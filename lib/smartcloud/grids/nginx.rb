@@ -23,12 +23,12 @@ module Smartcloud
 				if system("docker info")
 					true
 				else
-					puts "Error: Docker daemon is not running. Have you installed docker? Please ensure docker is running and try again."
+					puts "Error: Docker daemon is not running. Have you installed docker? Please ensure docker daemon is running and try again."
 					false
 				end
 			end
 
-			def has_docker_compose?
+			def self.has_docker_compose?
 				if system("which docker-compose")
 					true
 				else
