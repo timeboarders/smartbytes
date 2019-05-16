@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
 	s.name        	= 'smartcloud'
-	s.version     	= '0.0.0'
+	s.version     	= '0.1.0.alpha'
 	s.date        	= '2019-05-16'
 	s.summary     	= "Full-stack web server framework."
 	s.description 	= "Smartcloud is a full-stack web server framework optimized for programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration."
