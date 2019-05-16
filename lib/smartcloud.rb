@@ -3,6 +3,6 @@ class Smartcloud
 end
 
 require 'smartcloud/docker'
-require 'smartcloud/git'
-require 'smartcloud/nginx'
-require 'smartcloud/solr'
+require 'smartcloud/grids/git'
+require 'smartcloud/grids/nginx'
+require 'smartcloud/grids/solr'

@@ -8,7 +8,24 @@ if ARGV[0] == 'docker'
 	elsif ARGV[1] == 'uninstall'
 		Smartcloud::Docker.uninstall
 	end
-elsif ARGV[0] == 'git'
-elsif ARGV[0] == 'nginx'
-elsif ARGV[0] == 'solr'
+elsif ARGV[0] == 'grids'
+	if ARGV[1] == 'git'
+		if ARGV[2] == 'start'
+			Smartcloud::Grids::Git.start
+		elsif ARGV[2] == 'stop'
+			Smartcloud::Grids::Git.stop
+		end
+	elsif ARGV[1] == 'nginx'
+		if ARGV[2] == 'start'
+			Smartcloud::Grids::Nginx.start
+		elsif ARGV[2] == 'stop'
+			Smartcloud::Grids::Nginx.stop
+		end
+	elsif ARGV[1] == 'solr'
+		if ARGV[2] == 'start'
+			Smartcloud::Grids::Solr.start
+		elsif ARGV[2] == 'stop'
+			Smartcloud::Grids::Solr.stop
+		end
+	end
 end
