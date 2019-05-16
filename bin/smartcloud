@@ -2,7 +2,17 @@
 
 require 'smartcloud'
 
-if ARGV[0] == 'docker'
+if ARGV[0] == 'start'
+	print "Enter your domain name pointing to this server without any subdomain (Eg: example.com): "
+	domain_name = STDIN.gets.chomp
+	print "Enter admin email: "
+	admin_email = STDIN.gets.chomp
+	apps_root = File.expand_path("~/apps")
+	print "Enter path where apps should be stored (default: #{apps_root}): "
+	apps_root_entered = STDIN.gets.chomp
+	apps_root = File.expand_path(apps_root_entered) unless apps_root_entered.empty?
+	puts apps_root
+elsif ARGV[0] == 'docker'
 	if ARGV[1] == 'install'
 		Smartcloud::Docker.install
 	elsif ARGV[1] == 'uninstall'
