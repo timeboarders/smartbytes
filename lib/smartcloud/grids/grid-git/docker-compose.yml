@@ -1,0 +1,29 @@
+version: '3.5'
+
+services:
+  app:
+    image: tbcloud/git-receive
+    container_name: git-receive
+    env_file:
+      - "../.env"
+    environment:
+      - VIRTUAL_PROTO=fastcgi
+      - VIRTUAL_HOST=$DOMAIN_NAME
+      - LETSENCRYPT_HOST=$DOMAIN_NAME
+      - LETSENCRYPT_EMAIL=$ADMIN_EMAIL
+      - LETSENCRYPT_TEST=${DOMAIN_HTTPS_TEST:-false}
+    command: spawn-fcgi -n -p 9000 /usr/bin/fcgiwrap -f
+    expose:
+      - "9000"
+    volumes:
+      - ./buildpacks:/buildpacks
+      - ${APPS_ROOT}:/apps
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    networks:
+      - nginx-network
+
+networks:
+  nginx-network:
+    external:
+      name: nginx-network
