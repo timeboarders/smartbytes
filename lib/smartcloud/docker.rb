@@ -23,6 +23,9 @@ module Smartcloud
 			system("sudo apt-get install docker-ce")
 			system("sudo usermod -aG docker $USER")
 			system("docker run --rm hello-world")
+			system("sudo rm -rf /etc/docker/daemon.json")
+			system("echo '{ \"iptables\": false }' | sudo tee -a /etc/docker/daemon.json > /dev/null")
+			system("sudo systemctl restart docker")
 			puts "-----> Installing Docker Compose"
 			system("sudo curl -L --fail https://github.com/docker/compose/releases/download/1.21.2/run.sh -o /usr/local/bin/docker-compose")
 			system("sudo chmod +x /usr/local/bin/docker-compose")
@@ -45,6 +48,7 @@ module Smartcloud
 			puts "-----> Uninstalling Docker"
 			system("sudo apt-get purge docker-ce")
 			system("sudo rm -rf /var/lib/docker")
+			system("sudo rm -rf /etc/docker/daemon.json")
 			puts "-----> Uninstallation Complete"
 			puts "-----> You must delete any edited configuration files manually."
 		end
