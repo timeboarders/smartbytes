@@ -17,7 +17,7 @@ class Smartcloud::Docker
 		system("sudo apt-get install apt-transport-https ca-certificates curl software-properties-common")
 		system("curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -")
 		system("sudo apt-key fingerprint 0EBFCD88")
-		system("sudo add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable'")
+		system("sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"")
 		system("sudo apt-get update")
 		system("sudo apt-get install docker-ce")
 		system("sudo usermod -aG docker $USER")
