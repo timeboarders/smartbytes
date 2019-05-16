@@ -26,6 +26,10 @@ elsif ARGV[0] == 'grids'
 			Smartcloud::Grids::Solr.start
 		elsif ARGV[2] == 'stop'
 			Smartcloud::Grids::Solr.stop
+		elsif ARGV[2] == 'create_core'
+			Smartcloud::Grids::Solr.create_core(ARGV[3])
+		elsif ARGV[2] == 'destroy_core'
+			Smartcloud::Grids::Solr.destroy_core(ARGV[3])
 		end
 	end
 end
