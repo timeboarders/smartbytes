@@ -12,21 +12,21 @@ class Smartcloud::Docker
 	# Arguments:
 	#   none
 	def self.install
-		# echo "-----> Installing Docker"
-		# sudo apt-get update
-		# sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-		# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-		# sudo apt-key fingerprint 0EBFCD88
-		# sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-		# sudo apt-get update
-		# sudo apt-get install docker-ce
-		# sudo usermod -aG docker $USER
-		# docker run --rm hello-world
-		# echo "-----> Installing Docker Compose"
-		# sudo curl -L --fail https://github.com/docker/compose/releases/download/1.21.2/run.sh -o /usr/local/bin/docker-compose
-		# sudo chmod +x /usr/local/bin/docker-compose
-		# docker-compose --version
-		# sudo curl -L https://raw.githubusercontent.com/docker/compose/1.21.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+		puts "-----> Installing Docker"
+		system("sudo apt-get update")
+		system("sudo apt-get install apt-transport-https ca-certificates curl software-properties-common")
+		system("curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -")
+		system("sudo apt-key fingerprint 0EBFCD88")
+		system("sudo add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable'")
+		system("sudo apt-get update")
+		system("sudo apt-get install docker-ce")
+		system("sudo usermod -aG docker $USER")
+		system("docker run --rm hello-world")
+		puts "-----> Installing Docker Compose"
+		system("sudo curl -L --fail https://github.com/docker/compose/releases/download/1.21.2/run.sh -o /usr/local/bin/docker-compose")
+		system("sudo chmod +x /usr/local/bin/docker-compose")
+		system("docker-compose --version")
+		system("sudo curl -L https://raw.githubusercontent.com/docker/compose/1.21.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose")
 		puts "-----> Installation Complete"
 	end
 
@@ -39,11 +39,11 @@ class Smartcloud::Docker
 	# Arguments:
 	#   none
 	def self.uninstall
-		# echo "-----> Uninstalling Docker Compose"
-		# sudo rm /usr/local/bin/docker-compose
-		# echo "-----> Uninstalling Docker"
-		# sudo apt-get purge docker-ce
-		# sudo rm -rf /var/lib/docker
+		puts "-----> Uninstalling Docker Compose"
+		system("sudo rm /usr/local/bin/docker-compose")
+		puts "-----> Uninstalling Docker"
+		system("sudo apt-get purge docker-ce")
+		system("sudo rm -rf /var/lib/docker")
 		puts "-----> Uninstallation Complete"
 		puts "-----> You must delete any edited configuration files manually."
 	end
