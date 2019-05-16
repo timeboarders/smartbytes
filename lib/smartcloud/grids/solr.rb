@@ -6,31 +6,33 @@ module Smartcloud
 			end
 
 			def self.start
-				# echo "-----> Setting up data folder used by solr"
-				# # Give the ownership of solr folder to 8983 for solr to use properly
-				# sudo chown -R 8983:8983 ./solr
-				#
-				# echo "-----> Starting Solr Network"
-				# docker-compose up -d
+				puts "-----> Starting Solr Network"
+
+				# Give the ownership of solr folder to 8983 for solr to use properly
+				system("sudo chown -R 8983:8983 #{self.solr_datapath}")
+
+				system("docker-compose -f #{self.docker_compose_filepath} up -d")
 			end
 	
 			def self.stop
-				# echo "-----> Stopping Solr Network"
-				# docker-compose down
+				puts "-----> Stopping Solr Network"
+				system("docker-compose -f #{self.docker_compose_filepath} down")
 			end
 
-			def self.create_core
-				# solr_corename=$1
-				# sudo docker exec -it --user=solr solr solr create_core -c ${solr_corename} -d sunspot
+			def self.create_core(corename)
+				system("sudo docker exec -it --user=solr solr solr create_core -c #{corename} -d sunspot")
 			end
 
-			def self.destroy_core
-				# solr_corename=$1
-				# sudo docker exec -it --user=solr solr solr delete -c ${solr_corename}
+			def self.destroy_core(corename)
+				system("sudo docker exec -it --user=solr solr solr delete -c ${corename}")
 			end
 
 			def self.docker_compose_filepath
 				File.join(Smartcloud.root, 'lib/smartcloud/grids/grid-solr/docker-compose.yml')
+			end
+
+			def self.solr_datapath
+				File.join(Smartcloud.root, 'lib/smartcloud/grids/grid-solr/solr')
 			end
 		end
 	end
