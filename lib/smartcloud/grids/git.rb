@@ -43,6 +43,10 @@ module Smartcloud
 				# docker-compose down
 				# rm .env
 			end
+
+			def self.docker_compose_filepath
+				File.join(Smartcloud.root, 'lib/smartcloud/grids/grid-git/docker-compose.yml')
+			end
 		end
 	end
 end

@@ -28,6 +28,10 @@ module Smartcloud
 				# solr_corename=$1
 				# sudo docker exec -it --user=solr solr solr delete -c ${solr_corename}
 			end
+
+			def self.docker_compose_filepath
+				File.join(Smartcloud.root, 'lib/smartcloud/grids/grid-solr/docker-compose.yml')
+			end
 		end
 	end
 end
