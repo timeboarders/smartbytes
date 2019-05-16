@@ -20,7 +20,7 @@ module Smartcloud
 			end
 
 			def self.docker_running?
-				if system("docker info", err: File::NULL)
+				if system("docker info", out: File::NULL)
 					true
 				else
 					puts "Error: Docker daemon is not running. Have you installed docker? Please ensure docker daemon is running and try again."
@@ -29,7 +29,7 @@ module Smartcloud
 			end
 
 			def self.has_docker_compose?
-				if system("which docker-compose", err: File::NULL)
+				if system("which docker-compose", out: File::NULL)
 					true
 				else
 					puts "Error: docker-compose is not installed. Please ensure docker-compose is running and try again."
