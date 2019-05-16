@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require 'smartcloud'
+
+if ARGV[0] == 'docker'
+	if ARGV[1] == 'install'
+		Smartcloud::Docker.install
+	elsif ARGV[1] == 'uninstall'
+		Smartcloud::Docker.uninstall
+	end
+elsif ARGV[0] == 'git'
+elsif ARGV[0] == 'nginx'
+elsif ARGV[0] == 'solr'
+end
