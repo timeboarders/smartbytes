@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   solr:
-    image: solr:7.5.0-alpine
+    image: solr:alpine
     container_name: solr
     # ports:
     #   - "8983:8983"
