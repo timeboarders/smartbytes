@@ -1,5 +1,8 @@
 # The main Smartcloud driver
-class Smartcloud
+module Smartcloud
+	def self.root
+		@@root ||= File.expand_path('../..', __FILE__)
+	end
 end
 
 require 'smartcloud/docker'

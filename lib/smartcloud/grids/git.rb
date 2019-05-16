@@ -1,11 +1,15 @@
 # The main Smartcloud Grids Git driver
-class Smartcloud::Grids::Git
-	def initialize
-	end
+module Smartcloud
+	module Grids
+		class Git
+			def initialize
+			end
 	
-	def self.start
-	end
+			def self.start
+			end
 	
-	def self.stop
+			def self.stop
+			end
+		end
 	end
 end
