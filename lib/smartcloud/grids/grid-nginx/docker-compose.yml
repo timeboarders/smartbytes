@@ -11,8 +11,8 @@ services:
       - nginx-confd:/etc/nginx/conf.d/
       - nginx-vhost:/etc/nginx/vhost.d/
       - nginx-shtml:/usr/share/nginx/html
-      - ./certificates:/etc/nginx/certs:ro
-      - ./logins:/etc/nginx/htpasswd:ro
+      - ~/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:ro
+      - ~/.smartcloud/grids/grid-nginx/logins:/etc/nginx/htpasswd:ro
       - ./fastcgi.conf:/etc/nginx/fastcgi.conf:ro
     restart: always
     networks:
@@ -26,8 +26,8 @@ services:
       - nginx-confd:/etc/nginx/conf.d/
       - nginx-vhost:/etc/nginx/vhost.d/
       - nginx-shtml:/usr/share/nginx/html
-      - ./certificates:/etc/nginx/certs:ro
-      - ./logins:/etc/nginx/htpasswd:ro
+      - ~/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:ro
+      - ~/.smartcloud/grids/grid-nginx/logins:/etc/nginx/htpasswd:ro
       - ./fastcgi.conf:/etc/nginx/fastcgi.conf:ro
       - ./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro      
@@ -45,7 +45,7 @@ services:
       - nginx-confd:/etc/nginx/conf.d/
       - nginx-vhost:/etc/nginx/vhost.d/
       - nginx-shtml:/usr/share/nginx/html
-      - ./certificates:/etc/nginx/certs:rw
+      - ~/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: always
     networks:
