@@ -1,0 +1,1 @@
+ENV['SMARTCLOUD_USER_HOME'] = File.expand_path('~')

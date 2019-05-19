@@ -1,3 +1,5 @@
+require 'smartcloud/config/environment'
+
 # The main Smartcloud driver
 module Smartcloud
 	def self.root
