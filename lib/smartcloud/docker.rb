@@ -27,10 +27,10 @@ module Smartcloud
 			system("echo '{ \"iptables\": false }' | sudo tee -a /etc/docker/daemon.json > /dev/null")
 			system("sudo systemctl restart docker")
 			puts "-----> Installing Docker Compose"
-			system("sudo curl -L --fail https://github.com/docker/compose/releases/download/1.21.2/run.sh -o /usr/local/bin/docker-compose")
+			system("sudo curl -L --fail https://github.com/docker/compose/releases/download/1.24.0/run.sh -o /usr/local/bin/docker-compose")
 			system("sudo chmod +x /usr/local/bin/docker-compose")
 			system("docker-compose --version")
-			system("sudo curl -L https://raw.githubusercontent.com/docker/compose/1.21.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose")
+			system("sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose")
 			puts "-----> Installation Complete"
 		end
 
