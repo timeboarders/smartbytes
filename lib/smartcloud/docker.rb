@@ -54,7 +54,7 @@ module Smartcloud
 		end
 
 		def self.running?
-			if system("docker info", out: File::NULL)
+			if system("docker info", [:out, :err] => File::NULL)
 				true
 			else
 				puts "Error: Docker daemon is not running. Have you installed docker? Please ensure docker daemon is running and try again."
