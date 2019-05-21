@@ -55,7 +55,7 @@ while read oldrev newrev refname; do
 			--network="nginx-network" \
 			--expose="5000" \
 			--restart="always" \
-			tbcloud/ruby-2.5.1
+			smartcloud/buildpacks/rails
 		docker network connect solr-network $REPOSITORY_BASENAME
 		docker start $REPOSITORY_BASENAME
 		docker logs $REPOSITORY_BASENAME --follow

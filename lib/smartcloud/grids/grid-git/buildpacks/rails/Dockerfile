@@ -14,10 +14,8 @@ RUN apk update && apk upgrade && apk --no-cache add tzdata $BUILD_PACKAGES $GEM_
 # Setting correct timezone
 ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && apk del tzdata \
 \
-# Install Rails Essential & Common Gems with latest versions to be used as cache if possible.
+# Install bundler and foreman gems
 gem install bundler; gem install foreman; \
-gem install rails; gem install mysql2; gem install puma; gem install sass-rails; \
-gem install uglifier; gem install coffee-rails; gem install turbolinks; gem install jbuilder;
 
 # Generating entrypoint file
 RUN echo -e '#!/bin/sh\n\

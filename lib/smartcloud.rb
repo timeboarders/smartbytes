@@ -7,6 +7,18 @@ module Smartcloud
 	def self.user_home
 		@@user_home ||= File.expand_path('~')
 	end
+
+	def self.domain
+		"yourdomain.com"
+	end
+
+	def self.admin_email
+		"admin@yourdomain.com"
+	end
+
+	def self.letsencrypt_test
+		false
+	end
 end
 
 require 'smartcloud/docker'
