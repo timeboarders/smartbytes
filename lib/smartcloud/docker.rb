@@ -52,5 +52,14 @@ module Smartcloud
 			puts "-----> Uninstallation Complete"
 			puts "-----> You must delete any edited configuration files manually."
 		end
+
+		def self.running?
+			if system("docker info", out: File::NULL)
+				true
+			else
+				puts "Error: Docker daemon is not running. Have you installed docker? Please ensure docker daemon is running and try again."
+				false
+			end
+		end
 	end
 end

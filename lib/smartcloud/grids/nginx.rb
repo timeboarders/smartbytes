@@ -6,7 +6,7 @@ module Smartcloud
 			end
 	
 			def self.start
-				if self.docker_running?
+				if Smartcloud::Docker.running?
 					# Creating volumes
 					print "-----> Creating volume nginx-confd ... "
 					if system("docker volume create nginx-confd", out: File::NULL)
@@ -101,7 +101,7 @@ module Smartcloud
 			end
 
 			def self.stop
-				if self.docker_running?
+				if Smartcloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container nginx-letsencrypt ... "
 					if system("docker stop 'nginx-letsencrypt'", out: File::NULL)
@@ -135,15 +135,6 @@ module Smartcloud
 					if system("docker network rm nginx-network", out: File::NULL)
 						puts "done"
 					end
-				end
-			end
-	
-			def self.docker_running?
-				if system("docker info", out: File::NULL)
-					true
-				else
-					puts "Error: Docker daemon is not running. Have you installed docker? Please ensure docker daemon is running and try again."
-					false
 				end
 			end
 		end
