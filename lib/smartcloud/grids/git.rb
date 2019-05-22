@@ -115,7 +115,7 @@ module Smartcloud
 			end
 
 			def self.virtual_host
-				self.git_subdomain.nil? ? "git.#{Smartcloud.domain}" : "#{self.git_subdomain}.#{Smartcloud.domain}"
+				"#{Smartcloud.config.git_subdomain}.#{Smartcloud.config.domain}"
 			end
 
 			def self.letsencrypt_host
@@ -123,15 +123,11 @@ module Smartcloud
 			end
 
 			def self.letsencrypt_email
-				Smartcloud.admin_email
+				Smartcloud.config.admin_email
 			end
 
 			def self.letsencrypt_test
-				Smartcloud.letsencrypt_test
-			end
-
-			def self.git_subdomain
-				nil
+				Smartcloud.config.letsencrypt_test
 			end
 		end
 	end
