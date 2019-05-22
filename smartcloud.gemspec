@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 	s.required_ruby_version     = ">= 2.5.0"
 	s.required_rubygems_version = ">= 1.8.11"
 
-	s.files        	= Dir.glob("{bin,lib}/**/*") + %w(MIT-LICENSE README.md)
+	s.files        	= Dir.glob("{bin,lib}/**/*") + Dir.glob("{bin,lib}/**/.keep") + %w(MIT-LICENSE README.md)
 
 	s.metadata		= {
 		"source_code_uri" => "https://github.com/timeboardme/smartcloud"
