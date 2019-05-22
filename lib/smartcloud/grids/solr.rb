@@ -6,33 +6,86 @@ module Smartcloud
 			end
 
 			def self.start
-				puts "-----> Starting Solr Network"
+				if Smartcloud::Docker.running?
+					# Creating networks
+					unless system("docker network inspect solr-network", [:out, :err] => File::NULL)
+						print "-----> Creating network solr-network ... "
+						if system("docker network create solr-network", out: File::NULL)
+							puts "done"
+						end
+					end
 
-				# Give the ownership of solr folder to 8983 for solr to use properly
-				system("sudo chown -R 8983:8983 #{self.solr_datapath}")
+					print "-----> Settings permissions solr ... "
+					if system("sudo chown -R 8983:8983 #{Smartcloud.user_home}/.smartcloud/grids/grid-solr/data", out: File::NULL)
+						puts "done"
+					end
 
-				system("docker-compose -f #{self.docker_compose_filepath} up -d")
+					# Creating & Starting containers
+					print "-----> Creating container solr ... "
+					if system("docker create \
+						--name='solr' \
+						--publish='8983:8983' \
+						--volume='#{Smartcloud.user_home}/.smartcloud/grids/grid-solr/data:/var/solr/data' \
+						--restart='always' \
+						--network='solr-network' \
+						solr:alpine", out: File::NULL)
+
+						puts "done"
+						print "-----> Starting container solr ... "
+						if system("docker start solr", out: File::NULL)
+							puts "done"
+						end
+					end
+				end
 			end
 	
 			def self.stop
-				puts "-----> Stopping Solr Network"
-				system("docker-compose -f #{self.docker_compose_filepath} down")
+				if Smartcloud::Docker.running?
+					# Stopping & Removing containers - in reverse order
+					print "-----> Stopping container solr ... "
+					if system("docker stop 'solr'", out: File::NULL)
+						puts "done"
+						print "-----> Removing container solr ... "
+						if system("docker rm 'solr'", out: File::NULL)
+							puts "done"
+						end
+					end
+
+					# Removing networks
+					print "-----> Removing network solr-network ... "
+					if system("docker network rm solr-network", out: File::NULL)
+						puts "done"
+					end
+				end
 			end
 
 			def self.create_core(corename)
-				system("sudo docker exec -it --user=solr solr solr create_core -c #{corename} -d sunspot")
+				if Smartcloud::Docker.running?
+					puts "-----> Creating core #{corename} ... "
+					if system("docker exec -it --user=solr solr solr create_core -c #{corename}")
+						system("docker exec -it --user=solr solr solr config -c #{corename} -p 8983 -action set-user-property -property update.autoCreateFields -value false")
+						puts "done"
+
+						print "-----> Copying core files ... "
+						system("sudo cp -r #{Smartcloud.user_home}/.smartcloud/grids/grid-solr/sunspot/conf/* #{Smartcloud.user_home}/.smartcloud/grids/grid-solr/data/#{corename}/conf/")
+						if system("sudo chown -R 8983:8983 #{Smartcloud.user_home}/.smartcloud/grids/grid-solr/data/#{corename}/conf", out: File::NULL)
+							puts "done"
+						end
+					else
+						puts "error"
+					end
+				end
 			end
 
 			def self.destroy_core(corename)
-				system("sudo docker exec -it --user=solr solr solr delete -c ${corename}")
-			end
-
-			def self.docker_compose_filepath
-				File.join(Smartcloud.root, 'lib/smartcloud/grids/grid-solr/docker-compose.yml')
-			end
-
-			def self.solr_datapath
-				File.join(Smartcloud.root, 'lib/smartcloud/grids/grid-solr/solr')
+				if Smartcloud::Docker.running?
+					puts "-----> Removing core #{corename} ... "
+					if system("docker exec -it --user=solr solr solr delete -c #{corename}")
+						puts "done"
+					else
+						puts "error"
+					end
+				end
 			end
 		end
 	end
