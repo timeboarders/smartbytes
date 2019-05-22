@@ -2,44 +2,54 @@
 
 require 'smartcloud'
 
-if ARGV[0] == 'start'
-	print "Enter your domain name pointing to this server without any subdomain (Eg: example.com): "
-	domain_name = STDIN.gets.chomp
-	print "Enter admin email: "
-	admin_email = STDIN.gets.chomp
-	apps_root = File.expand_path("~/apps")
-	print "Enter path where apps should be stored (default: #{apps_root}): "
-	apps_root_entered = STDIN.gets.chomp
-	apps_root = File.expand_path(apps_root_entered) unless apps_root_entered.empty?
-	puts apps_root
-elsif ARGV[0] == 'docker'
-	if ARGV[1] == 'install'
-		Smartcloud::Docker.install
-	elsif ARGV[1] == 'uninstall'
-		Smartcloud::Docker.uninstall
+unless ARGV[0] == 'init'
+	# Check if Smartcloud initialised, else exit with message
+	Smartcloud.initialised!
+
+	if ARGV[0] == 'apps'
+		if ARGV[1] == 'create'
+			Smartcloud::Apps.create(ARGV[2])
+		elsif ARGV[1] == 'start'
+			Smartcloud::Apps.start(ARGV[2])
+		elsif ARGV[1] == 'stop'
+			Smartcloud::Apps.stop(ARGV[2])
+		elsif ARGV[1] == 'destroy'
+			Smartcloud::Apps.destroy(ARGV[2])
+		end
+	elsif ARGV[0] == 'docker'
+		if ARGV[1] == 'install'
+			Smartcloud::Docker.install
+		elsif ARGV[1] == 'uninstall'
+			Smartcloud::Docker.uninstall
+		end
+	elsif ARGV[0] == 'grids'
+		if ARGV[1] == 'git'
+			if ARGV[2] == 'start'
+				Smartcloud::Grids::Git.start
+			elsif ARGV[2] == 'stop'
+				Smartcloud::Grids::Git.stop
+			elsif ARGV[2] == 'prereceive'
+				oldrev = ARGV[3]; newrev = ARGV[4]; refname = ARGV[5]
+				Smartcloud::Grids::Git.prereceive(oldrev, newrev, refname) if oldrev && newrev && refname
+			end
+		elsif ARGV[1] == 'nginx'
+			if ARGV[2] == 'start'
+				Smartcloud::Grids::Nginx.start
+			elsif ARGV[2] == 'stop'
+				Smartcloud::Grids::Nginx.stop
+			end
+		elsif ARGV[1] == 'solr'
+			if ARGV[2] == 'start'
+				Smartcloud::Grids::Solr.start
+			elsif ARGV[2] == 'stop'
+				Smartcloud::Grids::Solr.stop
+			elsif ARGV[2] == 'create_core'
+				Smartcloud::Grids::Solr.create_core(ARGV[3])
+			elsif ARGV[2] == 'destroy_core'
+				Smartcloud::Grids::Solr.destroy_core(ARGV[3])
+			end
+		end
 	end
-elsif ARGV[0] == 'grids'
-	if ARGV[1] == 'git'
-		if ARGV[2] == 'start'
-			Smartcloud::Grids::Git.start
-		elsif ARGV[2] == 'stop'
-			Smartcloud::Grids::Git.stop
-		end
-	elsif ARGV[1] == 'nginx'
-		if ARGV[2] == 'start'
-			Smartcloud::Grids::Nginx.start
-		elsif ARGV[2] == 'stop'
-			Smartcloud::Grids::Nginx.stop
-		end
-	elsif ARGV[1] == 'solr'
-		if ARGV[2] == 'start'
-			Smartcloud::Grids::Solr.start
-		elsif ARGV[2] == 'stop'
-			Smartcloud::Grids::Solr.stop
-		elsif ARGV[2] == 'create_core'
-			Smartcloud::Grids::Solr.create_core(ARGV[3])
-		elsif ARGV[2] == 'destroy_core'
-			Smartcloud::Grids::Solr.destroy_core(ARGV[3])
-		end
-	end
+else
+	Smartcloud.init
 end
