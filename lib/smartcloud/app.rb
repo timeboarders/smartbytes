@@ -1,6 +1,6 @@
 # The main Smartcloud Apps driver
 module Smartcloud
-	class Apps
+	class App
 		def initialize
 		end
 
@@ -11,21 +11,13 @@ module Smartcloud
 		#   => Creation Complete
 		#
 		# Arguments:
+		# 	user => (String)
 		#   name => (String)
-		def self.create(name)
-			puts "-----> Creating App"			
-			puts "-----> Creation Complete"
-		end
-
-		# Destroying App!
-		#
-		# Example:
-		#   >> Apps.destroy
-		#   => Destruction Complete
-		#
-		# Arguments:
-		#   name => (String)
-		def self.destroy(name)
+		def self.create(user, name)
+			puts "-----> Creating Application ... "
+			# Create bare repository in ~/.smartcloud/apps/repositories/#{user}/#{name}
+			# Copy pre-receive hook
+			puts "done"
 		end
 
 		# Running App!
@@ -57,6 +49,17 @@ module Smartcloud
 		end
 		
 		def self.stop(name)
+		end
+
+		# Destroying App!
+		#
+		# Example:
+		#   >> Apps.destroy
+		#   => Destruction Complete
+		#
+		# Arguments:
+		#   name => (String)
+		def self.destroy(name)
 		end
 	end
 end
