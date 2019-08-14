@@ -16,7 +16,7 @@ module Smartcloud
 					end
 
 					print "-----> Settings permissions solr ... "
-					if system("sudo chown -R 8983:8983 #{Smartcloud.user_home}/.smartcloud/grids/grid-solr/data", out: File::NULL)
+					if system("sudo chown -R 8983:8983 #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data", out: File::NULL)
 						puts "done"
 					end
 
@@ -25,10 +25,10 @@ module Smartcloud
 					if system("docker create \
 						--name='solr' \
 						--publish='8983:8983' \
-						--volume='#{Smartcloud.user_home}/.smartcloud/grids/grid-solr/data:/var/solr/data' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data:/opt/solr/server/solr' \
 						--restart='always' \
 						--network='solr-network' \
-						solr:alpine", out: File::NULL)
+						solr:7.5.0", out: File::NULL)
 
 						puts "done"
 						print "-----> Starting container solr ... "
@@ -67,8 +67,8 @@ module Smartcloud
 						puts "done"
 
 						print "-----> Copying core files ... "
-						system("sudo cp -r #{Smartcloud.user_home}/.smartcloud/grids/grid-solr/sunspot/conf/* #{Smartcloud.user_home}/.smartcloud/grids/grid-solr/data/#{corename}/conf/")
-						if system("sudo chown -R 8983:8983 #{Smartcloud.user_home}/.smartcloud/grids/grid-solr/data/#{corename}/conf", out: File::NULL)
+						system("sudo cp -r #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/sunspot/conf/* #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data/#{corename}/conf/")
+						if system("sudo chown -R 8983:8983 #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data/#{corename}/conf", out: File::NULL)
 							puts "done"
 						end
 					else
