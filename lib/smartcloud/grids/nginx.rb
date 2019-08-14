@@ -40,9 +40,9 @@ module Smartcloud
 						--volume='nginx-confd:/etc/nginx/conf.d/' \
 						--volume='nginx-vhost:/etc/nginx/vhost.d/' \
 						--volume='nginx-shtml:/usr/share/nginx/html' \
-						--volume='#{Smartcloud.root}/lib/smartcloud/grids/grid-nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro' \
-						--volume='#{Smartcloud.user_home}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:ro' \
-						--volume='#{Smartcloud.user_home}/.smartcloud/grids/grid-nginx/htpasswd:/etc/nginx/htpasswd:ro' \
+						--volume='#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:ro' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/htpasswd:/etc/nginx/htpasswd:ro' \
 						--restart='always' \
 						--network='nginx-network' \
 						nginx", out: File::NULL)
@@ -60,10 +60,10 @@ module Smartcloud
 						--volume='nginx-confd:/etc/nginx/conf.d/' \
 						--volume='nginx-vhost:/etc/nginx/vhost.d/' \
 						--volume='nginx-shtml:/usr/share/nginx/html' \
-						--volume='#{Smartcloud.root}/lib/smartcloud/grids/grid-nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro' \
-						--volume='#{Smartcloud.root}/lib/smartcloud/grids/grid-nginx/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro' \
-						--volume='#{Smartcloud.user_home}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:ro' \
-						--volume='#{Smartcloud.user_home}/.smartcloud/grids/grid-nginx/htpasswd:/etc/nginx/htpasswd:ro' \
+						--volume='#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro' \
+						--volume='#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-nginx/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:ro' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/htpasswd:/etc/nginx/htpasswd:ro' \
 						--volume='/var/run/docker.sock:/tmp/docker.sock:ro' \
 						--restart='always' \
 						--network='nginx-network' \
@@ -85,7 +85,7 @@ module Smartcloud
 						--volume='nginx-confd:/etc/nginx/conf.d/' \
 						--volume='nginx-vhost:/etc/nginx/vhost.d/' \
 						--volume='nginx-shtml:/usr/share/nginx/html' \
-						--volume='#{Smartcloud.user_home}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:rw' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:rw' \
 						--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 						--restart='always' \
 						--network='nginx-network' \
