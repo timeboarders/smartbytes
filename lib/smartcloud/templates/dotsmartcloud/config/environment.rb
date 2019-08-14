@@ -1,13 +1,10 @@
 # Be sure to restart your server when you modify this file.
 
-# naked domain name
-Smartcloud.config.domain = "yourdomain.com"
+# host to be used for git
+Smartcloud.config.git_host = "git.yourdomain.com"
 
-# system admin email id
-Smartcloud.config.admin_email = "admin@yourdomain.com"
+# admin email id to be used for git
+Smartcloud.config.git_admin_email = "admin@yourdomain.com"
 
-# letsencrypt test boolean
-Smartcloud.config.letsencrypt_test = false
-
-# subdomain to be used for git
-Smartcloud.config.git_subdomain = "git"
+# letsencrypt test boolean to be used for git
+Smartcloud.config.git_letsencrypt_test = false
