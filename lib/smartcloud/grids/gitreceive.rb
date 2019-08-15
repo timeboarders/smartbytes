@@ -1,7 +1,7 @@
 # The main Smartcloud Grids Git driver
 module Smartcloud
 	module Grids
-		class Git
+		class Gitreceive
 			def initialize
 			end
 
@@ -102,14 +102,14 @@ module Smartcloud
 			def self.create_images
 				unless system("docker image inspect smartcloud/git-receive", [:out, :err] => File::NULL)
 					print "-----> Creating image smartcloud/git-receive ... "
-					if system("docker image build -t smartcloud/git-receive #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-git", out: File::NULL)
+					if system("docker image build -t smartcloud/git-receive #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-gitreceive", out: File::NULL)
 						puts "done"
 					end
 				end
 
 				unless system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
 					print "-----> Creating image smartcloud/buildpacks/rails ... "
-					if system("docker image build -t smartcloud/buildpacks/rails #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-git/buildpacks/rails", out: File::NULL)
+					if system("docker image build -t smartcloud/buildpacks/rails #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-gitreceive/buildpacks/rails", out: File::NULL)
 						puts "done"
 					end
 				end
