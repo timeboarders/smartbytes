@@ -86,6 +86,7 @@ require 'smartcloud/docker'
 require 'smartcloud/grids/nginx'
 require 'smartcloud/grids/gitreceive'
 require 'smartcloud/grids/solr'
+require 'smartcloud/grids/mysql'
 
 require 'smartcloud/user'
 require 'smartcloud/app'
