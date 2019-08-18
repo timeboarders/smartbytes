@@ -23,14 +23,15 @@ module Smartcloud
 			system("sudo apt-get install docker-ce")
 			system("sudo usermod -aG docker $USER")
 			system("docker run --rm hello-world")
-			system("sudo rm -rf /etc/docker/daemon.json")
-			system("echo '{ \"iptables\": false }' | sudo tee -a /etc/docker/daemon.json > /dev/null")
-			system("sudo systemctl restart docker")
-			puts "-----> Installing Docker Compose"
-			system("sudo curl -L --fail https://github.com/docker/compose/releases/download/1.24.0/run.sh -o /usr/local/bin/docker-compose")
-			system("sudo chmod +x /usr/local/bin/docker-compose")
-			system("docker-compose --version")
-			system("sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose")
+
+			# puts "-----> Installing Docker Compose"
+			# system("sudo curl -L --fail https://github.com/docker/compose/releases/download/1.24.0/run.sh -o /usr/local/bin/docker-compose")
+			# system("sudo chmod +x /usr/local/bin/docker-compose")
+			# system("docker-compose --version")
+			# system("sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose")
+
+			self.add_ufw_rules
+
 			puts "-----> Installation Complete"
 		end
 
@@ -43,12 +44,15 @@ module Smartcloud
 		# Arguments:
 		#   none
 		def self.uninstall
-			puts "-----> Uninstalling Docker Compose"
-			system("sudo rm /usr/local/bin/docker-compose")
+			# puts "-----> Uninstalling Docker Compose"
+			# system("sudo rm /usr/local/bin/docker-compose")
+
 			puts "-----> Uninstalling Docker"
 			system("sudo apt-get purge docker-ce")
 			system("sudo rm -rf /var/lib/docker")
-			system("sudo rm -rf /etc/docker/daemon.json")
+
+			self.remove_ufw_rules
+
 			puts "-----> Uninstallation Complete"
 			puts "-----> You must delete any edited configuration files manually."
 		end
@@ -60,6 +64,57 @@ module Smartcloud
 				puts "Error: Docker daemon is not running. Have you installed docker? Please ensure docker daemon is running and try again."
 				false
 			end
+		end
+
+		def self.add_ufw_rules
+			puts '-----> Add the following rules to the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
+			puts '# BEGIN UFW AND DOCKER
+			*filter
+			:ufw-user-forward - [0:0]
+			:DOCKER-USER - [0:0]
+			-A DOCKER-USER -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+			-A DOCKER-USER -m conntrack --ctstate INVALID -j DROP
+			-A DOCKER-USER -i eth0 -j ufw-user-forward
+			-A DOCKER-USER -i eth0 -j DROP
+			COMMIT
+			# END UFW AND DOCKER'
+
+			# puts "-----> Adding UFW rules for Docker"
+			# interface_name = system("ip route show | sed -e 's/^default via [0-9.]* dev \(\w\+\).*/\1/'")
+			# puts interface_name
+
+			# system("sed '/^# BEGIN UFW AND DOCKER/,/^# END UFW AND DOCKER/d' '/etc/ufw/after.rules'")
+			# system("sudo tee -a '/etc/ufw/after.rules' > /dev/null <<EOT
+			# # BEGIN UFW AND DOCKER
+			# *filter
+			# :ufw-user-forward - [0:0]
+			# :DOCKER-USER - [0:0]
+			# -A DOCKER-USER -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+			# -A DOCKER-USER -m conntrack --ctstate INVALID -j DROP
+			# -A DOCKER-USER -i eth0 -j ufw-user-forward
+			# -A DOCKER-USER -i eth0 -j DROP
+			# COMMIT
+			# # END UFW AND DOCKER
+			# EOT")
+			# system("sudo ufw reload")
+		end
+
+		def self.remove_ufw_rules
+			puts '-----> Remove the following rules at the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
+			puts '# BEGIN UFW AND DOCKER
+			*filter
+			:ufw-user-forward - [0:0]
+			:DOCKER-USER - [0:0]
+			-A DOCKER-USER -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+			-A DOCKER-USER -m conntrack --ctstate INVALID -j DROP
+			-A DOCKER-USER -i eth0 -j ufw-user-forward
+			-A DOCKER-USER -i eth0 -j DROP
+			COMMIT
+			# END UFW AND DOCKER'
+
+			# puts "-----> Removing UFW rules for Docker"
+			# system("sed '/^# BEGIN UFW AND DOCKER/,/^# END UFW AND DOCKER/d' '/etc/ufw/after.rules'")
+			# system("sudo ufw reload")
 		end
 	end
 end
