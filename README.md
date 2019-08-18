@@ -39,11 +39,13 @@ $ gem install smartcloud --user-install
 $ smartcloud init
 ```
 
-## Setup Machine
+<!--
+## TODO - Setup Machine
 1. Getting Started and Securing your Server:
 ```
 $ smartcloud machine install
 ```
+-->
 
 ## Install Docker
 1. Run docker install command:
