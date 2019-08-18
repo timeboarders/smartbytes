@@ -1,4 +1,5 @@
 # SmartCloud
+Smartcloud is a full-stack web server framework for rails optimized for programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration.
 
 ## Creating a New Machine
 1. Create a New Ubuntu 18.04 LTS Machine & SSH into it with your root password:
