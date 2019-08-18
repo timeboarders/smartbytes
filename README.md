@@ -1,14 +1,28 @@
 # SmartCloud
-Smartcloud is a full-stack web server framework for rails optimized for programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration.
+Smartcloud is a full-stack deployment framework for Rails optimized for programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration.
 
-## Creating a New Machine
-1. Create a New Ubuntu 18.04 LTS Machine & SSH into it with your root password:
+Deploy your Rails apps to your own server with - git push production master
+
+## How it Works
+
+After you run the below commands, you get.
+1. Setup of basic best practices of setting up and securing a VPS server.
+2. Setup and installation of Docker.
+3. Setup and installation of docker based Mysql, Solr, Nginx, GitReceive.
+4. Deployment of your Rails apps to your own server with - git push production master
+
+## Creating a New Linode Machine
+1. Create a New Ubuntu 18.04 LTS Linode Machine (Follow only the 'Create a Linode' section):
+```
+https://www.linode.com/docs/getting-started/#create-a-linode
+```
+2. SSH into the machine with your root password:
 ```
 $ ssh root@<YOURMACHINEIPADDRESS>
 ```
 
 ## Install SmartCloud
-1. Install Ruby at the command prompt if you haven't done yet:
+1. Install Ruby:
 ```
 $ sudo apt-get install ruby-full
 ```
@@ -57,7 +71,7 @@ $ smartcloud grids gitreceive start
 ```
 
 ## TODO - Creating New App
-1. Creating a new app on the server:
+1. Creating a new bare app on the server:
 ```
 $ smartcloud apps create <USERNAME> <APPNAME>
 ```
