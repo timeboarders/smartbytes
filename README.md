@@ -11,14 +11,14 @@ After you run the below commands, you get.
 3. Setup and installation of docker based Mysql, Solr, Nginx, GitReceive.
 4. Deployment of your Rails apps to your own server with - git push production master
 
-## Creating a New Linode Machine
-1. Create a New Ubuntu 18.04 LTS Linode Machine (Follow only the 'Create a Linode' section):
+## Setup a New Machine - Ubuntu 18.04 LTS
+1. Getting Started with Linode:
 ```
-https://www.linode.com/docs/getting-started/#create-a-linode
+https://www.linode.com/docs/getting-started/
 ```
-2. SSH into the machine with your root password:
+2. How to Secure Your Server:
 ```
-$ ssh root@<YOURMACHINEIPADDRESS>
+https://www.linode.com/docs/security/securing-your-server/
 ```
 
 ## Install SmartCloud
