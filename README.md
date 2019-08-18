@@ -30,7 +30,7 @@ $ sudo apt-get install ruby-full
 ```
 $ echo 'export PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"' >> ~/.bashrc && source ~/.bashrc
 ```
-3. Install smartcloud:
+3. Install smartcloud for current user:
 ```
 $ gem install smartcloud --user-install
 ```
