@@ -16,30 +16,36 @@ if ARGV[0] == 'docker'
 		Smartcloud::Docker.uninstall
 	end
 elsif ARGV[0] == 'grids'
-	if ARGV[1] == 'git'
+	if ARGV[1] == 'gitreceive'
 		if ARGV[2] == 'start'
-			Smartcloud::Grids::Git.start
+			Smartcloud::Grids::Gitreceive.start
 		elsif ARGV[2] == 'stop'
-			Smartcloud::Grids::Git.stop
-		elsif ARGV[2] == 'prereceive'
-			oldrev = ARGV[3]; newrev = ARGV[4]; refname = ARGV[5]
-			Smartcloud::Grids::Git.prereceive(oldrev, newrev, refname) if oldrev && newrev && refname
+			Smartcloud::Grids::Gitreceive.stop
+		# elsif ARGV[2] == 'prereceive'
+		# 	oldrev = ARGV[3]; newrev = ARGV[4]; refname = ARGV[5]
+		# 	Smartcloud::Grids::Gitreceive.prereceive(oldrev, newrev, refname) if oldrev && newrev && refname
+		end
+	elsif ARGV[1] == 'mysql'
+		if ARGV[2] == 'start'
+			Smartcloud::Grids::Mysql.start(ARGV[3])
+		elsif ARGV[2] == 'stop'
+			Smartcloud::Grids::Mysql.stop
 		end
 	elsif ARGV[1] == 'nginx'
 		if ARGV[2] == 'start'
-			Smartcloud::Grids::Nginx.start
+			Smartcloud::Grids::Nginx.start(ARGV[3])
 		elsif ARGV[2] == 'stop'
 			Smartcloud::Grids::Nginx.stop
 		end
 	elsif ARGV[1] == 'solr'
 		if ARGV[2] == 'start'
-			Smartcloud::Grids::Solr.start
+			Smartcloud::Grids::Solr.start(ARGV[3])
 		elsif ARGV[2] == 'stop'
 			Smartcloud::Grids::Solr.stop
-		elsif ARGV[2] == 'create_core'
-			Smartcloud::Grids::Solr.create_core(ARGV[3])
-		elsif ARGV[2] == 'destroy_core'
-			Smartcloud::Grids::Solr.destroy_core(ARGV[3])
+		# elsif ARGV[2] == 'create_core'
+		# 	Smartcloud::Grids::Solr.create_core(ARGV[3])
+		# elsif ARGV[2] == 'destroy_core'
+		# 	Smartcloud::Grids::Solr.destroy_core(ARGV[3])
 		end
 	end
 # elsif ARGV[0] == 'user'
@@ -48,14 +54,14 @@ elsif ARGV[0] == 'grids'
 # 	elsif ARGV[1] == 'destroy'
 # 		Smartcloud::User.destroy(ARGV[2], ARGV[3])
 # 	end
-elsif ARGV[0] == 'apps'
-	if ARGV[1] == 'create'
-		Smartcloud::App.create(ARGV[2], ARGV[3])
-	elsif ARGV[1] == 'start'
-		Smartcloud::App.start(ARGV[2])
-	elsif ARGV[1] == 'stop'
-		Smartcloud::App.stop(ARGV[2])
-	elsif ARGV[1] == 'destroy'
-		Smartcloud::App.destroy(ARGV[2])
-	end
+# elsif ARGV[0] == 'apps'
+# 	if ARGV[1] == 'create'
+# 		Smartcloud::App.create(ARGV[2], ARGV[3])
+# 	elsif ARGV[1] == 'start'
+# 		Smartcloud::App.start(ARGV[2])
+# 	elsif ARGV[1] == 'stop'
+# 		Smartcloud::App.stop(ARGV[2])
+# 	elsif ARGV[1] == 'destroy'
+# 		Smartcloud::App.destroy(ARGV[2])
+# 	end
 end

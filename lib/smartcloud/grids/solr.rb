@@ -5,7 +5,7 @@ module Smartcloud
 			def initialize
 			end
 
-			def self.start
+			def self.start(exposed)
 				if Smartcloud::Docker.running?
 					# Creating networks
 					unless system("docker network inspect solr-network", [:out, :err] => File::NULL)
@@ -24,7 +24,7 @@ module Smartcloud
 					print "-----> Creating container solr ... "
 					if system("docker create \
 						--name='solr' \
-						--publish='8983:8983' \
+						#{"--publish='8983:8983'" if exposed == '--exposed'} \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data:/opt/solr/server/solr' \
 						--restart='always' \
 						--network='solr-network' \

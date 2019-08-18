@@ -5,7 +5,7 @@ module Smartcloud
 			def initialize
 			end
 
-			def self.start
+			def self.start(exposed)
 				if Smartcloud::Docker.running?
 					# Creating networks
 					unless system("docker network inspect mysql-network", [:out, :err] => File::NULL)
@@ -20,7 +20,7 @@ module Smartcloud
 					if system("docker create \
 						--name='mysql' \
 						--env MYSQL_RANDOM_ROOT_PASSWORD=yes \
-						--publish='3306:3306' \
+						#{"--publish='3306:3306'" if exposed == '--exposed'} \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-mysql/data:/var/lib/mysql' \
 						--restart='always' \
 						--network='mysql-network' \

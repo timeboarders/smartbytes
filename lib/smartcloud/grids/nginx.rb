@@ -5,7 +5,7 @@ module Smartcloud
 			def initialize
 			end
 	
-			def self.start
+			def self.start(exposed)
 				if Smartcloud::Docker.running?
 					# Creating volumes
 					print "-----> Creating volume nginx-confd ... "
@@ -35,13 +35,12 @@ module Smartcloud
 					print "-----> Creating container nginx ... "
 					if system("docker create \
 						--name='nginx' \
-						--publish='80:80' \
-						--publish='443:443' \
+						#{"--publish='80:80' --publish='443:443'" if exposed == '--exposed'} \
 						--volume='nginx-confd:/etc/nginx/conf.d/' \
 						--volume='nginx-vhost:/etc/nginx/vhost.d/' \
 						--volume='nginx-shtml:/usr/share/nginx/html' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs' \
 						--volume='#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro' \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:ro' \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/htpasswd:/etc/nginx/htpasswd:ro' \
 						--restart='always' \
 						--network='nginx-network' \
@@ -57,13 +56,8 @@ module Smartcloud
 					print "-----> Creating container nginx-gen ... "
 					if system("docker create \
 						--name='nginx-gen' \
-						--volume='nginx-confd:/etc/nginx/conf.d/' \
-						--volume='nginx-vhost:/etc/nginx/vhost.d/' \
-						--volume='nginx-shtml:/usr/share/nginx/html' \
-						--volume='#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro' \
+						--volumes-from nginx \
 						--volume='#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-nginx/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro' \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:ro' \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/htpasswd:/etc/nginx/htpasswd:ro' \
 						--volume='/var/run/docker.sock:/tmp/docker.sock:ro' \
 						--restart='always' \
 						--network='nginx-network' \
@@ -82,10 +76,7 @@ module Smartcloud
 						--name='nginx-letsencrypt' \
 						--env NGINX_PROXY_CONTAINER=nginx \
 						--env NGINX_DOCKER_GEN_CONTAINER=nginx-gen \
-						--volume='nginx-confd:/etc/nginx/conf.d/' \
-						--volume='nginx-vhost:/etc/nginx/vhost.d/' \
-						--volume='nginx-shtml:/usr/share/nginx/html' \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/certificates:/etc/nginx/certs:rw' \
+						--volumes-from nginx \
 						--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 						--restart='always' \
 						--network='nginx-network' \
