@@ -1,5 +1,11 @@
 # SmartCloud
 
+## Creating a New Machine
+1. Create a New Ubuntu 18.04 LTS Machine & SSH into it with your root password:
+```
+$ ssh root@198.51.100.4
+```
+
 ## Install SmartCloud
 1. Install Ruby at the command prompt if you haven't done yet:
 ```
