@@ -3,7 +3,7 @@
 ## Creating a New Machine
 1. Create a New Ubuntu 18.04 LTS Machine & SSH into it with your root password:
 ```
-$ ssh root@198.51.100.4
+$ ssh root@<YOURMACHINEIPADDRESS>
 ```
 
 ## Install SmartCloud
