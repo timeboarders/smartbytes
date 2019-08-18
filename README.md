@@ -52,7 +52,7 @@ $ smartcloud machine install
 ```
 $ smartcloud docker install
 ```
-2. Add UFW rules for Docker
+2. Add UFW rules for Docker as specified at the end of installation.
 
 ## Starting Grids as per Choice
 1. Start mysql grid:
