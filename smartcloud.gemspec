@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
 	s.name        	= 'smartcloud'
-	s.version     	= '0.0.2'
+	s.version     	= '0.0.3'
 	s.summary     	= "Full-stack deployment framework for Rails."
 	s.description 	= "Smartcloud is a full-stack deployment framework for rails optimized for programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration."
 
@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
 		"source_code_uri" => "https://github.com/timeboardme/smartcloud"
 	}
 
-	s.executables 	<< 'smartcloud'
+	s.executables 	= %w(smartcloud runner)
 end
