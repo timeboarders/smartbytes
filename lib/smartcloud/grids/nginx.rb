@@ -5,7 +5,7 @@ module Smartcloud
 			def initialize
 			end
 	
-			def self.start(exposed)
+			def self.up(exposed)
 				if Smartcloud::Docker.running?
 					# Creating volumes
 					print "-----> Creating volume nginx-confd ... "
@@ -91,7 +91,7 @@ module Smartcloud
 				end
 			end
 
-			def self.stop
+			def self.down
 				if Smartcloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container nginx-letsencrypt ... "

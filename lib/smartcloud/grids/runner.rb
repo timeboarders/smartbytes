@@ -5,7 +5,7 @@ module Smartcloud
 			def initialize
 			end
 
-			def self.start
+			def self.up
 				if Smartcloud::Docker.running?
 					# Creating swapfile
 					# self.create_swapfile
@@ -41,7 +41,7 @@ module Smartcloud
 				end
 			end
 	
-			def self.stop
+			def self.down
 				if Smartcloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container runner ... "
