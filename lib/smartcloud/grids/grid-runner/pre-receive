@@ -9,5 +9,5 @@ while read oldrev newrev refname; do
 	else
 	    REPOSITORY_BASENAME=$(basename $(readlink -nf "$PWD"/..))
 	fi
-	runner prereceive $REMOTE_USER $REPOSITORY_BASENAME $oldrev $newrev $refname
+	runner prereceive $REPOSITORY_BASENAME $REMOTE_USER $oldrev $newrev $refname
 done
