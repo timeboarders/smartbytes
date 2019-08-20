@@ -13,7 +13,15 @@ module Smartcloud
 				puts "Initializing Smartcloud ...\n\n"
 
 				begin
-					print "Enter host domain for your git grid. [Recommended: git.yourdomain.com]: "
+					print "Enter domain to be used for apps for your git grid. [Recommended: yourdomain.com]: "
+					config_apps_domain = STDIN.gets.chomp
+					raise if config_apps_domain.empty?
+				rescue
+					retry
+				end
+
+				begin
+					print "Enter host domain for your git grid. [Recommended: git.#{config_apps_domain}]: "
 					config_git_host = STDIN.gets.chomp
 					raise if config_git_host.empty?
 				rescue
@@ -21,7 +29,7 @@ module Smartcloud
 				end
 
 				begin
-					print "Enter admin email id for your git grid. [Recommended: admin@yourdomain.com]: "
+					print "Enter admin email id for your git grid. [Recommended: admin@#{config_apps_domain}]: "
 					config_git_admin_email = STDIN.gets.chomp
 					raise if config_git_admin_email.empty?
 				rescue
@@ -29,7 +37,7 @@ module Smartcloud
 				end
 
 				begin
-					print "Enter username for your git grid user. [Recommended: git@yourdomain.com]: "
+					print "Enter username for your git grid user. [Recommended: git@#{config_apps_domain}]: "
 					username = STDIN.gets.chomp
 					raise if username.empty?
 				rescue
@@ -48,7 +56,9 @@ module Smartcloud
 				# modifying environment.rb file
 				tempFile = Tempfile.new("#{Smartcloud.config.user_home_path}/.smartcloud/config/environmentTemp.rb")
 				File.open("#{Smartcloud.config.user_home_path}/.smartcloud/config/environment.rb", "r").each_line do |line|
-					if line =~ /Smartcloud.config.git_host/
+					if line =~ /Smartcloud.config.apps_domain/
+						tempFile.puts "Smartcloud.config.apps_domain = \"#{config_apps_domain}\""
+					elsif line =~ /Smartcloud.config.git_host/
 						tempFile.puts "Smartcloud.config.git_host = \"#{config_git_host}\""
 					elsif line =~ /Smartcloud.config.git_admin_email/
 						tempFile.puts "Smartcloud.config.git_admin_email = \"#{config_git_admin_email}\""
