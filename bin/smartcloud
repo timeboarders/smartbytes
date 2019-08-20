@@ -21,21 +21,6 @@ elsif ARGV[0] == 'grids'
 			Smartcloud::Grids::Runner.up
 		elsif ARGV[2] == 'down'
 			Smartcloud::Grids::Runner.down
-		elsif ARGV[2] == 'prereceive'
-			oldrev = ARGV[3]; newrev = ARGV[4]; refname = ARGV[5]
-			Smartcloud::Grids::Runner.prereceive(oldrev, newrev, refname) if oldrev && newrev && refname
-		elsif ARGV[2] == 'apps'
-			raise "Please provide username" unless ARGV[4]
-			raise "Please provide app name" unless ARGV[5]
-			if ARGV[3] == 'create'
-				Smartcloud::Grids::Runner.create_app(ARGV[4], ARGV[5])
-			elsif ARGV[3] == 'start'
-				Smartcloud::Grids::Runner.start_app(ARGV[4], ARGV[5])
-			elsif ARGV[3] == 'stop'
-				Smartcloud::Grids::Runner.stop_app(ARGV[4], ARGV[5])
-			elsif ARGV[3] == 'destroy'
-				Smartcloud::Grids::Runner.destroy_app(ARGV[4], ARGV[5])
-			end
 		end
 	elsif ARGV[1] == 'mysql'
 		if ARGV[2] == 'up'
@@ -54,10 +39,10 @@ elsif ARGV[0] == 'grids'
 			Smartcloud::Grids::Solr.up(ARGV[3])
 		elsif ARGV[2] == 'down'
 			Smartcloud::Grids::Solr.down
-		# elsif ARGV[2] == 'create_core'
-		# 	Smartcloud::Grids::Solr.create_core(ARGV[3])
-		# elsif ARGV[2] == 'destroy_core'
-		# 	Smartcloud::Grids::Solr.destroy_core(ARGV[3])
+		elsif ARGV[2] == 'create_core'
+			Smartcloud::Grids::Solr.create_core(ARGV[3])
+		elsif ARGV[2] == 'destroy_core'
+			Smartcloud::Grids::Solr.destroy_core(ARGV[3])
 		end
 	end
 # elsif ARGV[0] == 'user'
