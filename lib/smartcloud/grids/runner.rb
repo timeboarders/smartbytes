@@ -24,7 +24,7 @@ module Smartcloud
 							--env LETSENCRYPT_EMAIL=#{Smartcloud.config.git_admin_email} \
 							--env LETSENCRYPT_TEST=#{Smartcloud.config.git_letsencrypt_test} \
 							--expose='9000' \
-							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/apps:/apps' \
+							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner:/.smartcloud/grids/grid-runner' \
 							--volume='/var/run/docker.sock:/var/run/docker.sock' \
 							--restart='always' \
 							--network='nginx-network' \
@@ -145,7 +145,7 @@ module Smartcloud
 				# 	else
 				# 	    REPOSITORY_BASENAME=$(basename $(readlink -nf "$PWD"/..))
 				# 	fi
-				# 	REPOSITORY_PATH=/apps/containers/${REPOSITORY_BASENAME}
+				# 	REPOSITORY_PATH=/.smartcloud/grids/grid-runner/apps/containers/${REPOSITORY_BASENAME}
 				# 	NOW_DATE=$(date +"%Y%m%d%H%M%S")
 				# 	[[ ! -d "$REPOSITORY_PATH/$NOW_DATE" ]] && mkdir -p $REPOSITORY_PATH/$NOW_DATE && git archive "$newrev" | tar -x -C $REPOSITORY_PATH/$NOW_DATE
 				#
@@ -177,7 +177,7 @@ module Smartcloud
 				# Smartcloud::Apps.start(name)
 				# fi
 			end
-			
+
 			# Creating App!
 			#
 			# Example:
@@ -189,7 +189,7 @@ module Smartcloud
 			#   name => (String)
 			def self.create_app(username, name)
 				if Smartcloud::Docker.running?
-					repo_path = "#{Smartcloud.config.user_home_path}/.smartcloud/apps/repositories/#{username}/#{name}.git"
+					repo_path = "/.smartcloud/grids/grid-runner/apps/repositories/#{username}/#{name}.git"
 
 					print "-----> Creating Application ... "
 
@@ -202,8 +202,8 @@ module Smartcloud
 
 					Dir.chdir(repo_path) do
 						%x[git init --bare]
-						%x[chmod +x #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/pre-receive]
-						%x[ln -s /pre-receive #{repo_path}/hooks/pre-receive]
+						%x[chmod +x #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/pre-receive]
+						%x[ln -s #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/pre-receive #{repo_path}/hooks/pre-receive]
 						puts "done"
 					end
 				end
