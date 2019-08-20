@@ -67,7 +67,7 @@ module Smartcloud
 						puts "done"
 
 						print "-----> Copying core files ... "
-						system("sudo cp -r #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/sunspot/conf/* #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data/#{corename}/conf/")
+						system("sudo cp -r #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-solr/sunspot/conf/* #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data/#{corename}/conf/")
 						if system("sudo chown -R 8983:8983 #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data/#{corename}/conf", out: File::NULL)
 							puts "done"
 						end
