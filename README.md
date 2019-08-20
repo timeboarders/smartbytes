@@ -8,7 +8,7 @@ Deploy your Rails apps to your own server with - git push production master
 After you run the below commands, you get.
 1. Setup of basic best practices of setting up and securing a VPS server.
 2. Setup and installation of Docker.
-3. Setup and installation of docker based Mysql, Solr, Nginx, GitReceive.
+3. Setup and installation of docker based Mysql, Solr, Nginx, Runner.
 4. Deployment of your Rails apps to your own server with - git push production master
 
 ## Setup a New Machine - Ubuntu 18.04 LTS
@@ -67,9 +67,9 @@ $ smartcloud grids solr start
 ```
 $ smartcloud grids nginx start
 ```
-4. Start gitreceive grid:
+4. Start runner grid:
 ```
-$ smartcloud grids gitreceive start
+$ smartcloud grids runner start
 ```
 
 ## TODO - Creating New App

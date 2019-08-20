@@ -16,14 +16,26 @@ if ARGV[0] == 'docker'
 		Smartcloud::Docker.uninstall
 	end
 elsif ARGV[0] == 'grids'
-	if ARGV[1] == 'gitreceive'
+	if ARGV[1] == 'runner'
 		if ARGV[2] == 'start'
-			Smartcloud::Grids::Gitreceive.start
+			Smartcloud::Grids::Runner.start
 		elsif ARGV[2] == 'stop'
-			Smartcloud::Grids::Gitreceive.stop
-		# elsif ARGV[2] == 'prereceive'
-		# 	oldrev = ARGV[3]; newrev = ARGV[4]; refname = ARGV[5]
-		# 	Smartcloud::Grids::Gitreceive.prereceive(oldrev, newrev, refname) if oldrev && newrev && refname
+			Smartcloud::Grids::Runner.stop
+		elsif ARGV[2] == 'prereceive'
+			oldrev = ARGV[3]; newrev = ARGV[4]; refname = ARGV[5]
+			Smartcloud::Grids::Runner.prereceive(oldrev, newrev, refname) if oldrev && newrev && refname
+		elsif ARGV[2] == 'apps'
+			raise "Please provide username" unless ARGV[4]
+			raise "Please provide app name" unless ARGV[5]
+			if ARGV[3] == 'create'
+				Smartcloud::Grids::Runner.create_app(ARGV[4], ARGV[5])
+			elsif ARGV[3] == 'start'
+				Smartcloud::Grids::Runner.start_app(ARGV[4], ARGV[5])
+			elsif ARGV[3] == 'stop'
+				Smartcloud::Grids::Runner.stop_app(ARGV[4], ARGV[5])
+			elsif ARGV[3] == 'destroy'
+				Smartcloud::Grids::Runner.destroy_app(ARGV[4], ARGV[5])
+			end
 		end
 	elsif ARGV[1] == 'mysql'
 		if ARGV[2] == 'start'
@@ -53,15 +65,5 @@ elsif ARGV[0] == 'grids'
 # 		Smartcloud::User.create(ARGV[2], ARGV[3], ARGV[4])
 # 	elsif ARGV[1] == 'destroy'
 # 		Smartcloud::User.destroy(ARGV[2], ARGV[3])
-# 	end
-# elsif ARGV[0] == 'apps'
-# 	if ARGV[1] == 'create'
-# 		Smartcloud::App.create(ARGV[2], ARGV[3])
-# 	elsif ARGV[1] == 'start'
-# 		Smartcloud::App.start(ARGV[2])
-# 	elsif ARGV[1] == 'stop'
-# 		Smartcloud::App.stop(ARGV[2])
-# 	elsif ARGV[1] == 'destroy'
-# 		Smartcloud::App.destroy(ARGV[2])
 # 	end
 end

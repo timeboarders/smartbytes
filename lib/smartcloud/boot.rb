@@ -89,4 +89,3 @@ require 'smartcloud/grids/solr'
 require 'smartcloud/grids/mysql'
 
 require 'smartcloud/user'
-require 'smartcloud/app'
