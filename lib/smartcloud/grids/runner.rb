@@ -1,7 +1,7 @@
 # The main Smartcloud Grids Git driver
 module Smartcloud
 	module Grids
-		class Gitreceive
+		class Runner
 			def initialize
 			end
 
@@ -14,10 +14,10 @@ module Smartcloud
 					self.create_images
 
 					# Creating & Starting containers
-					if system("docker image inspect smartcloud/git-receive", [:out, :err] => File::NULL) && system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
-						print "-----> Creating container git-receive ... "
+					if system("docker image inspect smartcloud/runner", [:out, :err] => File::NULL) && system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
+						print "-----> Creating container runner ... "
 						if system("docker create \
-							--name='git-receive' \
+							--name='runner' \
 							--env VIRTUAL_PROTO=fastcgi \
 							--env VIRTUAL_HOST=#{Smartcloud.config.git_host} \
 							--env LETSENCRYPT_HOST=#{Smartcloud.config.git_host} \
@@ -28,12 +28,12 @@ module Smartcloud
 							--volume='/var/run/docker.sock:/var/run/docker.sock' \
 							--restart='always' \
 							--network='nginx-network' \
-							smartcloud/git-receive \
+							smartcloud/runner \
 							spawn-fcgi -n -p 9000 /usr/bin/fcgiwrap -f", out: File::NULL)
 							puts "done"
 
-							print "-----> Starting container git-receive ... "
-							if system("docker start git-receive", out: File::NULL)
+							print "-----> Starting container runner ... "
+							if system("docker start runner", out: File::NULL)
 								puts "done"
 							end
 						end
@@ -44,12 +44,12 @@ module Smartcloud
 			def self.stop
 				if Smartcloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
-					print "-----> Stopping container git-receive ... "
-					if system("docker stop 'git-receive'", out: File::NULL)
+					print "-----> Stopping container runner ... "
+					if system("docker stop 'runner'", out: File::NULL)
 						puts "done"
 
-						print "-----> Removing container git-receive ... "
-						if system("docker rm 'git-receive'", out: File::NULL)
+						print "-----> Removing container runner ... "
+						if system("docker rm 'runner'", out: File::NULL)
 							puts "done"
 						end
 					end
@@ -100,16 +100,16 @@ module Smartcloud
 			end
 			
 			def self.create_images
-				unless system("docker image inspect smartcloud/git-receive", [:out, :err] => File::NULL)
-					print "-----> Creating image smartcloud/git-receive ... "
-					if system("docker image build -t smartcloud/git-receive #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-gitreceive", out: File::NULL)
+				unless system("docker image inspect smartcloud/runner", [:out, :err] => File::NULL)
+					print "-----> Creating image smartcloud/runner ... "
+					if system("docker image build -t smartcloud/runner #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner", out: File::NULL)
 						puts "done"
 					end
 				end
 
 				unless system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
 					print "-----> Creating image smartcloud/buildpacks/rails ... "
-					if system("docker image build -t smartcloud/buildpacks/rails #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-gitreceive/buildpacks/rails", out: File::NULL)
+					if system("docker image build -t smartcloud/buildpacks/rails #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/buildpacks/rails", out: File::NULL)
 						puts "done"
 					end
 				end
@@ -123,9 +123,9 @@ module Smartcloud
 					end
 				end
 
-				if system("docker image inspect smartcloud/git-receive", [:out, :err] => File::NULL)
-					print "-----> Removing image smartcloud/git-receive ... "
-					if system("docker image rm smartcloud/git-receive", out: File::NULL)
+				if system("docker image inspect smartcloud/runner", [:out, :err] => File::NULL)
+					print "-----> Removing image smartcloud/runner ... "
+					if system("docker image rm smartcloud/runner", out: File::NULL)
 						puts "done"
 					end
 				end
