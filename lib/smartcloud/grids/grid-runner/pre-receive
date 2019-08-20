@@ -3,5 +3,5 @@
 # oldrev, newrev, refname are a feature of the way in which Git executes the pre-receive hook.
 # See https://www.kernel.org/pub/software/scm/git/docs/githooks.html
 while read oldrev newrev refname; do
-	runner prereceive oldrev newrev refname
+	runner prereceive $oldrev $newrev $refname
 done
