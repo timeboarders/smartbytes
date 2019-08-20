@@ -13,7 +13,7 @@ module Smartcloud
 				puts "Initializing Smartcloud ...\n\n"
 
 				begin
-					print "Enter domain to be used for apps for your git grid. [Recommended: yourdomain.com]: "
+					print "Enter top-level apps domain to be used for subdomains of your apps. [Recommended: yourdomain.com]: "
 					config_apps_domain = STDIN.gets.chomp
 					raise if config_apps_domain.empty?
 				rescue
@@ -21,17 +21,9 @@ module Smartcloud
 				end
 
 				begin
-					print "Enter host domain for your git grid. [Recommended: git.#{config_apps_domain}]: "
-					config_git_host = STDIN.gets.chomp
-					raise if config_git_host.empty?
-				rescue
-					retry
-				end
-
-				begin
-					print "Enter admin email id for your git grid. [Recommended: admin@#{config_apps_domain}]: "
-					config_git_admin_email = STDIN.gets.chomp
-					raise if config_git_admin_email.empty?
+					print "Enter sysadmin email id. [Recommended: admin@#{config_apps_domain}]: "
+					config_sysadmin_email = STDIN.gets.chomp
+					raise if config_sysadmin_email.empty?
 				rescue
 					retry
 				end
@@ -58,10 +50,10 @@ module Smartcloud
 				File.open("#{Smartcloud.config.user_home_path}/.smartcloud/config/environment.rb", "r").each_line do |line|
 					if line =~ /Smartcloud.config.apps_domain/
 						tempFile.puts "Smartcloud.config.apps_domain = \"#{config_apps_domain}\""
-					elsif line =~ /Smartcloud.config.git_host/
-						tempFile.puts "Smartcloud.config.git_host = \"#{config_git_host}\""
-					elsif line =~ /Smartcloud.config.git_admin_email/
-						tempFile.puts "Smartcloud.config.git_admin_email = \"#{config_git_admin_email}\""
+					elsif line =~ /Smartcloud.config.git_domain/
+						tempFile.puts "Smartcloud.config.git_domain = \"git.#{config_apps_domain}\""
+					elsif line =~ /Smartcloud.config.sysadmin_email/
+						tempFile.puts "Smartcloud.config.sysadmin_email = \"#{config_sysadmin_email}\""
 					else
 						tempFile.puts line
 					end
@@ -72,10 +64,10 @@ module Smartcloud
 				# Reload the updated environment.rb file as it is required by methods below
 				require "#{Smartcloud.config.user_home_path}/.smartcloud/config/environment.rb"
 				
-				# creating user for git grid at config.git_host
-				Smartcloud::User.create(Smartcloud.config.git_host, username, password)
+				# creating user for git grid at config.git_domain
+				Smartcloud::User.create(Smartcloud.config.git_domain, username, password)
 
-				puts "\nIMPORTANT NOTE: Please ensure that the required host domain '#{Smartcloud.config.git_host}' is pointing to this server using DNS Records before proceeding."
+				puts "\nIMPORTANT NOTE: Please ensure that the required top-level apps domain '#{Smartcloud.config.apps_domain}' and git domain '#{Smartcloud.config.git_domain}' is pointing to this server using DNS Records before proceeding."
 				puts "IMPORTANT NOTE: Your git grid password is #{password} for username #{username}"
 
 				puts "\nInitializing Smartcloud ... done"
