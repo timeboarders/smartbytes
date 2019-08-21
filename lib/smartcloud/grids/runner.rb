@@ -19,11 +19,12 @@ module Smartcloud
 						if system("docker create \
 							--name='runner' \
 							--env VIRTUAL_PROTO=fastcgi \
-							--env VIRTUAL_HOST=#{Smartcloud.config.git_host} \
-							--env LETSENCRYPT_HOST=#{Smartcloud.config.git_host} \
-							--env LETSENCRYPT_EMAIL=#{Smartcloud.config.git_admin_email} \
-							--env LETSENCRYPT_TEST=#{Smartcloud.config.git_letsencrypt_test} \
+							--env VIRTUAL_HOST=#{Smartcloud.config.git_domain} \
+							--env LETSENCRYPT_HOST=#{Smartcloud.config.git_domain} \
+							--env LETSENCRYPT_EMAIL=#{Smartcloud.config.sysadmin_email} \
+							--env LETSENCRYPT_TEST=#{Smartcloud.config.letsencrypt_test} \
 							--expose='9000' \
+							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:/.smartcloud/config' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner:/.smartcloud/grids/grid-runner' \
 							--volume='/var/run/docker.sock:/var/run/docker.sock' \
 							--restart='always' \
@@ -129,53 +130,6 @@ module Smartcloud
 						puts "done"
 					end
 				end
-			end
-
-			def self.prereceive(oldrev, newrev, refname)
-				# Verify the user and ensure the user is correct and has access to this repository
-				
-				# # Only run this script for the master branch. You can remove this
-				# # if block if you wish to run it for others as well.
-				# if [ "$refname" == "refs/heads/master" ]; then
-				#
-				# 	echo "-----> Initializing Application"
-				# 	if [ $(git rev-parse --is-bare-repository) = true ]; then
-				# 	    REPOSITORY_BASENAME=$(basename "$PWD")
-				# 		REPOSITORY_BASENAME=${REPOSITORY_BASENAME%.git}
-				# 	else
-				# 	    REPOSITORY_BASENAME=$(basename $(readlink -nf "$PWD"/..))
-				# 	fi
-				# 	REPOSITORY_PATH=/.smartcloud/grids/grid-runner/apps/containers/${REPOSITORY_BASENAME}
-				# 	NOW_DATE=$(date +"%Y%m%d%H%M%S")
-				# 	[[ ! -d "$REPOSITORY_PATH/$NOW_DATE" ]] && mkdir -p $REPOSITORY_PATH/$NOW_DATE && git archive "$newrev" | tar -x -C $REPOSITORY_PATH/$NOW_DATE
-				#
-				#
-				# 	if [ -f $REPOSITORY_PATH/$NOW_DATE/bin/rails ]; then
-				# 		echo "-----> Ruby on Rails Application Detected"
-				#
-				# 		if [ ! -f "$REPOSITORY_PATH/$NOW_DATE/Procfile" ]; then
-				# 		echo "-----> Procfile not detected. Please add Procfile and try again."
-				# 			exit 1;
-				# 		fi
-				#
-				# 		if [ ! -f "$REPOSITORY_PATH/env" ]; then
-				# 			echo "-----> Generating Environment Variables File"
-				# 			cat > $REPOSITORY_PATH/env <<- EOF
-				# 				##### Docker
-				# 				VIRTUAL_HOST=$REPOSITORY_BASENAME.$DOMAIN_NAME
-				# 				# LETSENCRYPT_HOST=$REPOSITORY_BASENAME.$DOMAIN_NAME
-				# 				# LETSENCRYPT_EMAIL=admin@$DOMAIN_NAME
-				# 				# LETSENCRYPT_TEST=true
-				#
-				# 				##### Rails
-				# 				# RAILS_MASTER_KEY=testmasterkey
-				# 			EOF
-				# 		fi
-				# 	fi
-				#
-				#
-				# Smartcloud::Apps.start(name)
-				# fi
 			end
 
 			# Creating App!
