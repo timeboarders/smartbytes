@@ -139,25 +139,48 @@ module Smartcloud
 			#   => Creation Complete
 			#
 			# Arguments:
+			#   appname => (String)
 			# 	username => (String)
-			#   name => (String)
-			def self.create_app(username, name)
+			def self.create_app(appname, username)
 				if Smartcloud::Docker.running?
-					repo_path = "/.smartcloud/grids/grid-runner/apps/repositories/#{username}/#{name}.git"
-
+					repository_path = "/.smartcloud/grids/grid-runner/apps/repositories/#{appname}.git"
+					container_path = "/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
 					print "-----> Creating Application ... "
 
-					if Dir.exist?(repo_path)
-						puts "failed. App with name '#{name}' already exists."
+					# Checking if app with given name already exists
+					if Dir.exist?(repository_path)
+						puts "failed. App with name '#{appname}' already exists."
 						exit
 					end
 
-					Dir.mkdir(repo_path)
+					# Creating Directories
+					FileUtils.mkdir_p(repository_path)
+					FileUtils.mkdir_p(container_path)
 
-					Dir.chdir(repo_path) do
+					# Initializing bare repo and pre-receive
+					Dir.chdir(repository_path) do
 						%x[git init --bare]
-						%x[chmod +x #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/pre-receive]
-						%x[ln -s #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/pre-receive #{repo_path}/hooks/pre-receive]
+						%x[chmod +x /.smartcloud/grids/grid-runner/pre-receive]
+						%x[ln -s /.smartcloud/grids/grid-runner/pre-receive #{repository_path}/hooks/pre-receive]
+						puts "done"
+					end
+
+					# Creating Environment File
+					if File.exists?("/.smartcloud/config/environment.rb")
+						require "/.smartcloud/config/environment"
+					end
+					unless File.exist? "#{container_path}/env"
+						print "-----> Creating Environment File ... "
+						system("cat > #{container_path}/env <<- EOF
+							## System
+							USERNAME=#{username}
+
+							## Docker
+							VIRTUAL_HOST=#{appname}.#{Smartcloud.config.apps_domain}
+							LETSENCRYPT_HOST=#{appname}.#{Smartcloud.config.apps_domain}
+							LETSENCRYPT_EMAIL=#{Smartcloud.config.sysadmin_email}
+							LETSENCRYPT_TEST=false
+						EOF")
 						puts "done"
 					end
 				end
