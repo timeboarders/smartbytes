@@ -166,14 +166,15 @@ module Smartcloud
 					end
 
 					# Creating Environment File
-					if File.exists?("/.smartcloud/config/environment.rb")
+					if File.exist?("/.smartcloud/config/environment.rb")
 						require "/.smartcloud/config/environment"
 					end
 					unless File.exist? "#{container_path}/env"
-						print "-----> Creating Environment File ... "
+						print "-----> Creating App Environment ... "
 						system("cat > #{container_path}/env <<- EOF
 							## System
 							USERNAME=#{username}
+							KEEP_RELEASES=3
 
 							## Docker
 							VIRTUAL_HOST=#{appname}.#{Smartcloud.config.apps_domain}
@@ -186,34 +187,68 @@ module Smartcloud
 				end
 			end
 
-			# Running App!
-			#
-			# Example:
-			#   >> Apps.run
-			#   => Running Complete
-			#
-			# Arguments:
-			# 	username => (String)
-			#   name => (String)		
-			def self.start_app(username, name)
-				if Smartcloud::Docker.running?
-					# 	echo "-----> Launching Application"
-					# 	if [ "$(docker ps -a -q -f name=$REPOSITORY_BASENAME)" ]; then
-					# 		docker stop "$REPOSITORY_BASENAME" && docker rm "$REPOSITORY_BASENAME"
-					# 	fi
-					# 	docker create \
-					# 		--log-opt mode=non-blocking --log-opt max-buffer-size=4m \
-					# 		--name="$REPOSITORY_BASENAME" \
-					# 		--env-file="$REPOSITORY_PATH/env" \
-					# 		--volume="$APPS_ROOT/containers/$REPOSITORY_BASENAME/$NOW_DATE:/code" \
-					# 		--volume="~/.smartcloud/grid-runner/buildpacks/rails/gems:/.gems" \
-					# 		--network="nginx-network" \
-					# 		--expose="5000" \
-					# 		--restart="always" \
-					# 		smartcloud/buildpacks/rails
-					# 	docker network connect solr-network $REPOSITORY_BASENAME
-					# 	docker start $REPOSITORY_BASENAME
-					# 	docker logs $REPOSITORY_BASENAME --follow
+			def self.prereceive_app(appname, username, oldrev, newrev, refname)
+				container_path = "/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
+
+				## Verify the user and ensure the user is correct and has access to this repository
+				print "-----> Verifying User ... "
+				unless File.exist? "#{container_path}/env"
+					puts "Environment could not be loaded ... Failed"
+					exit 1
+				end
+
+				# Load ENV vars
+				File.open("#{container_path}/env").each_line do |line|
+					line.chomp!
+					next if line.empty? || line.start_with?('#')
+				    key, value = line.split "="
+				    ENV[key] = value
+				end
+
+				# Match Username
+				unless ENV['USERNAME'] == username
+					puts "User is not authorized ... Failed"
+					exit 1
+				end
+				puts "done"
+
+				# Only run this script for the master branch. You can remove this
+				# if block if you wish to run it for others as well.
+				if refname == "refs/heads/master"
+					print "-----> Initializing Application ... "
+
+					# Note: There should be no space between + and " in now_date.
+					# Note: date will be UTC date until timezone has been changed.
+					now_date = `date +"%Y%m%d%H%M%S"`.chomp!
+					container_path_with_now_date = "#{container_path}/#{now_date}"
+
+					unless Dir.exist? container_path_with_now_date
+						FileUtils.mkdir_p(container_path_with_now_date)
+						if system("git archive #{newrev} | tar -x -C #{container_path_with_now_date}")
+							puts "done"
+
+							# Clean up very old versions
+							Dir.chdir(container_path) do
+								app_versions = Dir.glob('*').select { |f| File.directory? f }.sort
+								destroy_count = app_versions.count - ENV['KEEP_RELEASES'].to_i
+								if destroy_count > 0
+									print "-----> Deleting Old Application Versions ... "
+									destroy_count.times do
+										FileUtils.rm_r(File.join(Dir.pwd, app_versions.shift))
+									end
+									puts "done"
+								end
+							end
+
+							# Start App
+							Dir.chdir(container_path_with_now_date) do
+								# self.start_app(appname)
+							end
+						else
+							puts "failed. Could not extract new app version."
+							exit 1
+						end
+					end
 				end
 			end
 		
@@ -221,22 +256,22 @@ module Smartcloud
 				if Smartcloud::Docker.running?
 				end
 			end
-		
-			def self.restart_app(username, name)
+
+			def self.stop_app(appname)
 				if Smartcloud::Docker.running?
+					print "-----> Stopping container #{appname} ... "
+					if system("docker stop '#{appname}'", out: File::NULL)
+						puts "done"
+
+						print "-----> Removing container #{appname} ... "
+						if system("docker rm '#{appname}'", out: File::NULL)
+							puts "done"
+						end
+					end
 				end
 			end
 
-			# Destroying App!
-			#
-			# Example:
-			#   >> Apps.destroy
-			#   => Destruction Complete
-			#
-			# Arguments:
-			# 	username => (String)
-			#   name => (String)
-			def self.destroy_app(username, name)
+			def self.destroy_app(appname)
 				if Smartcloud::Docker.running?
 				end
 			end
