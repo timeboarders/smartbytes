@@ -273,6 +273,16 @@ module Smartcloud
 
 			def self.destroy_app(appname)
 				if Smartcloud::Docker.running?
+					# Stopping & Removing old container
+					self.stop_app(appname)
+
+					# Destroying Directories
+					print "-----> Deleting App #{appname} ... "
+					repository_path = "/.smartcloud/grids/grid-runner/apps/repositories/#{appname}.git"
+					container_path = "/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
+					FileUtils.rm_r(repository_path)
+					FileUtils.rm_r(container_path)
+					puts "done"
 				end
 			end
 		end
