@@ -111,7 +111,11 @@ module Smartcloud
 			def self.create_images
 				unless system("docker image inspect smartcloud/runner", [:out, :err] => File::NULL)
 					print "-----> Creating image smartcloud/runner ... "
-					if system("docker image build -t smartcloud/runner #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner", out: File::NULL)
+					if system("docker image build -t smartcloud/runner \
+						--build-arg DOCKER_GID=`getent group docker | cut -d: -f3` \
+						--build-arg USER_UID=`id -u` \
+						--build-arg USER_NAME=`id -un` \
+						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner", out: File::NULL)
 						puts "done"
 					end
 				end
