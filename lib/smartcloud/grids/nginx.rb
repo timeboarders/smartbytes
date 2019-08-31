@@ -76,6 +76,7 @@ module Smartcloud
 						--name='nginx-letsencrypt' \
 						--env NGINX_PROXY_CONTAINER=nginx \
 						--env NGINX_DOCKER_GEN_CONTAINER=nginx-gen \
+						--env DEFAULT_EMAIL=#{Smartcloud.config.sysadmin_email} \
 						--volumes-from nginx \
 						--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 						--restart='always' \
