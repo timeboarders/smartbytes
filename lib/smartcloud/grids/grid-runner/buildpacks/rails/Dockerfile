@@ -3,8 +3,9 @@ MAINTAINER Timeboard <hello@timeboard.me>
 
 ############### INSTALL RUBY ON RAILS ESSENTIALS ###############
 
-RUN apk add --update tzdata && \
-	apk add --update build-base && \
+RUN apk add --update build-base && \
+	apk add --update ruby-mysql2 && \
+	apk add --update tzdata && \
     rm -rf /var/cache/apk/*
 
 # Install bundler and foreman gems
