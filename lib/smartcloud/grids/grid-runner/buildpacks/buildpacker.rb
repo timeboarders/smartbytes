@@ -16,11 +16,14 @@ class Buildpacker
 
 		puts "-----> Performing bundle install ... "
 		if system("bundle install")
-			puts "-----> Compiling Assets ... "
-			if system("bundle exec rails assets:precompile")
-				puts "-----> Running Web Server ... "
-				if system("foreman start -f Procfile")
-					puts "-----> Launched Application ... Success."
+			puts "-----> Installing Javascript Dependencies ... "
+			if system("yarn install")
+				puts "-----> Compiling Assets ... "
+				if system("bundle exec rails assets:precompile")
+					puts "-----> Running Web Server ... "
+					if system("foreman start -f Procfile")
+						puts "-----> Launched Application ... Success."
+					end
 				end
 			end
 		end		
