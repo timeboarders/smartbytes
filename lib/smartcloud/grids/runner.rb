@@ -355,6 +355,7 @@ module Smartcloud
 					--env-file='#{container_path}/env' \
 					--expose='5000' \
 					--volume='#{container_path_with_now_date}:/code' \
+					--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/buildpacks/rails/gems:/usr/local/bundle' \
 					--workdir='/code' \
 					--restart='always' \
 					--network='nginx-network' \
