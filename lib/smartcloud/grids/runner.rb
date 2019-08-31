@@ -155,8 +155,8 @@ module Smartcloud
 			# 	username => (String)
 			def self.create_app(appname, username)
 				if Smartcloud::Docker.running?
-					repository_path = "/.smartcloud/grids/grid-runner/apps/repositories/#{appname}.git"
-					container_path = "/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
+					repository_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/repositories/#{appname}.git"
+					container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
 					print "-----> Creating Application ... "
 
 					# Checking if app with given name already exists
@@ -172,14 +172,14 @@ module Smartcloud
 					# Initializing bare repo and pre-receive
 					Dir.chdir(repository_path) do
 						%x[git init --bare]
-						%x[chmod +x /.smartcloud/grids/grid-runner/pre-receive]
-						%x[ln -s /.smartcloud/grids/grid-runner/pre-receive #{repository_path}/hooks/pre-receive]
+						%x[chmod +x #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/pre-receive]
+						%x[ln -s #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/pre-receive #{repository_path}/hooks/pre-receive]
 						puts "done"
 					end
 
 					# Creating Environment File
-					if File.exist?("/.smartcloud/config/environment.rb")
-						require "/.smartcloud/config/environment"
+					if File.exist?("#{Smartcloud.config.user_home_path}/.smartcloud/config/environment.rb")
+						require "#{Smartcloud.config.user_home_path}/.smartcloud/config/environment"
 					end
 					unless File.exist? "#{container_path}/env"
 						print "-----> Creating App Environment ... "
@@ -199,13 +199,28 @@ module Smartcloud
 				end
 			end
 
+			def self.destroy_app(appname)
+				if Smartcloud::Docker.running?
+					# Stopping & Removing old container
+					self.stop_app(appname)
+
+					# Destroying Directories
+					print "-----> Deleting App #{appname} ... "
+					repository_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/repositories/#{appname}.git"
+					container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
+					FileUtils.rm_r(repository_path)
+					FileUtils.rm_r(container_path)
+					puts "done"
+				end
+			end
+
 			def self.prereceive_app(appname, username, oldrev, newrev, refname)
-				container_path = "/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
+				container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
 
 				## Verify the user and ensure the user is correct and has access to this repository
 				print "-----> Verifying User ... "
 				unless File.exist? "#{container_path}/env"
-					puts "Environment could not be loaded ... Failed"
+					puts "Environment could not be loaded ... Failed."
 					exit 1
 				end
 
@@ -219,7 +234,7 @@ module Smartcloud
 
 				# Match Username
 				unless ENV['USERNAME'] == username
-					puts "User is not authorized ... Failed"
+					puts "User is not authorized ... Failed."
 					exit 1
 				end
 				puts "done"
@@ -244,7 +259,7 @@ module Smartcloud
 								app_versions = Dir.glob('*').select { |f| File.directory? f }.sort
 								destroy_count = app_versions.count - ENV['KEEP_RELEASES'].to_i
 								if destroy_count > 0
-									print "-----> Deleting Old Application Versions ... "
+									print "-----> Deleting older application releases ... "
 									destroy_count.times do
 										FileUtils.rm_r(File.join(Dir.pwd, app_versions.shift))
 									end
@@ -253,48 +268,101 @@ module Smartcloud
 							end
 
 							# Start App
-							Dir.chdir(container_path_with_now_date) do
-								# self.start_app(appname)
-							end
+							self.start_app(appname)
 						else
-							puts "failed. Could not extract new app version."
+							puts "Could not extract new app version ... Failed."
 							exit 1
 						end
 					end
 				end
 			end
-		
-			def self.stop_app(username, name)
+
+			def self.start_app(appname, app_version = 0)
 				if Smartcloud::Docker.running?
+					container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
+
+					Dir.chdir(container_path) do
+						if app_version == 0
+							app_versions = Dir.glob('*').select { |f| File.directory? f }.sort
+							app_version = app_versions.last
+						end
+
+						container_path_with_now_date = "#{container_path}/#{app_version}"
+
+						# Setup Buildpacker
+						buildpacker_path = "#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/buildpacks/buildpacker.rb"
+						FileUtils.cp(buildpacker_path, container_path_with_now_date)
+
+						puts "-----> Launching Application ... "
+
+						if File.exist? "#{container_path_with_now_date}/bin/rails"
+							# Stopping & Removing container
+							self.stop_app(appname)
+
+							# Starting Rails App
+							self.start_app_rails(appname, container_path, container_path_with_now_date)
+						end
+					end
 				end
+
+				# This line is important to cancel pre-receive push if finally the app could not be started.
+				# If the app was finally started, then this line should never be executed.
+				exit 1
 			end
 
 			def self.stop_app(appname)
 				if Smartcloud::Docker.running?
-					print "-----> Stopping container #{appname} ... "
-					if system("docker stop '#{appname}'", out: File::NULL)
-						puts "done"
-
-						print "-----> Removing container #{appname} ... "
-						if system("docker rm '#{appname}'", out: File::NULL)
+					if system("docker inspect -f '{{.State.Running}}' #{appname}", [:out, :err] => File::NULL)
+						print "-----> Stopping container #{appname} ... "
+						if system("docker stop '#{appname}'", out: File::NULL)
 							puts "done"
+
+							print "-----> Removing container #{appname} ... "
+							if system("docker rm '#{appname}'", out: File::NULL)
+								puts "done"
+							end
 						end
 					end
 				end
 			end
 
-			def self.destroy_app(appname)
-				if Smartcloud::Docker.running?
-					# Stopping & Removing old container
-					self.stop_app(appname)
+			def self.start_app_rails(appname, container_path, container_path_with_now_date)
+				puts "-----> Ruby on Rails application detected"
 
-					# Destroying Directories
-					print "-----> Deleting App #{appname} ... "
-					repository_path = "/.smartcloud/grids/grid-runner/apps/repositories/#{appname}.git"
-					container_path = "/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
-					FileUtils.rm_r(repository_path)
-					FileUtils.rm_r(container_path)
-					puts "done"
+				# Setup rails env
+				env_path = "#{container_path}/env"
+				system("grep -q '^## Rails' #{env_path} || echo '\n## Rails' >> #{env_path}")
+				system("grep -q '^RAILS_ENV=' #{env_path} || echo 'RAILS_ENV=production' >> #{env_path}")
+				system("grep -q '^RACK_ENV=' #{env_path} || echo 'RACK_ENV=production' >> #{env_path}")
+				system("grep -q '^RAILS_LOG_TO_STDOUT=' #{env_path} || echo 'RAILS_LOG_TO_STDOUT=enabled' >> #{env_path}")
+				system("grep -q '^RAILS_SERVE_STATIC_FILES=' #{env_path} || echo 'RAILS_SERVE_STATIC_FILES=enabled' >> #{env_path}")
+				system("grep -q '^LANG=' #{env_path} || echo 'LANG=en_US.UTF-8' >> #{env_path}")
+				system("grep -q '^RAILS_MASTER_KEY=' #{env_path} || echo 'RAILS_MASTER_KEY=yourmasterkey' >> #{env_path}")
+				puts "-----> WARNING: Please set your RAILS_MASTER_KEY env var for this rails app." if system("grep -q '^RAILS_MASTER_KEY=yourmasterkey' #{env_path}")
+
+				# Setup Procfile
+				unless File.exist? "#{container_path_with_now_date}/Procfile"
+					puts "-----> WARNING: Procfile not detected. Adding a default Procfile. It is recommended to add your own Procfile."
+					system("cat > #{container_path_with_now_date}/Procfile <<- EOF
+						web: bundle exec puma -C config/puma.rb
+					EOF")
+				end
+
+				# Creating & Starting container
+				if system("docker create \
+					--name='#{appname}' \
+					--env-file='#{container_path}/env' \
+					--expose='5000' \
+					--volume='#{container_path_with_now_date}:/code' \
+					--workdir='/code' \
+					--restart='always' \
+					--network='nginx-network' \
+					smartcloud/buildpacks/rails", out: File::NULL)
+
+					system("docker network connect solr-network #{appname}")
+					system("docker network connect mysql-network #{appname}")
+
+					system("docker start --attach #{appname}")
 				end
 			end
 		end
