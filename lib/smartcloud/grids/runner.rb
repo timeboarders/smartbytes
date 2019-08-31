@@ -305,8 +305,9 @@ module Smartcloud
 					end
 				end
 
-				# This line is important to cancel pre-receive push if finally the app could not be started.
-				# If the app was finally started, then this line should never be executed.
+				# These two lines are important to stop and remove container and then cancel pre-receive push if finally the app could not be started.
+				# If the app was finally started, then these two lines should never be executed.
+				self.stop_app(appname)
 				exit 1
 			end
 
