@@ -122,7 +122,10 @@ module Smartcloud
 
 				unless system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
 					print "-----> Creating image smartcloud/buildpacks/rails ... "
-					if system("docker image build -t smartcloud/buildpacks/rails #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/buildpacks/rails", out: File::NULL)
+					if system("docker image build -t smartcloud/buildpacks/rails \
+						--build-arg USER_UID=`id -u` \
+						--build-arg USER_NAME=`id -un` \
+						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/buildpacks/rails", out: File::NULL)
 						puts "done"
 					end
 				end
