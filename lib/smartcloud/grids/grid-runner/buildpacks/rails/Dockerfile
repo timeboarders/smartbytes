@@ -1,8 +1,14 @@
 FROM ruby:2.6.4-alpine3.10
 MAINTAINER Timeboard <hello@timeboard.me>
 
-############### INSTALL RUBY ON RAILS ESSENTIALS ###############
+# Setting up user
+# - envs
+ARG USER_UID
+ARG USER_NAME
+# - Create user.
+RUN adduser --disabled-password --gecos "" --uid "$USER_UID" "$USER_NAME"
 
+# Install Ruby on Rails Essentials
 RUN apk add --update build-base && \
 	apk add --update tzdata && \
 	apk add --update nodejs && \
@@ -13,6 +19,8 @@ RUN apk add --update build-base && \
 	apk add --update mupdf && \
 	apk add --update mupdf-tools && \
     rm -rf /var/cache/apk/*
+
+USER "$USER_NAME"
 
 # Install bundler and foreman gems
 RUN gem install bundler && \
