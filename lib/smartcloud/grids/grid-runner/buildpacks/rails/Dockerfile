@@ -1,11 +1,17 @@
-FROM ruby:2.6.3-alpine
+FROM ruby:2.6.4-alpine3.10
 MAINTAINER Timeboard <hello@timeboard.me>
 
 ############### INSTALL RUBY ON RAILS ESSENTIALS ###############
 
 RUN apk add --update build-base && \
-	apk add --update ruby-mysql2 && \
 	apk add --update tzdata && \
+	apk add --update nodejs && \
+	apk add --update yarn && \
+	apk add --update ruby-mysql2 && \
+	apk add --update imagemagick && \
+	apk add --update ffmpeg && \
+	apk add --update mupdf && \
+	apk add --update mupdf-tools && \
     rm -rf /var/cache/apk/*
 
 # Install bundler and foreman gems
