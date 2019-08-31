@@ -15,7 +15,7 @@ class Buildpacker
 		FileUtils.rm("tmp/pids/server.pid") if File.exist? "tmp/pids/server.pid"
 
 		puts "-----> Performing bundle install ... "
-		if system("bundle check || bundle install")
+		if system("bundle install")
 			puts "-----> Installing Javascript Dependencies ... "
 			if system("yarn install")
 				puts "-----> Pre-compiling Assets ... "
