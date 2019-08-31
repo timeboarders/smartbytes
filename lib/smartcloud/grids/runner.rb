@@ -49,18 +49,22 @@ module Smartcloud
 			def self.down
 				if Smartcloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
-					print "-----> Stopping container runner ... "
-					if system("docker stop 'runner'", out: File::NULL)
-						puts "done"
-
-						print "-----> Removing container runner ... "
-						if system("docker rm 'runner'", out: File::NULL)
+					if system("docker inspect -f '{{.State.Running}}' 'runner'", [:out, :err] => File::NULL)
+						print "-----> Stopping container runner ... "
+						if system("docker stop 'runner'", out: File::NULL)
 							puts "done"
+
+							print "-----> Removing container runner ... "
+							if system("docker rm 'runner'", out: File::NULL)
+								puts "done"
+							end
 						end
+					else
+						puts "-----> Container 'runner' is currently not running."
 					end
 
 					# Removing images
-					# self.destroy_images
+					self.destroy_images
 
 					# Removing swapfile
 					# self.destroy_swapfile
