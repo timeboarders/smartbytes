@@ -344,6 +344,10 @@ module Smartcloud
 				system("grep -q '^RAILS_MASTER_KEY=' #{env_path} || echo 'RAILS_MASTER_KEY=yourmasterkey' >> #{env_path}")
 				puts "-----> WARNING: Please set your RAILS_MASTER_KEY env var for this rails app." if system("grep -q '^RAILS_MASTER_KEY=yourmasterkey' #{env_path}")
 
+				# Setup gems folder. If this is not created then docker will create it while running the container,
+				# but the folder will have root user assigned instead of the current user.
+				FileUtils.mkdir_p("#{container_path}/gems")
+
 				# Setup Godfile
 				unless File.exist? "#{container_path_with_now_date}/Godfile"
 					puts "-----> WARNING: Godfile not detected. Adding a default Godfile. It is recommended to add your own Godfile."
@@ -362,7 +366,7 @@ module Smartcloud
 					--env-file='#{container_path}/env' \
 					--expose='5000' \
 					--volume='#{container_path_with_now_date}:/code' \
-					--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/buildpacks/rails/gems:/usr/local/bundle' \
+					--volume='#{container_path}/gems:/code/vendor/bundle' \
 					--workdir='/code' \
 					--restart='always' \
 					--network='nginx-network' \
