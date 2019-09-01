@@ -355,6 +355,7 @@ module Smartcloud
 						God.watch do |w|
 							w.name = 'web'
 							w.start = 'bundle exec puma -C config/puma.rb'
+							w.behavior(:clean_pid_file)
 							w.keepalive
 						end
 					EOF")
