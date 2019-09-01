@@ -186,7 +186,7 @@ module Smartcloud
 					end
 					unless File.exist? "#{container_path}/env"
 						print "-----> Creating App Environment ... "
-						system("cat > #{container_path}/env <<- EOF
+						page = <<~HEREDOC
 							## System
 							USERNAME=#{username}
 							KEEP_RELEASES=3
@@ -196,8 +196,8 @@ module Smartcloud
 							LETSENCRYPT_HOST=#{appname}.#{Smartcloud.config.apps_domain}
 							LETSENCRYPT_EMAIL=#{Smartcloud.config.sysadmin_email}
 							LETSENCRYPT_TEST=false
-						EOF")
-						puts "done"
+						HEREDOC
+						puts "done" if system("echo '#{page}' > #{container_path}/env")
 					end
 				end
 			end
@@ -247,18 +247,18 @@ module Smartcloud
 				if refname == "refs/heads/master"
 					print "-----> Initializing Application ... "
 
-					# Note: There should be no space between + and " in now_date.
+					# Note: There should be no space between + and " in version.
 					# Note: date will be UTC date until timezone has been changed.
-					now_date = `date +"%Y%m%d%H%M%S"`.chomp!
-					container_path_with_now_date = "#{container_path}/#{now_date}"
+					version = `date +"%Y%m%d%H%M%S"`.chomp!
+					container_path_with_version = "#{container_path}/releases/#{version}"
 
-					unless Dir.exist? container_path_with_now_date
-						FileUtils.mkdir_p(container_path_with_now_date)
-						if system("git archive #{newrev} | tar -x -C #{container_path_with_now_date}")
+					unless Dir.exist? container_path_with_version
+						FileUtils.mkdir_p(container_path_with_version)
+						if system("git archive #{newrev} | tar -x -C #{container_path_with_version}")
 							puts "done"
 
 							# Clean up very old versions
-							Dir.chdir(container_path) do
+							Dir.chdir("#{container_path}/releases") do
 								app_versions = Dir.glob('*').select { |f| File.directory? f }.sort
 								destroy_count = app_versions.count - ENV['KEEP_RELEASES'].to_i
 								if destroy_count > 0
@@ -276,6 +276,9 @@ module Smartcloud
 							puts "Could not extract new app version ... Failed."
 							exit 1
 						end
+					else
+						puts "This version name already exists ... Failed."
+						exit 1
 					end
 				end
 			end
@@ -284,26 +287,26 @@ module Smartcloud
 				if Smartcloud::Docker.running?
 					container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
 
-					Dir.chdir(container_path) do
+					Dir.chdir("#{container_path}/releases") do
 						if app_version == 0
 							app_versions = Dir.glob('*').select { |f| File.directory? f }.sort
 							app_version = app_versions.last
 						end
 
-						container_path_with_now_date = "#{container_path}/#{app_version}"
+						container_path_with_version = "#{container_path}/releases/#{app_version}"
 
 						# Setup Buildpacker
 						buildpacker_path = "#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/buildpacks/buildpacker.rb"
-						FileUtils.cp(buildpacker_path, container_path_with_now_date)
+						FileUtils.cp(buildpacker_path, container_path_with_version)
 
 						puts "-----> Launching Application ... "
 
-						if File.exist? "#{container_path_with_now_date}/bin/rails"
+						if File.exist? "#{container_path_with_version}/bin/rails"
 							# Stopping & Removing container
 							self.stop_app(appname)
 
 							# Starting Rails App
-							self.start_app_rails(appname, container_path, container_path_with_now_date)
+							self.start_app_rails(appname, container_path, container_path_with_version)
 						end
 					end
 				end
@@ -330,12 +333,12 @@ module Smartcloud
 				end
 			end
 
-			def self.start_app_rails(appname, container_path, container_path_with_now_date)
+			def self.start_app_rails(appname, container_path, container_path_with_version)
 				puts "-----> Ruby on Rails application detected"
 
 				# Setup rails env
 				env_path = "#{container_path}/env"
-				system("grep -q '^## Rails' #{env_path} || echo '\n## Rails' >> #{env_path}")
+				system("grep -q '^## Rails' #{env_path} || echo '## Rails' >> #{env_path}")
 				system("grep -q '^RAILS_ENV=' #{env_path} || echo 'RAILS_ENV=production' >> #{env_path}")
 				system("grep -q '^RACK_ENV=' #{env_path} || echo 'RACK_ENV=production' >> #{env_path}")
 				system("grep -q '^RAILS_LOG_TO_STDOUT=' #{env_path} || echo 'RAILS_LOG_TO_STDOUT=enabled' >> #{env_path}")
@@ -349,16 +352,17 @@ module Smartcloud
 				FileUtils.mkdir_p("#{container_path}/gems")
 
 				# Setup Godfile
-				unless File.exist? "#{container_path_with_now_date}/Godfile"
+				unless File.exist? "#{container_path_with_version}/Godfile"
 					puts "-----> WARNING: Godfile not detected. Adding a default Godfile. It is recommended to add your own Godfile."
-					system("cat > #{container_path_with_now_date}/Godfile <<- EOF
+					page = <<~HEREDOC
 						God.watch do |w|
 							w.name = 'web'
 							w.start = 'bundle exec puma -C config/puma.rb'
 							w.behavior(:clean_pid_file)
 							w.keepalive
 						end
-					EOF")
+					HEREDOC
+					system("echo '#{page}' > #{container_path_with_version}/Godfile")
 				end
 
 				# Creating & Starting container
@@ -366,7 +370,7 @@ module Smartcloud
 					--name='#{appname}' \
 					--env-file='#{container_path}/env' \
 					--expose='5000' \
-					--volume='#{container_path_with_now_date}:/code' \
+					--volume='#{container_path_with_version}:/code' \
 					--volume='#{container_path}/gems:/code/vendor/bundle' \
 					--workdir='/code' \
 					--restart='always' \
