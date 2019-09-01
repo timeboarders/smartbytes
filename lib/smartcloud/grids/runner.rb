@@ -237,7 +237,7 @@ module Smartcloud
 
 				# Match Username
 				unless ENV['USERNAME'] == username
-					puts "User is not authorized ... Failed."
+					puts "Unauthorized."
 					exit 1
 				end
 				puts "done"
