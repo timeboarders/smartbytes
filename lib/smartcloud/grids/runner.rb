@@ -334,7 +334,7 @@ module Smartcloud
 			end
 
 			def self.start_app_rails(appname, container_path, container_path_with_version)
-				puts "-----> Ruby on Rails application detected"
+				puts "-----> Ruby on Rails application detected."
 
 				# Setup rails env
 				env_path = "#{container_path}/env"
