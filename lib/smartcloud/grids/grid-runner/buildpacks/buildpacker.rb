@@ -12,7 +12,7 @@ class Buildpacker
 		FileUtils.rm("tmp/pids/server.pid") if File.exist? "tmp/pids/server.pid"
 
 		puts "-----> Performing bundle install ... "
-		if system("bundle install --deployment --clean --without development test")
+		if system("bundle install --deployment --clean")
 			puts "-----> Installing Javascript Dependencies & Pre-compiling Assets ... "
 			if system("bundle exec rails assets:precompile", out: File::NULL)
 				puts "done"
@@ -21,7 +21,7 @@ class Buildpacker
 				if system("god -c Godfile -D")
 					puts "-----> Launched Application ... Success."
 				end
-				exit 0
+				# exit 0
 			end
 		end		
 	end
