@@ -22,9 +22,9 @@ RUN apk add --update build-base && \
 
 USER "$USER_NAME"
 
-# Install bundler and foreman gems
+# Install bundler and god gems
 RUN gem install bundler && \
-	gem install foreman
+	gem install god
 
 # Command to execute at container start
 CMD ["ruby", "buildpacker.rb"]

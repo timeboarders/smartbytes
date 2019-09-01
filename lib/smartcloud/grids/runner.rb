@@ -344,11 +344,15 @@ module Smartcloud
 				system("grep -q '^RAILS_MASTER_KEY=' #{env_path} || echo 'RAILS_MASTER_KEY=yourmasterkey' >> #{env_path}")
 				puts "-----> WARNING: Please set your RAILS_MASTER_KEY env var for this rails app." if system("grep -q '^RAILS_MASTER_KEY=yourmasterkey' #{env_path}")
 
-				# Setup Procfile
-				unless File.exist? "#{container_path_with_now_date}/Procfile"
-					puts "-----> WARNING: Procfile not detected. Adding a default Procfile. It is recommended to add your own Procfile."
-					system("cat > #{container_path_with_now_date}/Procfile <<- EOF
-						web: bundle exec puma -C config/puma.rb
+				# Setup Godfile
+				unless File.exist? "#{container_path_with_now_date}/Godfile"
+					puts "-----> WARNING: Godfile not detected. Adding a default Godfile. It is recommended to add your own Godfile."
+					system("cat > #{container_path_with_now_date}/Godfile <<- EOF
+						God.watch do |w|
+							w.name = 'web'
+							w.start = 'bundle exec puma -C config/puma.rb'
+							w.keepalive
+						end
 					EOF")
 				end
 

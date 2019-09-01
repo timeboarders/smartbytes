@@ -18,7 +18,7 @@ class Buildpacker
 				puts "done"
 
 				puts "-----> Running Web Server ... "
-				if system("foreman start -f Procfile")
+				if system("god -c Godfile -D")
 					puts "-----> Launched Application ... Success."
 				end
 				exit 0
