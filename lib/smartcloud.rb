@@ -1,4 +1,5 @@
 require "ostruct"
+require "logger"
 
 # The main Smartcloud driver
 module Smartcloud
