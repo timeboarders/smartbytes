@@ -14,20 +14,24 @@ RUN sed -i "s/999/99/" /etc/group && \
 	adduser "$USER_NAME" "docker"
 
 # We need the following:
-# - git, because that gets us the git-http-backend CGI script
 # - fcgiwrap, because that is how nginx does CGI
+# ----- IMPORTANT NOTE: This is custom build fcgiwrap package to account for NO_BUFFERING option.
+# ----- Original fcgiwrap: https://github.com/gnosek/fcgiwrap
+# ----- Custom fcgiwrap: https://github.com/notr1ch/fcgiwrap
+# - git and git-daemon, because that gets us the git-http-backend CGI script
+# - ruby, to run smartcloud gem
 # - spawn-fcgi, to launch fcgiwrap and to create the unix socket
-RUN apk add --update git && \
+COPY fcgiwrap /root/apk-packages/fcgiwrap
+RUN apk add fcgiwrap --repository /root/apk-packages/fcgiwrap/packages/main --allow-untrusted && \
+	rm -rf /root/apk-packages
+RUN apk add --update coreutils && \
+	apk add --update util-linux && \
+	apk add --update git && \
 	apk add --update git-daemon && \
 	apk add --update ruby && \
-    apk add --update fcgiwrap && \
     apk add --update spawn-fcgi && \
     rm -rf /var/cache/apk/*
 
 RUN gem install smartcloud --no-rdoc --no-ri
 
-# launch fcgiwrap via spawn-fcgi; launch nginx in the foreground
-# so the container doesn't die on us; supposedly we should be
-# using supervisord or something like that instead, but this
-# will do
 CMD "git, fcgiwrap & spawn-fcgi installed"
