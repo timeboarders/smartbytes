@@ -28,4 +28,4 @@ RUN gem install smartcloud && \
 	gem install god
 
 # Command to execute at container start
-CMD ["ruby", "buildpacker.rb"]
+CMD ["buildpacker", "start"]
