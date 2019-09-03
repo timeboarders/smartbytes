@@ -23,8 +23,9 @@ module Smartcloud
 	    end
 
 	    def configure_logger_for(classname)
+		  $stdout.sync = true
 	      logger = ::Logger.new($stdout)
-		  logger.level = ::Logger::INFO
+		  logger.level = "::Logger::#{Smartcloud.config.logger_level}".to_sym
 	      logger.progname = classname
 	      logger
 	    end
