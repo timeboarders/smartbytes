@@ -275,10 +275,6 @@ module Smartcloud
 						end
 						container_path_with_version = "#{container_path}/releases/#{app_version}"
 
-						# Setup Buildpacker
-						buildpacker_path = "#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/buildpacks/buildpacker.rb"
-						FileUtils.cp(buildpacker_path, container_path_with_version)
-
 						# Launching Application
 						logger.info "Launching Application ..."
 						if File.exist? "#{container_path_with_version}/bin/rails"
