@@ -24,6 +24,7 @@ module Smartcloud
 
 	    def configure_logger_for(classname)
 	      logger = ::Logger.new($stdout)
+		  logger.level = ::Logger::INFO
 	      logger.progname = classname
 	      logger
 	    end
