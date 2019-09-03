@@ -22,8 +22,9 @@ RUN apk add --update build-base && \
 
 USER "$USER_NAME"
 
-# Install bundler and god gems
-RUN gem install bundler && \
+# Install gems
+RUN gem install smartcloud && \
+	gem install bundler && \
 	gem install god
 
 # Command to execute at container start
