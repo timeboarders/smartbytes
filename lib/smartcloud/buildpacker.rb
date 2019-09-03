@@ -26,6 +26,3 @@ module Smartcloud
 		end
 	end
 end
-
-buildpacker = Buildpacker.new
-buildpacker.pack
