@@ -10,4 +10,5 @@ while read oldrev newrev refname; do
 	    REPOSITORY_BASENAME=$(basename $(readlink -nf "$PWD"/..))
 	fi
 	script -qfc "runner prereceive $REPOSITORY_BASENAME $REMOTE_USER $oldrev $newrev $refname" /home/$(whoami)/.smartcloud/grids/grid-runner/apps/containers/$REPOSITORY_BASENAME/typescript
+	exit 1
 done
