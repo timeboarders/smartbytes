@@ -1,5 +1,4 @@
 require "ostruct"
-require "logger"
 
 # The main Smartcloud driver
 module Smartcloud
@@ -14,4 +13,5 @@ if File.exist?("#{Smartcloud.config.user_home_path}/.smartcloud/config/environme
 	require "#{Smartcloud.config.user_home_path}/.smartcloud/config/environment"
 end
 
+require 'smartcloud/base'
 require 'smartcloud/boot'
