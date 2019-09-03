@@ -3,7 +3,7 @@ require "tempfile"
 
 # The main Smartcloud Boot driver
 module Smartcloud
-	class Boot
+	class Boot < Smartcloud::Base
 		def initialize
 		end
 

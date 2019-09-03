@@ -1,7 +1,7 @@
 # The main Smartcloud Grids Solr driver
 module Smartcloud
 	module Grids
-		class Solr
+		class Solr < Smartcloud::Base
 			def initialize
 			end
 

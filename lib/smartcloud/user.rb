@@ -3,7 +3,7 @@ require "base64"
 
 # The main Smartcloud User driver
 module Smartcloud
-	class User
+	class User < Smartcloud::Base
 		def initialize
 		end
 

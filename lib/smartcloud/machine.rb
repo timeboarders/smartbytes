@@ -1,6 +1,6 @@
 # The main Smartcloud Machine driver
 module Smartcloud
-	class Machine
+	class Machine < Smartcloud::Base
 		def initialize
 		end
 

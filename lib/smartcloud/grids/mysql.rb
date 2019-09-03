@@ -1,7 +1,7 @@
 # The main Smartcloud Grids Mysql driver
 module Smartcloud
 	module Grids
-		class Mysql
+		class Mysql < Smartcloud::Base
 			def initialize
 			end
 

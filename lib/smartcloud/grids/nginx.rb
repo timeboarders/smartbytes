@@ -1,7 +1,7 @@
 # The main Smartcloud Grids Nginx driver
 module Smartcloud
 	module Grids
-		class Nginx
+		class Nginx < Smartcloud::Base
 			def initialize
 			end
 	

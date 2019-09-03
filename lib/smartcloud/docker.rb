@@ -1,6 +1,6 @@
 # The main Smartcloud Docker driver
 module Smartcloud
-	class Docker
+	class Docker < Smartcloud::Base
 		def initialize
 		end
 
