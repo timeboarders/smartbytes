@@ -1,7 +1,8 @@
 # The main Smartcloud Grids Git driver
 module Smartcloud
 	module Grids
-		class Runner
+		class Runner < Smartcloud::Base
+
 			def initialize
 			end
 
@@ -218,34 +219,26 @@ module Smartcloud
 			end
 
 			def self.prereceive_app(appname, username, oldrev, newrev, refname)
+				logger.formatter = proc do |severity, datetime, progname, message|
+				  "\t\t\t-----> #{severity}: #{message}\n"
+				end
+				logger.level = ::Logger::DEBUG
+
+				# Load vars and environment
 				container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
+				return unless self.load_container_env_vars(container_path)
 
-				## Verify the user and ensure the user is correct and has access to this repository
-				print "-----> Verifying User ... "
-				unless File.exist? "#{container_path}/env"
-					puts "Environment could not be loaded ... Failed."
-					exit 1
-				end
-
-				# Load ENV vars
-				File.open("#{container_path}/env").each_line do |line|
-					line.chomp!
-					next if line.empty? || line.start_with?('#')
-				    key, value = line.split "="
-				    ENV[key] = value
-				end
-
-				# Match Username
+				# Verify the user and ensure the user is correct and has access to this repository
+				logger.info "Verifying User ..."
 				unless ENV['USERNAME'] == username
-					puts "Unauthorized."
-					exit 1
+					logger.error "Unauthorized."
+					return
 				end
-				puts "done"
 
 				# Only run this script for the master branch. You can remove this
 				# if block if you wish to run it for others as well.
 				if refname == "refs/heads/master"
-					print "-----> Initializing Application ... "
+					logger.info "Loading Application ..."
 
 					# Note: There should be no space between + and " in version.
 					# Note: date will be UTC date until timezone has been changed.
@@ -255,32 +248,19 @@ module Smartcloud
 					unless Dir.exist? container_path_with_version
 						FileUtils.mkdir_p(container_path_with_version)
 						if system("git archive #{newrev} | tar -x -C #{container_path_with_version}")
-							puts "done"
-
-							# Clean up very old versions
-							Dir.chdir("#{container_path}/releases") do
-								app_versions = Dir.glob('*').select { |f| File.directory? f }.sort
-								destroy_count = app_versions.count - ENV['KEEP_RELEASES'].to_i
-								if destroy_count > 0
-									print "-----> Deleting older application releases ... "
-									destroy_count.times do
-										FileUtils.rm_r(File.join(Dir.pwd, app_versions.shift))
-									end
-									puts "done"
-								end
-							end
-
 							# Start App
 							self.start_app(appname)
 						else
-							puts "Could not extract new app version ... Failed."
-							exit 1
+							logger.fatal "Could not extract new app version ... Failed."
+							return
 						end
 					else
-						puts "This version name already exists ... Failed."
-						exit 1
+						logger.fatal "This version name already exists ... Failed."
+						return
 					end
 				end
+
+				logger.formatter = nil
 			end
 
 			def self.start_app(appname, app_version = 0)
@@ -288,45 +268,35 @@ module Smartcloud
 					container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
 
 					Dir.chdir("#{container_path}/releases") do
+						# Getting App Version
 						if app_version == 0
 							app_versions = Dir.glob('*').select { |f| File.directory? f }.sort
 							app_version = app_versions.last
 						end
-
 						container_path_with_version = "#{container_path}/releases/#{app_version}"
 
 						# Setup Buildpacker
 						buildpacker_path = "#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/buildpacks/buildpacker.rb"
 						FileUtils.cp(buildpacker_path, container_path_with_version)
 
-						puts "-----> Launching Application ... "
-
+						# Launching Application
+						logger.info "Launching Application ..."
 						if File.exist? "#{container_path_with_version}/bin/rails"
-							# Stopping & Removing container
-							self.stop_app(appname)
-
 							# Starting Rails App
 							self.start_app_rails(appname, container_path, container_path_with_version)
 						end
 					end
 				end
-
-				# These two lines are important to stop and remove container and then cancel pre-receive push if finally the app could not be started.
-				# If the app was finally started, then these two lines should never be executed.
-				self.stop_app(appname)
-				exit 1
 			end
 
 			def self.stop_app(appname)
 				if Smartcloud::Docker.running?
 					if system("docker inspect -f '{{.State.Running}}' #{appname}", [:out, :err] => File::NULL)
-						print "-----> Stopping container #{appname} ... "
+						logger.debug "Stopping container #{appname} ..."
 						if system("docker stop '#{appname}'", out: File::NULL)
-							puts "done"
-
-							print "-----> Removing container #{appname} ... "
+							logger.debug "Removing container #{appname} ..."
 							if system("docker rm '#{appname}'", out: File::NULL)
-								puts "done"
+								logger.debug "Stopped & Removed #{appname} ..."
 							end
 						end
 					end
@@ -334,7 +304,11 @@ module Smartcloud
 			end
 
 			def self.start_app_rails(appname, container_path, container_path_with_version)
-				puts "-----> Ruby on Rails application detected."
+				# Stopping & Removing not required app containers
+				# TODO: To be removed after dynamic container switching has been implemented as it should be done in the end at the time of cleanup after the new container is running.
+				self.stop_app(appname)
+
+				logger.info "Ruby on Rails application detected."
 
 				# Setup rails env
 				env_path = "#{container_path}/env"
@@ -345,7 +319,7 @@ module Smartcloud
 				system("grep -q '^RAILS_SERVE_STATIC_FILES=' #{env_path} || echo 'RAILS_SERVE_STATIC_FILES=enabled' >> #{env_path}")
 				system("grep -q '^LANG=' #{env_path} || echo 'LANG=en_US.UTF-8' >> #{env_path}")
 				system("grep -q '^RAILS_MASTER_KEY=' #{env_path} || echo 'RAILS_MASTER_KEY=yourmasterkey' >> #{env_path}")
-				puts "-----> WARNING: Please set your RAILS_MASTER_KEY env var for this rails app." if system("grep -q '^RAILS_MASTER_KEY=yourmasterkey' #{env_path}")
+				logger.warn "WARNING: Please set your RAILS_MASTER_KEY env var for this rails app." if system("grep -q '^RAILS_MASTER_KEY=yourmasterkey' #{env_path}")
 
 				# Setup gems folder. If this is not created then docker will create it while running the container,
 				# but the folder will have root user assigned instead of the current user.
@@ -353,11 +327,11 @@ module Smartcloud
 
 				# Setup Godfile
 				unless File.exist? "#{container_path_with_version}/Godfile"
-					puts "-----> WARNING: Godfile not detected. Adding a default Godfile. It is recommended to add your own Godfile."
-					page = <<~HEREDOC
+					logger.warn "WARNING: Godfile not detected. Adding a default Godfile. It is recommended to add your own Godfile."
+					page = <<~"HEREDOC"
 						God.watch do |w|
-							w.name = 'web'
-							w.start = 'bundle exec puma -C config/puma.rb'
+							w.name = "web"
+							w.start = "bundle exec puma -C config/puma.rb"
 							w.behavior(:clean_pid_file)
 							w.keepalive
 						end
@@ -381,7 +355,44 @@ module Smartcloud
 					system("docker network connect mysql-network #{appname}")
 
 					system("docker start --attach #{appname}")
+					self.clean_up(container_path)
 				end
+			end
+
+			def self.clean_up(container_path)
+				logger.info "Cleaning up ..."
+
+				# Stopping & Removing not required app containers
+				appname = File.basename(container_path)
+				self.stop_app(appname)
+
+				# Clean up very old versions
+				Dir.chdir("#{container_path}/releases") do
+					app_versions = Dir.glob('*').select { |f| File.directory? f }.sort
+					destroy_count = app_versions.count - ENV['KEEP_RELEASES'].to_i
+					if destroy_count > 0
+						logger.debug "Deleting older application releases ..."
+						destroy_count.times do
+							FileUtils.rm_r(File.join(Dir.pwd, app_versions.shift))
+						end
+					end
+				end
+			end
+
+			def self.load_container_env_vars(container_path)
+				unless File.exist? "#{container_path}/env"
+					logger.fatal "Environment could not be loaded ... Failed."
+					return false
+				end
+
+				File.open("#{container_path}/env").each_line do |line|
+					line.chomp!
+					next if line.empty? || line.start_with?('#')
+				    key, value = line.split "="
+				    ENV[key] = value
+				end
+
+				true
 			end
 		end
 	end
