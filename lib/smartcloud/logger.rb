@@ -1,5 +1,7 @@
 require "logger"
 
+$stdout.sync = true
+
 module Smartcloud
 	module Logger
 	  def logger
@@ -23,9 +25,8 @@ module Smartcloud
 	    end
 
 	    def configure_logger_for(classname)
-		  $stdout.sync = true
 	      logger = ::Logger.new($stdout)
-		  logger.level = "::Logger::#{Smartcloud.config.logger_level}".to_sym
+		  logger.level = ::Logger.const_get("#{Smartcloud.config.logger_level}".upcase)
 	      logger.progname = classname
 	      logger
 	    end
