@@ -1,14 +1,12 @@
 FROM ruby:2.6.4-alpine3.10
-MAINTAINER Timeboard <hello@timeboard.me>
+LABEL maintainer="Timeboard <hello@timeboard.me>"
 
-# Setting up user
-# - envs
+# User
 ARG USER_UID
 ARG USER_NAME
-# - Create user.
 RUN adduser --disabled-password --gecos "" --uid "$USER_UID" "$USER_NAME"
 
-# Install Ruby on Rails Essentials
+# Ruby on Rails Essentials
 RUN apk add --update build-base && \
 	apk add --update tzdata && \
 	apk add --update nodejs && \
@@ -20,12 +18,13 @@ RUN apk add --update build-base && \
 	apk add --update mupdf-tools && \
     rm -rf /var/cache/apk/*
 
+# Privileges
 USER "$USER_NAME"
+WORKDIR "/app"
 
-# Install gems
+# Gems
 RUN gem install smartcloud && \
 	gem install bundler && \
 	gem install god
 
-# Command to execute at container start
 CMD ["buildpacker", "start"]
