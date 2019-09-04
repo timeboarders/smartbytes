@@ -217,16 +217,17 @@ module Smartcloud
 
 			def self.prereceive_app(appname, username, oldrev, newrev, refname)
 				logger.formatter = proc do |severity, datetime, progname, message|
-				  "\t\t\t-----> #{severity}: #{message}\n"
+					severity_text = { "DEBUG" => "\u{1f527} #{severity}:", "INFO" => " \u{276f}", "WARN" => "\u{2757} #{severity}:",
+						"ERROR" => "\u{274c} #{severity}:", "FATAL" => "\u{2b55} #{severity}:", "UNKNOWN" => "\u{2753} #{severity}:"
+					}
+					"\t\t\t\t#{severity_text[severity]} #{message}\n"
 				end
-				logger.level = ::Logger::DEBUG
 
 				# Load vars and environment
 				container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
 				return unless self.load_container_env_vars(container_path)
 
 				# Verify the user and ensure the user is correct and has access to this repository
-				logger.info "Verifying User ..."
 				unless ENV['USERNAME'] == username
 					logger.error "Unauthorized."
 					return
