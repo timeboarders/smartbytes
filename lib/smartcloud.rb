@@ -1,4 +1,5 @@
 require "ostruct"
+require "net/ssh"
 
 # The main Smartcloud driver
 module Smartcloud
