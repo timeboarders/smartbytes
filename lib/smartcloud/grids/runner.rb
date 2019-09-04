@@ -361,6 +361,29 @@ module Smartcloud
 				end
 			end
 
+			# Hot reloading app containers and removing old app container
+			def self.hot_reloaded_app?(appname)
+				logger.debug "Hot reloading '#{appname}' containers ..."
+
+				container_id = `docker ps -a -q --filter='name=^#{appname}$'`.chomp
+				unless container_id.empty?
+					if system("docker container rename #{appname} #{appname}_old", [:out, :err] => File::NULL)
+						logger.debug "Container renamed from #{appname} #{appname}_old"
+						if system("docker container rename #{appname}_new #{appname}", [:out, :err] => File::NULL)
+							logger.debug "Container renamed from #{appname}_new #{appname}"
+							self.stop_app("#{appname}_old")
+							return true
+						end
+					end
+				else
+					if system("docker container rename #{appname}_new #{appname}", [:out, :err] => File::NULL)
+						logger.debug "Container renamed from #{appname}_new #{appname}"
+						return true
+					end
+				end
+				return false
+			end
+
 			def self.load_container_env_vars(container_path)
 				unless File.exist? "#{container_path}/env"
 					logger.fatal "Environment could not be loaded ... Failed."
