@@ -30,12 +30,9 @@ module Smartcloud
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner:#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner' \
 							--volume='/var/run/docker.sock:/var/run/docker.sock' \
-							--user=#{File.basename(Smartcloud.config.user_home_path)} \
-							--workdir='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps' \
 							--restart='always' \
 							--network='nginx-network' \
-							smartcloud/runner \
-							spawn-fcgi -n -p 9000 /usr/bin/fcgiwrap -f", out: File::NULL)
+							smartcloud/runner", out: File::NULL)
 							puts "done"
 
 							print "-----> Starting container runner ... "
