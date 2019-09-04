@@ -299,15 +299,17 @@ module Smartcloud
 				system("grep -q '^RAILS_SERVE_STATIC_FILES=' #{env_path} || echo 'RAILS_SERVE_STATIC_FILES=enabled' >> #{env_path}")
 				system("grep -q '^LANG=' #{env_path} || echo 'LANG=en_US.UTF-8' >> #{env_path}")
 				system("grep -q '^RAILS_MASTER_KEY=' #{env_path} || echo 'RAILS_MASTER_KEY=yourmasterkey' >> #{env_path}")
-				logger.warn "WARNING: Please set your RAILS_MASTER_KEY env var for this rails app." if system("grep -q '^RAILS_MASTER_KEY=yourmasterkey' #{env_path}")
+				logger.warn "Please set your RAILS_MASTER_KEY env var for this rails app." if system("grep -q '^RAILS_MASTER_KEY=yourmasterkey' #{env_path}")
 
-				# Setup gems folder. If this is not created then docker will create it while running the container,
+				# Setup app folders. If this is not created then docker will create it while running the container,
 				# but the folder will have root user assigned instead of the current user.
-				FileUtils.mkdir_p("#{container_path}/gems")
+				FileUtils.mkdir_p("#{container_path}/app/vendor/bundle")
+				FileUtils.mkdir_p("#{container_path}/app/public")
+				FileUtils.mkdir_p("#{container_path}/app/node_modules")
 
 				# Setup Godfile
 				unless File.exist? "#{container_path_with_version}/Godfile"
-					logger.warn "WARNING: Godfile not detected. Adding a default Godfile. It is recommended to add your own Godfile."
+					logger.warn "Godfile not detected. Adding a default Godfile. It is recommended to add your own Godfile."
 					page = <<~"HEREDOC"
 						God.watch do |w|
 							w.name = "web"
