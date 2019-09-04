@@ -24,7 +24,6 @@ WORKDIR "/app"
 
 # Gems
 RUN gem install smartcloud && \
-	gem install bundler && \
-	gem install god
+	gem install bundler
 
 CMD ["buildpacker", "start"]

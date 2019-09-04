@@ -71,10 +71,10 @@ module Smartcloud
 				# Remove server.pid if it exists
 				FileUtils.rm("tmp/pids/server.pid") if File.exist? "tmp/pids/server.pid"
 
-				# if system("god -c Godfile -D")
+				if system("bundle", "exec", "puma", "-C", "config/puma.rb", out: File::NULL)
 					return true
-				# end
-				# return false
+				end
+				return false
 			end
 
 			def set_logger_formatter_arrow
