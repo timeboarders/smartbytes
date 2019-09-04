@@ -59,5 +59,11 @@ module Smartcloud
 			# sudo fail2ban-client reload
 			# sudo fail2ban-client status
 		end
+
+		def installing_docker_to_server
+		end
+
+		def installing_engine_to_server
+		end
 	end
 end
