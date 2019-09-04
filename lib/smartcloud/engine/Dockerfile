@@ -8,12 +8,11 @@ RUN apk add --update docker && \
 # - envs
 ARG USER_NAME
 ARG USER_UID
-ARG USER_GID
 ARG DOCKER_GID
 # - fix to change gid of 999 to 99 so that addgroup is free to create a group with 999 as gid
 # - Create group & user. Then add user to group
 RUN sed -i "s/999/99/" /etc/group && \
-	adduser --disabled-password --gecos "" --uid $USER_UID --gid $USER_GID $USER_NAME && \
+	adduser --disabled-password --gecos "" --uid $USER_UID $USER_NAME && \
 	addgroup --gid $DOCKER_GID "docker" && adduser $USER_NAME docker
 
 USER "$USER_NAME"
