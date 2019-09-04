@@ -1,0 +1,5 @@
+machine:
+  name: example
+  host: 122.122.122.122
+  username: exampleuser
+  password: examplepassword
