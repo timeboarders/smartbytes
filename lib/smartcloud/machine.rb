@@ -1,3 +1,5 @@
+require "net/ssh"
+
 # The main Smartcloud Machine driver
 module Smartcloud
 	class Machine < Smartcloud::Base
