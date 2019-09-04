@@ -69,5 +69,6 @@ elsif ARGV[0] == 'grids'
 # 	elsif ARGV[1] == 'destroy'
 # 		Smartcloud::User.destroy(ARGV[2], ARGV[3])
 # 	end
+else
+	puts "Specify a command to execute."
 end
-puts "Specify a command to execute."
