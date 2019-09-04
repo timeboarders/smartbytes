@@ -83,12 +83,14 @@ module Smartcloud
 end
 
 require 'smartcloud/machine'
+
+require 'smartcloud/engine'
 require 'smartcloud/docker'
 
-require 'smartcloud/grids/nginx'
-require 'smartcloud/grids/runner'
-require 'smartcloud/grids/buildpacker'
-require 'smartcloud/grids/solr'
-require 'smartcloud/grids/mysql'
-
 require 'smartcloud/user'
+
+require 'smartcloud/grids/mysql'
+require 'smartcloud/grids/solr'
+require 'smartcloud/grids/buildpacker'
+require 'smartcloud/grids/runner'
+require 'smartcloud/grids/nginx'
