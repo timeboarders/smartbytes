@@ -284,24 +284,10 @@ module Smartcloud
 			end
 
 			def self.stop_app(appname)
-				if Smartcloud::Docker.running?
-					if system("docker inspect -f '{{.State.Running}}' #{appname}", [:out, :err] => File::NULL)
-						logger.debug "Stopping container #{appname} ..."
-						if system("docker stop '#{appname}'", out: File::NULL)
-							logger.debug "Removing container #{appname} ..."
-							if system("docker rm '#{appname}'", out: File::NULL)
-								logger.debug "Stopped & Removed #{appname} ..."
-							end
-						end
-					end
-				end
+				self.stop_container(appname)
 			end
 
 			def self.start_app_rails(appname, container_path, container_path_with_version)
-				# Stopping & Removing not required app containers
-				# TODO: To be removed after dynamic container switching has been implemented as it should be done in the end at the time of cleanup after the new container is running.
-				self.stop_app(appname)
-
 				logger.info "Ruby on Rails application detected."
 
 				# Setup rails env
@@ -387,6 +373,20 @@ module Smartcloud
 				end
 
 				true
+			end
+
+			def self.stop_container(container_name)
+				if Smartcloud::Docker.running?
+					container_id = `docker ps -a -q --filter='name=^#{container_name}$'`.chomp
+					unless container_id.empty?
+						logger.debug "Stopping & Removing container #{container_name} ..."
+						if system("docker stop #{container_name} && docker rm #{container_name}", out: File::NULL)
+							logger.debug "Stopped & Removed container #{container_name} ..."
+						end
+					else
+						logger.debug "Container '#{container_name}' does not exist to stop."
+					end
+				end
 			end
 		end
 	end
