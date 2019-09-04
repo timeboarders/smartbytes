@@ -62,10 +62,25 @@ module Smartcloud
 			# sudo fail2ban-client status
 		end
 
-		def installing_docker_to_server
-		end
-
-		def installing_engine_to_server
-		end
+		# def create(name)
+		# 	FileUtils.mkdir_p name
+		# 	FileUtils.cp_r "#{Smartcloud.config.root_path}/lib/smartcloud/templates/machine/.", "#{name}"
+		# 	puts "Please fill details in your config folder before proceeding."
+		# end
+		#
+		# def run(*args)
+		# end
+		#
+		# def install_docker
+		# end
+		#
+		# def uninstall_docker
+		# end
+		#
+		# def install_engine
+		# end
+		#
+		# def uninstall_engine
+		# end
 	end
 end

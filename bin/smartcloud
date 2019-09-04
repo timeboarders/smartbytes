@@ -9,6 +9,24 @@ elsif !Smartcloud::Boot.initialized?
 	exit
 end
 
+# if ARGV[0] == 'new'
+# 	machine = Smartcloud::Machine.new
+# 	raise "Please specify machine name" unless ARGV[1]
+# 	machine.create(ARGV[1])
+# elsif ARGV[0] == 'install'
+# 	machine = Smartcloud::Machine.new
+# 	machine.install_docker
+# 	machine.install_engine
+# elsif ARGV[0] == 'uninstall'
+# 	machine = Smartcloud::Machine.new
+# 	machine.uninstall_engine
+# 	machine.uninstall_docker
+# elsif ARGV[0] == 'run'
+# 	machine = Smartcloud::Machine.new
+# 	ARGV.shift
+# 	raise "Please specify command to run" unless ARGV[0]
+# 	machine.run(ARGV)
+
 if ARGV[0] == 'docker'
 	if ARGV[1] == 'install'
 		Smartcloud::Docker.install
@@ -52,3 +70,4 @@ elsif ARGV[0] == 'grids'
 # 		Smartcloud::User.destroy(ARGV[2], ARGV[3])
 # 	end
 end
+puts "Specify a command to execute."
