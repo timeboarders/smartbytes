@@ -1,3 +1,5 @@
+require 'open3'
+
 module Smartcloud
 	module Grids
 		class Buildpacker < Smartcloud::Base
@@ -15,6 +17,57 @@ module Smartcloud
 			end
 
 			def pack_rails
+				return unless bundle_install?
+				return unless precompile_assets?
+				return unless start_web_server?
+
+				exit 0
+			end
+
+			# Perform bundle install
+			def bundle_install?
+				logger.info "Performing bundle install ..."
+
+				set_logger_formatter_tabs
+				exit_status = nil
+				Open3.popen2e("bundle", "install", "--deployment", "--clean") do |stdin, stdout_and_stderr, wait_thr|
+					stdout_and_stderr.each { |line| logger.info "#{line}" }
+					exit_status = wait_thr.value.success?
+				end
+				set_logger_formatter_arrow
+
+				if exit_status
+					return true
+				else
+					logger.error "Could not complete bundle install."
+					return false
+				end
+			end
+
+			# Perform pre-compiling of assets
+			def precompile_assets?
+				logger.info "Installing Javascript dependencies & pre-compiling assets ..."
+
+				set_logger_formatter_tabs
+				exit_status = nil
+				Open3.popen2e("bundle", "exec", "rails", "assets:precompile") do |stdin, stdout_and_stderr, wait_thr|
+					stdout_and_stderr.each { |line| logger.info "#{line}" }
+					exit_status = wait_thr.value.success?
+				end
+				set_logger_formatter_arrow
+
+				if exit_status
+					return true
+				else
+					logger.error "Could not install Javascript dependencies or pre-compile assets."
+					return false
+				end
+			end
+
+			# Perform starting of web server
+			def start_web_server?
+				logger.debug "Starting Web Server ..."
+
 				# Remove server.pid if it exists
 				FileUtils.rm("tmp/pids/server.pid") if File.exist? "tmp/pids/server.pid"
 
