@@ -322,31 +322,40 @@ module Smartcloud
 				end
 
 				# Creating & Starting container
+				container_id = `docker ps -a -q --filter='name=^#{appname}_1$' --filter='status=running'`.chomp
+				new_container = container_id.empty? ? "#{appname}_1" : "#{appname}_2"
+				old_container = container_id.empty? ? "#{appname}_2" : "#{appname}_1"
+
+				self.stop_app("#{new_container}")
 				if system("docker create \
-					--name='#{appname}' \
+					--name='#{new_container}' \
 					--env-file='#{container_path}/env' \
 					--expose='5000' \
-					--volume='#{container_path_with_version}:/code' \
-					--volume='#{container_path}/gems:/code/vendor/bundle' \
-					--workdir='/code' \
+					--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
+					--volume='#{container_path_with_version}:/app' \
+					--volume='#{container_path}/app/vendor/bundle:/app/vendor/bundle' \
+					--volume='#{container_path}/app/public:/app/public' \
+					--volume='#{container_path}/app/node_modules:/app/node_modules' \
 					--restart='always' \
 					--network='nginx-network' \
 					smartcloud/buildpacks/rails", out: File::NULL)
 
-					system("docker network connect solr-network #{appname}")
-					system("docker network connect mysql-network #{appname}")
+					system("docker network connect solr-network #{new_container}")
+					system("docker network connect mysql-network #{new_container}")
 
-					system("docker start --attach #{appname}")
-					self.clean_up(container_path)
+					if system("docker start --attach #{new_container}")
+						self.stop_app(old_container)
+						self.clean_up(container_path)
+						logger.info "Launched Application ... Success."
+						exit 10
+					else
+						self.stop_app("#{new_container}")
+					end
 				end
 			end
 
 			def self.clean_up(container_path)
 				logger.info "Cleaning up ..."
-
-				# Stopping & Removing not required app containers
-				appname = File.basename(container_path)
-				self.stop_app(appname)
 
 				# Clean up very old versions
 				Dir.chdir("#{container_path}/releases") do
@@ -359,29 +368,6 @@ module Smartcloud
 						end
 					end
 				end
-			end
-
-			# Hot reloading app containers and removing old app container
-			def self.hot_reloaded_app?(appname)
-				logger.debug "Hot reloading '#{appname}' containers ..."
-
-				container_id = `docker ps -a -q --filter='name=^#{appname}$'`.chomp
-				unless container_id.empty?
-					if system("docker container rename #{appname} #{appname}_old", [:out, :err] => File::NULL)
-						logger.debug "Container renamed from #{appname} #{appname}_old"
-						if system("docker container rename #{appname}_new #{appname}", [:out, :err] => File::NULL)
-							logger.debug "Container renamed from #{appname}_new #{appname}"
-							self.stop_app("#{appname}_old")
-							return true
-						end
-					end
-				else
-					if system("docker container rename #{appname}_new #{appname}", [:out, :err] => File::NULL)
-						logger.debug "Container renamed from #{appname}_new #{appname}"
-						return true
-					end
-				end
-				return false
 			end
 
 			def self.load_container_env_vars(container_path)
@@ -400,6 +386,7 @@ module Smartcloud
 				true
 			end
 
+			# Stop Container
 			def self.stop_container(container_name)
 				if Smartcloud::Docker.running?
 					container_id = `docker ps -a -q --filter='name=^#{container_name}$'`.chomp
