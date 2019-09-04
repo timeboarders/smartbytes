@@ -307,20 +307,6 @@ module Smartcloud
 				FileUtils.mkdir_p("#{container_path}/app/public")
 				FileUtils.mkdir_p("#{container_path}/app/node_modules")
 
-				# Setup Godfile
-				unless File.exist? "#{container_path_with_version}/Godfile"
-					logger.warn "Godfile not detected. Adding a default Godfile. It is recommended to add your own Godfile."
-					page = <<~"HEREDOC"
-						God.watch do |w|
-							w.name = "web"
-							w.start = "bundle exec puma -C config/puma.rb"
-							w.behavior(:clean_pid_file)
-							w.keepalive
-						end
-					HEREDOC
-					system("echo '#{page}' > #{container_path_with_version}/Godfile")
-				end
-
 				# Creating & Starting container
 				container_id = `docker ps -a -q --filter='name=^#{appname}_1$' --filter='status=running'`.chomp
 				new_container = container_id.empty? ? "#{appname}_1" : "#{appname}_2"
