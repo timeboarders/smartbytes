@@ -316,7 +316,7 @@ module Smartcloud
 				if system("docker create \
 					--name='#{new_container}' \
 					--env-file='#{container_path}/env' \
-					--expose='5000' \
+					--expose='3000' \
 					--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
 					--volume='#{container_path_with_version}:/app' \
 					--volume='#{container_path}/app/vendor/bundle:/app/vendor/bundle' \
