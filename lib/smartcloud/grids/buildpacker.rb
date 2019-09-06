@@ -68,13 +68,26 @@ module Smartcloud
 			def start_web_server?
 				logger.debug "Starting Web Server ..."
 
-				# Remove server.pid if it exists
-				FileUtils.rm("tmp/pids/server.pid") if File.exist? "tmp/pids/server.pid"
+				# Spawn Process
+				pid = Process.spawn("bundle", "exec", "puma", "--config", "config/puma.rb")
+				Process.detach(pid)
 
-				if system("bundle", "exec", "puma", "-C", "config/puma.rb", out: File::NULL)
-					return true
+				# Sleep
+				sleep 5
+
+				# Check PID running
+				status = nil
+				begin
+					Process.kill(0, pid)
+					puts "Web Server started successfully."
+					status = true
+				rescue Errno::ESRCH # No such process
+					puts "Web Server cound not start"
+					status = false
 				end
-				return false
+
+				# Return status
+				return status
 			end
 
 			def set_logger_formatter_arrow
