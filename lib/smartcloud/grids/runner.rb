@@ -324,6 +324,7 @@ module Smartcloud
 					--volume='#{container_path}/app/public:/app/public' \
 					--volume='#{container_path}/app/node_modules:/app/node_modules' \
 					--restart='always' \
+					--init \
 					--network='nginx-network' \
 					smartcloud/buildpacks/rails", out: File::NULL)
 
