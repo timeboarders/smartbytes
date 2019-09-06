@@ -17,11 +17,20 @@ module Smartcloud
 			end
 
 			def pack_rails
-				return unless bundle_install?
-				return unless precompile_assets?
-				return unless start_web_server?
+				if File.exist? "tmp/smartcloud/packed"
+					begin
+						pid = File.read('tmp/smartcloud/packed').to_i
+						Process.kill('QUIT', pid)
+					rescue Errno::ESRCH # No such process
+					end
+					exec "bundle", "exec", "puma", "--config", "config/puma.rb"
+				else
+					return unless bundle_install?
+					return unless precompile_assets?
+					return unless test_web_server?
 
-				exit 0
+					exit 0
+				end
 			end
 
 			# Perform bundle install
@@ -64,12 +73,16 @@ module Smartcloud
 				end
 			end
 
-			# Perform starting of web server
-			def start_web_server?
-				logger.debug "Starting Web Server ..."
+			# Perform testing of web server
+			def test_web_server?
+				logger.info "Setting up Web Server ..."
+
+				# tmp folder
+				FileUtils.mkdir_p("tmp/smartcloud")
+				FileUtils.rm_f("tmp/smartcloud/packed")
 
 				# Spawn Process
-				pid = Process.spawn("bundle", "exec", "puma", "--config", "config/puma.rb")
+				pid = Process.spawn("bundle", "exec", "puma", "--config", "config/puma.rb", out: File::NULL)
 				Process.detach(pid)
 
 				# Sleep
@@ -79,10 +92,10 @@ module Smartcloud
 				status = nil
 				begin
 					Process.kill(0, pid)
-					puts "Web Server started successfully."
+					system("echo '#{pid}' > tmp/smartcloud/packed")
 					status = true
 				rescue Errno::ESRCH # No such process
-					puts "Web Server cound not start"
+					logger.info "Web Server could not start"
 					status = false
 				end
 

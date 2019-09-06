@@ -332,10 +332,15 @@ module Smartcloud
 					system("docker network connect mysql-network #{new_container}")
 
 					if system("docker start --attach #{new_container}")
-						self.stop_app(old_container)
-						self.clean_up(container_path)
-						logger.info "Launched Application ... Success."
-						exit 10
+						logger.debug "Starting Web Server ..."
+						if system("docker start #{new_container}", out: File::NULL)
+							sleep 5
+							logger.info "Web Server started successfully."
+							self.stop_app(old_container)
+							self.clean_up(container_path)
+							logger.info "Launched Application ... Success."
+							exit 10
+						end
 					else
 						self.stop_app("#{new_container}")
 					end
