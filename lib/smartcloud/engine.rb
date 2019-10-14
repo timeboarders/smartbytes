@@ -4,6 +4,12 @@ module Smartcloud
 		def initialize
 		end
 
+		def self.install
+		end
+
+		def self.uninstall
+		end
+
 		def create_images
 			# unless system("docker image inspect smartcloud", [:out, :err] => File::NULL)
 			# 	print "-----> Creating image smartcloud ... "

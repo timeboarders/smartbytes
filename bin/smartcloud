@@ -31,12 +31,12 @@ if ARGV[0] == 'new'
 	machine = Smartcloud::Machine.new
 	raise "Please specify a machine name" unless ARGV[1]
 	machine.create(ARGV[1])
-elsif ARGV[0] == 'docker'
-	if ARGV[1] == 'install'
-		Smartcloud::Docker.install
-	elsif ARGV[1] == 'uninstall'
-		Smartcloud::Docker.uninstall
-	end
+elsif ARGV[0] == 'start'
+	Smartcloud::Docker.install
+	Smartcloud::Engine.install
+elsif ARGV[0] == 'stop'
+	Smartcloud::Engine.uninstall
+	Smartcloud::Docker.uninstall
 elsif ARGV[0] == 'grids'
 	if ARGV[1] == 'runner'
 		if ARGV[2] == 'up'
