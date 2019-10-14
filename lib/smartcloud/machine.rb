@@ -12,6 +12,20 @@ module Smartcloud
 			puts "New machine #{name} has been created."
 		end
 
+		def start
+			Smartcloud::Docker.install
+			Smartcloud::Engine.install
+			Smartcloud::User.generate
+		end
+
+		def stop
+			Smartcloud::Engine.uninstall
+			Smartcloud::Docker.uninstall
+		end
+
+		# def run(*args)
+		# end
+
 		def getting_started
 			# puts 'You may be prompted to make a menu selection when the Grub package is updated on Ubuntu. If prompted, select keep the local version currently installed.'
 
@@ -67,20 +81,5 @@ module Smartcloud
 			# sudo fail2ban-client reload
 			# sudo fail2ban-client status
 		end
-
-		# def run(*args)
-		# end
-		#
-		# def install_docker
-		# end
-		#
-		# def uninstall_docker
-		# end
-		#
-		# def install_engine
-		# end
-		#
-		# def uninstall_engine
-		# end
 	end
 end
