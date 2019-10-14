@@ -6,7 +6,7 @@ command = ARGV.shift
 if command == 'new'
 	raise "Please specify a machine name" unless ARGV[1]
 	machine = Smartcloud::Machine.new
-	machine.create ARGV[1]
+	machine.create ARGV
 elsif command == 'start'
 	machine = Smartcloud::Machine.new
 	machine.start
