@@ -40,11 +40,11 @@ module Smartcloud
 		private
 
 		def self.get_users_from_file
-			YAML.load_file("#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/users.yml") || Hash.new
+			YAML.load_file("#{Smartcloud.config.user_home_path}/.smartcloud/config/users.yml") || Hash.new
 		end
 		
 		def self.set_users_to_file(users)
-			File.open("#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/users.yml", "w") { |file| file.write(users.to_yaml) }
+			File.open("#{Smartcloud.config.user_home_path}/.smartcloud/config/users.yml", "w") { |file| file.write(users.to_yaml) }
 			self.create_htpasswd_files
 		end
 
