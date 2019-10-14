@@ -2,12 +2,6 @@
 
 require 'smartcloud'
 
-if ARGV[0] == 'new'
-	machine = Smartcloud::Machine.new
-	raise "Please specify a machine name" unless ARGV[1]
-	machine.create(ARGV[1])
-end
-
 # if ARGV[0] == 'init'
 # 	Smartcloud::Boot.init
 # elsif !Smartcloud::Boot.initialized?
@@ -33,7 +27,11 @@ end
 # 	raise "Please specify command to run" unless ARGV[0]
 # 	machine.run(ARGV)
 
-if ARGV[0] == 'docker'
+if ARGV[0] == 'new'
+	machine = Smartcloud::Machine.new
+	raise "Please specify a machine name" unless ARGV[1]
+	machine.create(ARGV[1])
+elsif ARGV[0] == 'docker'
 	if ARGV[1] == 'install'
 		Smartcloud::Docker.install
 	elsif ARGV[1] == 'uninstall'
