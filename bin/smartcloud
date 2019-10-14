@@ -2,77 +2,20 @@
 
 require 'smartcloud'
 
-# if ARGV[0] == 'init'
-# 	Smartcloud::Boot.init
-# elsif !Smartcloud::Boot.initialized?
-# 	puts "Smartcloud has not been initialized. Please run command 'smartcloud init'."
-# 	exit
-# end
-
-# if ARGV[0] == 'new'
-# 	machine = Smartcloud::Machine.new
-# 	raise "Please specify machine name" unless ARGV[1]
-# 	machine.create(ARGV[1])
-# elsif ARGV[0] == 'install'
-# 	machine = Smartcloud::Machine.new
-# 	machine.install_docker
-# 	machine.install_engine
-# elsif ARGV[0] == 'uninstall'
-# 	machine = Smartcloud::Machine.new
-# 	machine.uninstall_engine
-# 	machine.uninstall_docker
-# elsif ARGV[0] == 'run'
-# 	machine = Smartcloud::Machine.new
-# 	ARGV.shift
-# 	raise "Please specify command to run" unless ARGV[0]
-# 	machine.run(ARGV)
-
-if ARGV[0] == 'new'
-	machine = Smartcloud::Machine.new
+command = ARGV.shift
+if command == 'new'
 	raise "Please specify a machine name" unless ARGV[1]
-	machine.create(ARGV[1])
-elsif ARGV[0] == 'start'
-	Smartcloud::Docker.install
-	Smartcloud::Engine.install
-elsif ARGV[0] == 'stop'
-	Smartcloud::Engine.uninstall
-	Smartcloud::Docker.uninstall
-elsif ARGV[0] == 'grids'
-	if ARGV[1] == 'runner'
-		if ARGV[2] == 'up'
-			Smartcloud::Grids::Runner.up
-		elsif ARGV[2] == 'down'
-			Smartcloud::Grids::Runner.down
-		end
-	elsif ARGV[1] == 'mysql'
-		if ARGV[2] == 'up'
-			Smartcloud::Grids::Mysql.up(ARGV[3])
-		elsif ARGV[2] == 'down'
-			Smartcloud::Grids::Mysql.down
-		end
-	elsif ARGV[1] == 'nginx'
-		if ARGV[2] == 'up'
-			Smartcloud::Grids::Nginx.up(ARGV[3])
-		elsif ARGV[2] == 'down'
-			Smartcloud::Grids::Nginx.down
-		end
-	elsif ARGV[1] == 'solr'
-		if ARGV[2] == 'up'
-			Smartcloud::Grids::Solr.up(ARGV[3])
-		elsif ARGV[2] == 'down'
-			Smartcloud::Grids::Solr.down
-		elsif ARGV[2] == 'create_core'
-			Smartcloud::Grids::Solr.create_core(ARGV[3])
-		elsif ARGV[2] == 'destroy_core'
-			Smartcloud::Grids::Solr.destroy_core(ARGV[3])
-		end
-	end
-# elsif ARGV[0] == 'user'
-# 	if ARGV[1] == 'create'
-# 		Smartcloud::User.create(ARGV[2], ARGV[3], ARGV[4])
-# 	elsif ARGV[1] == 'destroy'
-# 		Smartcloud::User.destroy(ARGV[2], ARGV[3])
-# 	end
+	machine = Smartcloud::Machine.new
+	machine.create ARGV[1]
+elsif command == 'start'
+	machine = Smartcloud::Machine.new
+	machine.start
+elsif command == 'stop'
+	machine = Smartcloud::Machine.new
+	machine.stop
+elsif command == 'grids'
+	machine = Smartcloud::Machine.new
+	machine.run ARGV
 else
 	puts "Specify a command to execute."
 end
