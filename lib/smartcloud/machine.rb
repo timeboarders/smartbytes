@@ -6,7 +6,8 @@ module Smartcloud
 		def initialize
 		end
 
-		def create(name)
+		def create(*args)
+			name = args.shift
 			FileUtils.mkdir name
 			FileUtils.cp_r "#{Smartcloud.config.root_path}/lib/smartcloud/templates/dotsmartcloud/.", "#{name}"
 			puts "New machine #{name} has been created."
