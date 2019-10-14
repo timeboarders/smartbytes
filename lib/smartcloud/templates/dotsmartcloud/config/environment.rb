@@ -2,13 +2,13 @@
 
 # => NOTE: Ensure that the specified top-level domains are pointing to this server ip address using DNS records.
 
-# naked domain to be used for runner apps
+# Top-level naked domain to be used for subdomains of apps.
 Smartcloud.config.apps_domain = "yourdomain.com"
 
 # domain to be used for git runner
 Smartcloud.config.git_domain = "git.yourdomain.com"
 
-# sysadmin email id to be used
+# Sysadmin email id.
 Smartcloud.config.sysadmin_email = "admin@yourdomain.com"
 
 # letsencrypt test boolean to be used
