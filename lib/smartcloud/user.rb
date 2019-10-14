@@ -7,6 +7,10 @@ module Smartcloud
 		def initialize
 		end
 
+		def self.generate
+			self.create_htpasswd_files
+		end
+
 		def self.create(hostname, username, password)
 			if hostname.nil? || hostname.empty? || username.nil? || username.empty? || password.nil? || password.empty?
 				puts "One of hostname, username, password missing."
