@@ -2,12 +2,18 @@
 
 require 'smartcloud'
 
-if ARGV[0] == 'init'
-	Smartcloud::Boot.init
-elsif !Smartcloud::Boot.initialized?
-	puts "Smartcloud has not been initialized. Please run command 'smartcloud init'."
-	exit
+if ARGV[0] == 'new'
+	machine = Smartcloud::Machine.new
+	raise "Please specify a machine name" unless ARGV[1]
+	machine.create(ARGV[1])
 end
+
+# if ARGV[0] == 'init'
+# 	Smartcloud::Boot.init
+# elsif !Smartcloud::Boot.initialized?
+# 	puts "Smartcloud has not been initialized. Please run command 'smartcloud init'."
+# 	exit
+# end
 
 # if ARGV[0] == 'new'
 # 	machine = Smartcloud::Machine.new

@@ -6,6 +6,12 @@ module Smartcloud
 		def initialize
 		end
 
+		def create(name)
+			FileUtils.mkdir name
+			FileUtils.cp_r "#{Smartcloud.config.root_path}/lib/smartcloud/templates/dotsmartcloud/.", "#{name}"
+			puts "New machine #{name} has been created."
+		end
+
 		def getting_started
 			# puts 'You may be prompted to make a menu selection when the Grub package is updated on Ubuntu. If prompted, select keep the local version currently installed.'
 
@@ -62,12 +68,6 @@ module Smartcloud
 			# sudo fail2ban-client status
 		end
 
-		# def create(name)
-		# 	FileUtils.mkdir_p name
-		# 	FileUtils.cp_r "#{Smartcloud.config.root_path}/lib/smartcloud/templates/machine/.", "#{name}"
-		# 	puts "Please fill details in your config folder before proceeding."
-		# end
-		#
 		# def run(*args)
 		# end
 		#
