@@ -1,5 +1,7 @@
 # Be sure to restart your server when you modify this file.
 
+# => NOTE: Ensure that the specified top-level domains are pointing to this server ip address using DNS records.
+
 # naked domain to be used for runner apps
 Smartcloud.config.apps_domain = "yourdomain.com"
 
