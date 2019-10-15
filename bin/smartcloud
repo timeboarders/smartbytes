@@ -4,7 +4,7 @@ require 'smartcloud'
 
 command = ARGV.shift
 if command == 'new'
-	raise "Please specify a machine name" unless ARGV[1]
+	raise "Please specify a machine name" if ARGV.empty?
 	machine = Smartcloud::Machine.new
 	machine.create ARGV
 elsif command == 'start'
@@ -15,7 +15,7 @@ elsif command == 'stop'
 	machine.stop
 elsif command == 'grids'
 	machine = Smartcloud::Machine.new
-	machine.run ARGV
+	machine.grids ARGV
 else
 	puts "Specify a command to execute."
 end
