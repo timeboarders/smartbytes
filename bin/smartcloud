@@ -16,6 +16,9 @@ elsif command == 'stop'
 elsif command == 'grids'
 	machine = Smartcloud::Machine.new
 	machine.grids ARGV
+elsif command == 'ssh'
+	machine = Smartcloud::Machine.new
+	machine.ssh
 else
 	puts "Specify a command to execute."
 end
