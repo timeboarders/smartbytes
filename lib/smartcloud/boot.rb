@@ -6,6 +6,7 @@ module Smartcloud
 	end
 end
 
+require 'smartcloud/ssh'
 require 'smartcloud/machine'
 
 require 'smartcloud/engine'
