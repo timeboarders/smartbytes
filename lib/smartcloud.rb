@@ -1,9 +1,22 @@
 require "ostruct"
+require "yaml"
 
 # The main Smartcloud driver
 module Smartcloud
 	def self.config
 		@@config ||= OpenStruct.new
+	end
+
+	def self.credentials
+		@@credentials ||= OpenStruct.new(Smartcloud.transform_keys_to_symbols(YAML.load_file("#{Dir.pwd}/config/credentials.yml")))
+	end
+
+	private
+
+	def self.transform_keys_to_symbols(value)
+		return value if not value.is_a?(Hash)
+		hash = value.inject({}){|memo,(k,v)| memo[k.to_sym] = self.transform_keys_to_symbols(v); memo}
+		return hash
 	end
 end
 
