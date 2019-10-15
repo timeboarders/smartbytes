@@ -13,22 +13,30 @@ module Smartcloud
 		# Arguments:
 		#   none
 		def self.install
+			ssh = Smartcloud::SSH.new
+
 			puts "-----> Installing Docker"
-			system("sudo apt-get update")
-			system("sudo apt-get install apt-transport-https ca-certificates curl software-properties-common")
-			system("curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -")
-			system("sudo apt-key fingerprint 0EBFCD88")
-			system("sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"")
-			system("sudo apt-get update")
-			system("sudo apt-get install docker-ce")
-			system("sudo usermod -aG docker $USER")
-			system("docker run --rm hello-world")
+			commands = [
+				"sudo apt-get update",
+				"sudo apt-get install apt-transport-https ca-certificates curl software-properties-common",
+				"curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+				"sudo apt-key fingerprint 0EBFCD88",
+				"sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"",
+				"sudo apt-get update",
+				"sudo apt-get install docker-ce",
+				"sudo usermod -aG docker $USER",
+				"docker run --rm hello-world"
+			]
+			ssh.run commands
 
 			puts "-----> Installing Docker Compose"
-			system("sudo curl -L --fail https://github.com/docker/compose/releases/download/1.24.0/run.sh -o /usr/local/bin/docker-compose")
-			system("sudo chmod +x /usr/local/bin/docker-compose")
-			system("docker-compose --version")
-			system("sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose")
+			commands = [
+				"sudo curl -L --fail https://github.com/docker/compose/releases/download/1.24.0/run.sh -o /usr/local/bin/docker-compose",
+				"sudo chmod +x /usr/local/bin/docker-compose",
+				"docker-compose --version",
+				"sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose"
+			]
+			ssh.run commands
 
 			self.add_ufw_rules
 
@@ -44,26 +52,22 @@ module Smartcloud
 		# Arguments:
 		#   none
 		def self.uninstall
+			ssh = Smartcloud::SSH.new
+
 			puts "-----> Uninstalling Docker Compose"
-			system("sudo rm /usr/local/bin/docker-compose")
+			ssh.run "sudo rm /usr/local/bin/docker-compose"
 
 			puts "-----> Uninstalling Docker"
-			system("sudo apt-get purge docker-ce")
-			system("sudo rm -rf /var/lib/docker")
+			commands = [
+				"sudo apt-get purge docker-ce",
+				"sudo rm -rf /var/lib/docker"
+			]
+			ssh.run commands
 
 			self.remove_ufw_rules
 
 			puts "-----> Uninstallation Complete"
 			puts "-----> You must delete any edited configuration files manually."
-		end
-
-		def self.running?
-			if system("docker info", [:out, :err] => File::NULL)
-				true
-			else
-				puts "Error: Docker daemon is not running. Have you installed docker? Please ensure docker daemon is running and try again."
-				false
-			end
 		end
 
 		def self.add_ufw_rules
@@ -115,6 +119,17 @@ module Smartcloud
 			# puts "-----> Removing UFW rules for Docker"
 			# system("sed '/^# BEGIN UFW AND DOCKER/,/^# END UFW AND DOCKER/d' '/etc/ufw/after.rules'")
 			# system("sudo ufw reload")
+		end
+
+		# Below methods are non ssh methods and should be executed on the server only.
+
+		def self.running?
+			if system("docker info", [:out, :err] => File::NULL)
+				true
+			else
+				puts "Error: Docker daemon is not running. Have you installed docker? Please ensure docker daemon is running and try again."
+				false
+			end
 		end
 	end
 end
