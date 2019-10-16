@@ -7,6 +7,8 @@ module Smartcloud
 		end
 
 		def create(*args)
+			args.flatten!
+
 			name = args.shift
 			FileUtils.mkdir name
 			FileUtils.cp_r "#{Smartcloud.config.root_path}/lib/smartcloud/templates/dotsmartcloud/.", "#{name}"
