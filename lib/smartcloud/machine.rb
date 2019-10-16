@@ -84,5 +84,9 @@ module Smartcloud
 			# sudo fail2ban-client reload
 			# sudo fail2ban-client status
 		end
+
+		def self.smartcloud_dir?
+			File.file?("./bin/smartcloud.sh")
+		end
 	end
 end

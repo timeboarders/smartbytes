@@ -3,7 +3,15 @@
 require 'smartcloud'
 
 command = ARGV.shift
+
+unless command == 'new'
+	unless Smartcloud::Machine.smartcloud_dir?
+		raise "This is not a smartcloud directory. Are you in the correct directory?"
+	end
+end
+
 if command == 'new'
+	raise "This is already a smartcloud directory. Are you in the correct directory?" if Smartcloud::Machine.smartcloud_dir?
 	raise "Please specify a machine name" if ARGV.empty?
 	machine = Smartcloud::Machine.new
 	machine.create ARGV
