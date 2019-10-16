@@ -16,9 +16,9 @@ module Smartcloud
 		end
 
 		def start
+			Smartcloud::User.create_htpasswd_files
 			Smartcloud::Docker.install
 			Smartcloud::Engine.install
-			Smartcloud::User.generate
 		end
 
 		def stop
