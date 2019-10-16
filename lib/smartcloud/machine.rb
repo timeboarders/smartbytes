@@ -88,5 +88,62 @@ module Smartcloud
 		def self.smartcloud_dir?
 			File.file?("./bin/smartcloud.sh")
 		end
+
+		def sync(first_sync = false)
+			puts "-----> Syncing smartcloud ... "
+			return sync_push if first_sync
+
+			unless block_given?
+				sync_pull && sync_push
+			else
+				sync_pull
+				yield
+				sync_push
+			end
+		end
+
+		private
+
+		def sync_pull
+			system("rsync -azum --delete --include=*/ --include={#{sync_pull_files_list}} --exclude=* -e ssh #{Smartcloud.credentials.machine[:username]}@#{Smartcloud.credentials.machine[:host]}:~/.smartcloud/ .")
+		end
+
+		def sync_push
+			system("rsync -azum --delete --include=*/ --include={#{sync_push_files_list}} --exclude={#{excluded_sync_files_list}} --exclude={#{sync_pull_files_list}} -e ssh ./ #{Smartcloud.credentials.machine[:username]}@#{Smartcloud.credentials.machine[:host]}:~/.smartcloud")
+		end
+
+		def excluded_sync_files_list
+			files = [
+				'config/credentials.yml',
+				'config/users.yml'
+			]
+			files.join(',')
+		end
+
+		def sync_pull_files_list
+			files = [
+				'grids/grid-mysql/data/***',
+				'grids/grid-nginx/certificates/***',
+				'grids/grid-runner/apps/***',
+				'grids/grid-solr/data/***',
+			]
+			files.join(',')
+		end
+
+		def sync_push_files_list
+			files = [
+				'grids/grid-mysql/data/.keep',
+				'grids/grid-nginx/certificates/.keep',
+				'grids/grid-runner/apps/containers/.keep',
+				'grids/grid-runner/apps/repositories/.keep',
+				'grids/grid-solr/data/.keep',
+				'grids/grid-solr/data/README.txt',
+				'grids/grid-solr/data/solr.xml',
+				'grids/grid-solr/data/zoo.cfg',
+				'grids/grid-solr/data/configsets/***',
+				'grids/grid-solr/data/lib/***',
+			]
+			files.join(',')
+		end
 	end
 end
