@@ -15,11 +15,10 @@ module Smartcloud
 							raise "Could not execute command" unless success
 
 							channel.on_data do |channel, data|
+								$stdout.print data
+
 								if data =~ /^\[sudo\] password for /
-									$stdout.print data
 									channel.send_data "#{Smartcloud.credentials.machine[:password]}\n"
-								else
-									$stdout.print data
 								end
 							end
 
