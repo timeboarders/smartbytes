@@ -5,7 +5,10 @@ module Smartcloud
 			def initialize
 			end
 
-			def self.up(exposed)
+			def self.up(*args)
+				args.flatten!
+				exposed = args.empty? ? '' : args.shift
+
 				if Smartcloud::Docker.running?
 					# Creating networks
 					unless system("docker network inspect mysql-network", [:out, :err] => File::NULL)

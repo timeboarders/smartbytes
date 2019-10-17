@@ -5,7 +5,10 @@ module Smartcloud
 			def initialize
 			end
 
-			def self.up(exposed)
+			def self.up(*args)
+				args.flatten!
+				exposed = args.empty? ? '' : args.shift
+
 				if Smartcloud::Docker.running?
 					# Creating networks
 					unless system("docker network inspect solr-network", [:out, :err] => File::NULL)
@@ -59,7 +62,10 @@ module Smartcloud
 				end
 			end
 
-			def self.create_core(corename)
+			def self.create_core(*args)
+				args.flatten!
+				corename = args.empty? ? '' : args.shift
+
 				if Smartcloud::Docker.running?
 					puts "-----> Creating core #{corename} ... "
 					if system("docker exec -it --user=solr solr solr create_core -c #{corename}")
@@ -77,7 +83,10 @@ module Smartcloud
 				end
 			end
 
-			def self.destroy_core(corename)
+			def self.destroy_core(*args)
+				args.flatten!
+				corename = args.empty? ? '' : args.shift
+
 				if Smartcloud::Docker.running?
 					puts "-----> Removing core #{corename} ... "
 					if system("docker exec -it --user=solr solr solr delete -c #{corename}")

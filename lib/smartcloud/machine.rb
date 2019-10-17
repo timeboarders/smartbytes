@@ -26,8 +26,48 @@ module Smartcloud
 			Smartcloud::Docker.uninstall
 		end
 
-		# def run(*args)
-		# end
+		def grid(*args)
+			args.flatten!
+			name = "Smartcloud::Grids::#{args.shift.capitalize}"
+			action = args.shift.to_sym
+
+			args.empty? ? Object.const_get(name).public_send(action) : Object.const_get(name).public_send(action, args)
+
+			# if ARGV[1] == 'runner'
+			# 	if ARGV[2] == 'up'
+			# 		Smartcloud::Grids::Runner.up
+			# 	elsif ARGV[2] == 'down'
+			# 		Smartcloud::Grids::Runner.down
+			# 	end
+			# elsif ARGV[1] == 'mysql'
+			# 	if ARGV[2] == 'up'
+			# 		Smartcloud::Grids::Mysql.up(ARGV[3])
+			# 	elsif ARGV[2] == 'down'
+			# 		Smartcloud::Grids::Mysql.down
+			# 	end
+			# elsif ARGV[1] == 'nginx'
+			# 	if ARGV[2] == 'up'
+			# 		Smartcloud::Grids::Nginx.up(ARGV[3])
+			# 	elsif ARGV[2] == 'down'
+			# 		Smartcloud::Grids::Nginx.down
+			# 	end
+			# elsif ARGV[1] == 'solr'
+			# 	if ARGV[2] == 'up'
+			# 		Smartcloud::Grids::Solr.up(ARGV[3])
+			# 	elsif ARGV[2] == 'down'
+			# 		Smartcloud::Grids::Solr.down
+			# 	elsif ARGV[2] == 'create_core'
+			# 		Smartcloud::Grids::Solr.create_core(ARGV[3])
+			# 	elsif ARGV[2] == 'destroy_core'
+			# 		Smartcloud::Grids::Solr.destroy_core(ARGV[3])
+			# 	end
+			# end
+		end
+
+		def ssh
+			ssh = Smartcloud::SSH.new
+			ssh.login
+		end
 
 		def getting_started
 			# puts 'You may be prompted to make a menu selection when the Grub package is updated on Ubuntu. If prompted, select keep the local version currently installed.'

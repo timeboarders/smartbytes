@@ -21,9 +21,9 @@ elsif command == 'start'
 elsif command == 'stop'
 	machine = Smartcloud::Machine.new
 	machine.stop
-elsif command == 'grids'
+elsif command == 'grid'
 	machine = Smartcloud::Machine.new
-	machine.grids ARGV
+	machine.grid ARGV
 elsif command == 'ssh'
 	machine = Smartcloud::Machine.new
 	machine.ssh
