@@ -14,7 +14,9 @@ RUN sed -i "s/999/99/" /etc/group && \
 RUN apk add --update docker && \
     rm -rf /var/cache/apk/*
 
-# Gems
-RUN gem install --no-document smartcloud --pre
+# Smartcloud Gem
+COPY ./smartcloud-*.gem ./smartcloud.gem
+RUN gem install --no-document smartcloud.gem
+RUN rm ./smartcloud.gem
 
 ENTRYPOINT ["smartcloud"]

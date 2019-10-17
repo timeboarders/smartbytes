@@ -11,6 +11,9 @@ module Smartcloud
 			system("mkdir -p ./tmp/engine")
 			system("cp #{Smartcloud.config.root_path}/lib/smartcloud/engine/Dockerfile ./tmp/engine/Dockerfile")
 
+			gem_file_path = File.expand_path("../../cache/smartcloud-#{Smartcloud.version}.gem", Smartcloud.config.root_path)
+			system("cp #{gem_file_path} ./tmp/engine/smartcloud-#{Smartcloud.version}.gem")
+
 			machine.sync first_sync: true
 
 			puts "-----> Creating image smartcloud ... "
@@ -23,6 +26,7 @@ module Smartcloud
 			puts "-----> Adding smartcloud to PATH ... "
 			ssh.run "chmod +x ~/.smartcloud/bin/smartcloud.sh && sudo ln -sf ~/.smartcloud/bin/smartcloud.sh /usr/local/bin/smartcloud"
 			system("rm ./tmp/engine/Dockerfile")
+			system("rm ./tmp/engine/smartcloud-#{Smartcloud.version}.gem")
 
 			machine.sync
 		end
