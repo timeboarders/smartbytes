@@ -18,6 +18,6 @@ RUN apk add --update docker && \
 USER "$USER_NAME"
 
 # Gems
-RUN gem install --no-document smartcloud
+RUN gem install --no-document smartcloud --pre
 
 ENTRYPOINT ["smartcloud"]
