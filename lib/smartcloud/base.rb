@@ -1,4 +1,5 @@
 require 'smartcloud/logger'
+require "active_support/inflector"
 
 module Smartcloud
 	class Base
