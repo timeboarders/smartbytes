@@ -14,9 +14,6 @@ RUN sed -i "s/999/99/" /etc/group && \
 RUN apk add --update docker && \
     rm -rf /var/cache/apk/*
 
-# Privileges
-USER "$USER_NAME"
-
 # Gems
 RUN gem install --no-document smartcloud --pre
 
