@@ -28,10 +28,25 @@ module Smartcloud
 
 		def grid(*args)
 			args.flatten!
-			name = "Smartcloud::Grids::#{args.shift.capitalize}"
+
+			ssh = Smartcloud::SSH.new
+			ssh.run "smartcloud run grid #{args.join(" ")}"
+		end
+
+		def ssh
+			ssh = Smartcloud::SSH.new
+			ssh.login
+		end
+
+		def run(*args)
+			args.flatten!
+
+			controller_type = args.shift.pluralize.capitalize
+			controller_name = args.shift.capitalize
+			controller = "Smartcloud::#{controller_type}::#{controller_name}"
 			action = args.shift.to_sym
 
-			args.empty? ? Object.const_get(name).public_send(action) : Object.const_get(name).public_send(action, args)
+			args.empty? ? Object.const_get(controller).public_send(action) : Object.const_get(controller).public_send(action, args)
 
 			# if ARGV[1] == 'runner'
 			# 	if ARGV[2] == 'up'
@@ -62,11 +77,6 @@ module Smartcloud
 			# 		Smartcloud::Grids::Solr.destroy_core(ARGV[3])
 			# 	end
 			# end
-		end
-
-		def ssh
-			ssh = Smartcloud::SSH.new
-			ssh.login
 		end
 
 		def getting_started
@@ -125,8 +135,12 @@ module Smartcloud
 			# sudo fail2ban-client status
 		end
 
-		def self.smartcloud_dir?
+		def self.smartcloud_local?
 			File.file?("./bin/smartcloud.sh")
+		end
+
+		def self.smartcloud_server?
+			File.file?("#{Smartcloud.config.user_home_path}/.smartcloud/bin/smartcloud.sh")
 		end
 
 		def sync(first_sync = false)
