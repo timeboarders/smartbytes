@@ -4,7 +4,7 @@ require 'smartcloud'
 
 command = ARGV.shift
 
-unless command == 'new'
+unless ['new', 'grid'].include? command
 	unless Smartcloud::Machine.smartcloud_dir?
 		raise "This is not a smartcloud directory. Are you in the correct directory?"
 	end
@@ -21,15 +21,15 @@ elsif command == 'start'
 elsif command == 'stop'
 	machine = Smartcloud::Machine.new
 	machine.stop
-elsif command == 'grid'
-	machine = Smartcloud::Machine.new
-	machine.grid ARGV
 elsif command == 'ssh'
 	machine = Smartcloud::Machine.new
 	machine.ssh
 elsif command == 'sync'
 	machine = Smartcloud::Machine.new
 	machine.sync
+elsif command == 'grid'
+	machine = Smartcloud::Machine.new
+	machine.grid ARGV
 else
 	puts "Specify a command to execute."
 end
