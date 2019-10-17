@@ -4,32 +4,38 @@ require 'smartcloud'
 
 command = ARGV.shift
 
-unless ['new', 'grid'].include? command
-	unless Smartcloud::Machine.smartcloud_dir?
-		raise "This is not a smartcloud directory. Are you in the correct directory?"
+if Smartcloud::Machine.smartcloud_local?
+	if command == 'start'
+		machine = Smartcloud::Machine.new
+		machine.start
+	elsif command == 'stop'
+		machine = Smartcloud::Machine.new
+		machine.stop
+	elsif command == 'ssh'
+		machine = Smartcloud::Machine.new
+		machine.ssh
+	elsif command == 'sync'
+		machine = Smartcloud::Machine.new
+		machine.sync
+	elsif command == 'grid'
+		machine = Smartcloud::Machine.new
+		machine.grid ARGV
+	else
+		puts "Specify a valid local command to execute."
 	end
-end
-
-if command == 'new'
-	raise "This is already a smartcloud directory. Are you in the correct directory?" if Smartcloud::Machine.smartcloud_dir?
-	raise "Please specify a machine name" if ARGV.empty?
-	machine = Smartcloud::Machine.new
-	machine.create ARGV
-elsif command == 'start'
-	machine = Smartcloud::Machine.new
-	machine.start
-elsif command == 'stop'
-	machine = Smartcloud::Machine.new
-	machine.stop
-elsif command == 'ssh'
-	machine = Smartcloud::Machine.new
-	machine.ssh
-elsif command == 'sync'
-	machine = Smartcloud::Machine.new
-	machine.sync
-elsif command == 'grid'
-	machine = Smartcloud::Machine.new
-	machine.grid ARGV
+elsif Smartcloud::Machine.smartcloud_server?
+	if command == 'run'
+		machine = Smartcloud::Machine.new
+		machine.run ARGV
+	else
+		puts "Specify a valid server command to execute."
+	end
 else
-	puts "Specify a command to execute."
+	if command == 'new'
+		raise "Please specify a machine name" if ARGV.empty?
+		machine = Smartcloud::Machine.new
+		machine.create ARGV
+	else
+		puts "Specify a valid command to execute. Are you in the correct directory to run this command?"
+	end
 end
