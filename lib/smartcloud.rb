@@ -20,6 +20,8 @@ module Smartcloud
 	end
 end
 
+require 'smartcloud/version'
+
 Smartcloud.config.root_path = File.expand_path('../..', __FILE__)
 Smartcloud.config.user_home_path = File.expand_path('~')
 if File.exist?("#{Smartcloud.config.user_home_path}/.smartcloud/config/environment.rb")
