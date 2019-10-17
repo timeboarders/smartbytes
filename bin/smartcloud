@@ -27,6 +27,9 @@ elsif command == 'grids'
 elsif command == 'ssh'
 	machine = Smartcloud::Machine.new
 	machine.ssh
+elsif command == 'sync'
+	machine = Smartcloud::Machine.new
+	machine.sync
 else
 	puts "Specify a command to execute."
 end
