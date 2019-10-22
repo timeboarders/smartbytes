@@ -4,6 +4,11 @@ require 'smartcloud'
 
 command = ARGV.shift
 
+if command == '--version'
+	puts "smartcloud #{Smartcloud.version}"
+	return
+end
+
 if Smartcloud::Machine.smartcloud_local?
 	if command == 'start'
 		machine = Smartcloud::Machine.new
