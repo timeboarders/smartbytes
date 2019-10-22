@@ -136,11 +136,11 @@ module Smartcloud
 		end
 
 		def self.smartcloud_local?
-			File.file?("./bin/smartcloud.sh")
+			File.file?("./config/master.key")
 		end
 
 		def self.smartcloud_server?
-			File.file?("#{Smartcloud.config.user_home_path}/.smartcloud/bin/smartcloud.sh")
+			File.directory?("#{Smartcloud.config.user_home_path}/.smartcloud")
 		end
 
 		def sync(first_sync = false)
@@ -171,6 +171,7 @@ module Smartcloud
 		def excluded_sync_files_list
 			files = [
 				'config/credentials.yml',
+				'config/master.key',
 				'config/users.yml'
 			]
 			files.join(',')
