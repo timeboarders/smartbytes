@@ -17,6 +17,7 @@ module Smartcloud
 			machine.sync first_sync: true
 
 			puts "-----> Creating image smartcloud ... "
+			ssh.run "docker rmi smartcloud"
 			ssh.run "docker image build -t smartcloud \
 					--build-arg DOCKER_GID=`getent group docker | cut -d: -f3` \
 					--build-arg USER_UID=`id -u` \
