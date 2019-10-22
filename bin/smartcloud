@@ -32,6 +32,8 @@ elsif Smartcloud::Machine.smartcloud_server?
 	if command == 'run'
 		machine = Smartcloud::Machine.new
 		machine.run ARGV
+	elsif command == 'shell'
+		exec '/bin/sh -c sh'
 	else
 		puts "Specify a valid server command to execute."
 	end
