@@ -5,7 +5,7 @@ require 'smartcloud'
 command = ARGV.shift
 
 if command == '--version'
-	puts "smartcloud #{Smartcloud.version}"
+	puts "Smartcloud #{Smartcloud.version}"
 	return
 end
 
