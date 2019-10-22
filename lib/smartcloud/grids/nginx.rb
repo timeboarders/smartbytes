@@ -47,7 +47,7 @@ module Smartcloud
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nginx/htpasswd:/etc/nginx/htpasswd:ro' \
 						--restart='always' \
 						--network='nginx-network' \
-						nginx", out: File::NULL)
+						nginx:alpine", out: File::NULL)
 
 						puts "done"
 						print "-----> Starting container nginx ... "
