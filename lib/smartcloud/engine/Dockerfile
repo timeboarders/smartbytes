@@ -1,8 +1,6 @@
 FROM ruby:2.6.4-alpine3.10
 LABEL maintainer="Timeboard <hello@timeboard.me>"
 
-ARG SMARTCLOUD_VERSION
-
 # User
 # --- Fix to change gid of 999 to 99 so that addgroup is free to create a group with 999 as gid
 ARG USER_NAME
@@ -17,6 +15,7 @@ RUN apk add --update docker && \
     rm -rf /var/cache/apk/*
 
 # Smartcloud Gem
+ARG SMARTCLOUD_VERSION
 COPY ./smartcloud-$SMARTCLOUD_VERSION.gem ./smartcloud-$SMARTCLOUD_VERSION.gem
 RUN gem install --no-document smartcloud-$SMARTCLOUD_VERSION.gem && \
 	rm ./smartcloud-$SMARTCLOUD_VERSION.gem
