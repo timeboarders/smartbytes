@@ -36,6 +36,6 @@ else
 		machine = Smartcloud::Machine.new
 		machine.create ARGV
 	else
-		puts "Specify a valid command to execute. Are you in the correct directory to run this command?"
+		puts "Specify a valid smartcloud command to execute. Are you in the correct directory to run this command?"
 	end
 end
