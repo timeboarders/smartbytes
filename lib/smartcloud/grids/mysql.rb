@@ -23,12 +23,12 @@ module Smartcloud
 					if system("docker create \
 						--name='mysql' \
 						--env MYSQL_RANDOM_ROOT_PASSWORD=yes \
+						--user `id -u`:`id -g` \
 						#{"--publish='3306:3306'" if exposed == '--exposed'} \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-mysql/data:/var/lib/mysql' \
 						--restart='always' \
 						--network='mysql-network' \
-						mysql:5.7.27 \
-						--default-authentication-plugin=mysql_native_password", out: File::NULL)
+						mysql:8.0.18", out: File::NULL)
 
 						puts "done"
 						print "-----> Starting container mysql ... "
