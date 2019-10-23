@@ -22,11 +22,14 @@ module Smartcloud
 				system("grep -q '^RAILS_MASTER_KEY=' #{env_path} || echo 'RAILS_MASTER_KEY=yourmasterkey' >> #{env_path}")
 				logger.warn "Please set your RAILS_MASTER_KEY env var for this rails app." if system("grep -q '^RAILS_MASTER_KEY=yourmasterkey' #{env_path}")
 
-				# Setup app folders. If this is not created then docker will create it while running the container,
+				# Setup app folders needed for volumes. If this is not created then docker will create it while running the container,
 				# but the folder will have root user assigned instead of the current user.
 				FileUtils.mkdir_p("#{container_path}/app/vendor/bundle")
 				FileUtils.mkdir_p("#{container_path}/app/public")
 				FileUtils.mkdir_p("#{container_path}/app/node_modules")
+				FileUtils.mkdir_p("#{container_path_with_version}/vendor/bundle")
+				FileUtils.mkdir_p("#{container_path_with_version}/public")
+				FileUtils.mkdir_p("#{container_path_with_version}/node_modules")
 
 				# Creating & Starting container
 				container_id = `docker ps -a -q --filter='name=^#{appname}_1$' --filter='status=running'`.chomp
