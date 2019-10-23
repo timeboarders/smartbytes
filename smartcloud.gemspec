@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
 
 	s.add_runtime_dependency 'net-ssh', '~> 5.2'
 	s.add_runtime_dependency 'activesupport', '~> 6.0'
+	s.add_runtime_dependency 'bcrypt', '~> 3.1', '>= 3.1.13'
 
 	s.files        	= Dir.glob("{bin,lib}/**/*") + Dir.glob("{bin,lib}/**/.keep") + %w(MIT-LICENSE README.md)
 

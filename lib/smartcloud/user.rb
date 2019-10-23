@@ -1,5 +1,6 @@
 require 'yaml'
 require "base64"
+require 'bcrypt'
 
 # The main Smartcloud User driver
 module Smartcloud
@@ -22,8 +23,7 @@ module Smartcloud
 
 				file_data = ""
 				users.each do |user, password|
-					salt = Base64.encode64((("a".."z").to_a + ("A".."Z").to_a + (0..9).to_a).shuffle[0..7].join)
-					file_data += "#{user}:#{password.crypt(salt)}\n"
+					file_data += "#{user}:#{BCrypt::Password.create(password)}\n"
 				end
 				File.open("#{Dir.pwd}/grids/grid-nginx/htpasswd/#{hostname}", "w") { |file| file.write(file_data) }
 			end
