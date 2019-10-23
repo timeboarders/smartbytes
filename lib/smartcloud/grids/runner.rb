@@ -26,10 +26,12 @@ module Smartcloud
 							--env LETSENCRYPT_TEST=#{Smartcloud.config.letsencrypt_test} \
 							--env GIT_PROJECT_ROOT=#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/repositories \
 							--env GIT_HTTP_EXPORT_ALL="" \
+							--user `id -u` \
+							--workdir /home/`id -un`/.smartcloud/grids/grid-runner/apps \
 							--expose='9000' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner:#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner' \
-							--volume='/var/run/docker.sock:/var/run/docker.sock' \
+							--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 							--restart='always' \
 							--network='nginx-network' \
 							smartcloud/runner", out: File::NULL)
