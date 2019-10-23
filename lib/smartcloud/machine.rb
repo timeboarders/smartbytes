@@ -170,6 +170,8 @@ module Smartcloud
 
 		def sync_pull_files_list
 			files = [
+				'apps/***',
+
 				'grids',
 
 				'grids/grid-mysql',
@@ -177,9 +179,6 @@ module Smartcloud
 
 				'grids/grid-nginx',
 				'grids/grid-nginx/certificates/***',
-
-				'grids/grid-runner',
-				'grids/grid-runner/apps/***',
 
 				'grids/grid-solr',
 				'grids/grid-solr/solr/***',
@@ -189,6 +188,12 @@ module Smartcloud
 
 		def sync_push_files_list
 			files = [
+				'apps',
+				'apps/containers',
+				'apps/containers/.keep',
+				'apps/repositories',
+				'apps/repositories/.keep',
+
 				'bin/***',
 
 				'config',
@@ -211,11 +216,6 @@ module Smartcloud
 				'grids/grid-nginx/nginx.tmpl',
 
 				'grids/grid-runner',
-				'grids/grid-runner/apps',
-				'grids/grid-runner/apps/containers',
-				'grids/grid-runner/apps/containers/.keep',
-				'grids/grid-runner/apps/repositories',
-				'grids/grid-runner/apps/repositories/.keep',
 				'grids/grid-runner/pre-receive',
 
 				'grids/grid-solr',
