@@ -94,7 +94,7 @@ module Smartcloud
 				raise "Please provide appname" if appname.empty?
 
 				if Smartcloud::Docker.running?
-					container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/apps/containers/#{appname}"
+					container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/apps/containers/#{appname}"
 
 					Dir.chdir("#{container_path}/releases") do
 						# Getting App Version
