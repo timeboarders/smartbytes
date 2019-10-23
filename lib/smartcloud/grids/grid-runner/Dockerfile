@@ -10,6 +10,7 @@ RUN apk add fcgiwrap --repository /root/apk-packages/fcgiwrap/packages/main --al
 	rm -rf /root/apk-packages
 RUN apk add --update coreutils && \
 	apk add --update util-linux && \
+	apk add --update git && \
 	apk add --update git-daemon && \
     apk add --update spawn-fcgi && \
     rm -rf /var/cache/apk/*
