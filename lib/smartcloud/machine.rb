@@ -220,13 +220,7 @@ module Smartcloud
 
 				'grids/grid-solr',
 				'grids/grid-solr/data',
-				'grids/grid-solr/data/configsets/***',
-				'grids/grid-solr/data/lib',
-				'grids/grid-solr/data/lib/.keep',
 				'grids/grid-solr/data/.keep',
-				'grids/grid-solr/data/README.txt',
-				'grids/grid-solr/data/solr.xml',
-				'grids/grid-solr/data/zoo.cfg',
 
 				'tmp/***',
 			]
