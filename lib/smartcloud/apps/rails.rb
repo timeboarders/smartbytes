@@ -66,7 +66,7 @@ module Smartcloud
 					if system("docker start --attach #{new_container}")
 						logger.debug "Starting Web Server ..."
 						if system("docker start #{new_container}", out: File::NULL)
-							sleep 5
+							sleep 7
 							logger.info "Web Server started successfully."
 							Smartcloud::Apps::App.stop(old_container)
 							Smartcloud::Apps::App.clean_up(container_path)
