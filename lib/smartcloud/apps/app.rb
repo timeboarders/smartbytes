@@ -158,7 +158,7 @@ module Smartcloud
 					return false
 				end
 
-				env_vars = []
+				env_vars = {}
 				File.open("#{container_path}/env").each_line do |line|
 					line.chomp!
 					next if line.empty? || line.start_with?('#')
