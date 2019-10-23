@@ -25,6 +25,9 @@ if Smartcloud::Machine.smartcloud_local?
 	elsif command == 'grid'
 		machine = Smartcloud::Machine.new
 		machine.grid ARGV
+	elsif command == 'app'
+		machine = Smartcloud::Machine.new
+		machine.app ARGV
 	else
 		puts "Specify a valid local command to execute."
 	end

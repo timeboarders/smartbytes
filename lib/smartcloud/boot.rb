@@ -19,3 +19,6 @@ require 'smartcloud/grids/solr'
 require 'smartcloud/grids/buildpacker'
 require 'smartcloud/grids/runner'
 require 'smartcloud/grids/nginx'
+
+require 'smartcloud/apps/app'
+require 'smartcloud/apps/rails'

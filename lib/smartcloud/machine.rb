@@ -33,50 +33,36 @@ module Smartcloud
 			ssh.run "smartcloud run grid #{args.join(" ")}"
 		end
 
+		def app(*args)
+			args.flatten!
+
+			ssh = Smartcloud::SSH.new
+			ssh.run "smartcloud run app #{args.join(" ")}"
+		end
+
 		def ssh
 			ssh = Smartcloud::SSH.new
 			ssh.login
 		end
 
+		# Works only for class methods of the class as no instance of the class is created
 		def run(*args)
 			args.flatten!
 
-			controller_type = args.shift.pluralize.capitalize
-			controller_name = args.shift.capitalize
-			controller = "Smartcloud::#{controller_type}::#{controller_name}"
+			controller_type = args.shift.pluralize
+
+			if controller_type == "grids"
+				controller_name = args.shift
+			elsif  controller_type == "apps"
+				controller_name = "app"
+			else
+				raise "Invalid run command. Please try again."
+			end
+
+			controller = "Smartcloud::#{controller_type.capitalize}::#{controller_name.capitalize}"
 			action = args.shift.to_sym
 
 			args.empty? ? Object.const_get(controller).public_send(action) : Object.const_get(controller).public_send(action, args)
-
-			# if ARGV[1] == 'runner'
-			# 	if ARGV[2] == 'up'
-			# 		Smartcloud::Grids::Runner.up
-			# 	elsif ARGV[2] == 'down'
-			# 		Smartcloud::Grids::Runner.down
-			# 	end
-			# elsif ARGV[1] == 'mysql'
-			# 	if ARGV[2] == 'up'
-			# 		Smartcloud::Grids::Mysql.up(ARGV[3])
-			# 	elsif ARGV[2] == 'down'
-			# 		Smartcloud::Grids::Mysql.down
-			# 	end
-			# elsif ARGV[1] == 'nginx'
-			# 	if ARGV[2] == 'up'
-			# 		Smartcloud::Grids::Nginx.up(ARGV[3])
-			# 	elsif ARGV[2] == 'down'
-			# 		Smartcloud::Grids::Nginx.down
-			# 	end
-			# elsif ARGV[1] == 'solr'
-			# 	if ARGV[2] == 'up'
-			# 		Smartcloud::Grids::Solr.up(ARGV[3])
-			# 	elsif ARGV[2] == 'down'
-			# 		Smartcloud::Grids::Solr.down
-			# 	elsif ARGV[2] == 'create_core'
-			# 		Smartcloud::Grids::Solr.create_core(ARGV[3])
-			# 	elsif ARGV[2] == 'destroy_core'
-			# 		Smartcloud::Grids::Solr.destroy_core(ARGV[3])
-			# 	end
-			# end
 		end
 
 		def getting_started
