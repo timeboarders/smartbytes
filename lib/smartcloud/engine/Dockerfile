@@ -10,8 +10,9 @@ RUN sed -i "s/999/99/" /etc/group && \
 	adduser --disabled-password --gecos "" --uid "$USER_UID" "$USER_NAME" && \
 	addgroup --gid "$DOCKER_GID" "docker" && adduser "$USER_NAME" "docker"
 
-# Docker
+# Docker & Git
 RUN apk add --update docker && \
+	apk add --update git && \
     rm -rf /var/cache/apk/*
 
 # Smartcloud Gem
