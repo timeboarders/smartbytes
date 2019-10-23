@@ -112,9 +112,6 @@ module Smartcloud
 				unless system("docker image inspect smartcloud/runner", [:out, :err] => File::NULL)
 					print "-----> Creating image smartcloud/runner ... "
 					if system("docker image build -t smartcloud/runner \
-						--build-arg USER_NAME=`id -un` \
-						--build-arg USER_UID=`id -u` \
-						--build-arg DOCKER_GID=`getent group docker | cut -d: -f3` \
 						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner", out: File::NULL)
 						puts "done"
 					end
