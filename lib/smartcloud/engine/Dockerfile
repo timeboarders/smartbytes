@@ -19,4 +19,3 @@ ARG SMARTCLOUD_VERSION
 COPY ./smartcloud-$SMARTCLOUD_VERSION.gem ./smartcloud-$SMARTCLOUD_VERSION.gem
 RUN gem install --no-document smartcloud-$SMARTCLOUD_VERSION.gem && \
 	rm ./smartcloud-$SMARTCLOUD_VERSION.gem
-
