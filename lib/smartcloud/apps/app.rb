@@ -93,6 +93,13 @@ module Smartcloud
 
 				raise "Please provide appname" if appname.empty?
 
+				logger.formatter = proc do |severity, datetime, progname, message|
+					severity_text = { "DEBUG" => "\u{1f527} #{severity}:", "INFO" => " \u{276f}", "WARN" => "\u{2757} #{severity}:",
+						"ERROR" => "\u{274c} #{severity}:", "FATAL" => "\u{2b55} #{severity}:", "UNKNOWN" => "\u{2753} #{severity}:"
+					}
+					"\t\t\t\t#{severity_text[severity]} #{message}\n"
+				end
+
 				if Smartcloud::Docker.running?
 					container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/apps/containers/#{appname}"
 
@@ -110,6 +117,8 @@ module Smartcloud
 						app.start(appname, container_path, container_path_with_version)
 					end
 				end
+
+				logger.formatter = nil
 			end
 
 			def self.stop(*args)

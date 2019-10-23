@@ -8,6 +8,13 @@ module Smartcloud
 			def start(appname, container_path, container_path_with_version)
 				return unless File.exist? "#{container_path_with_version}/bin/rails"
 
+				logger.formatter = proc do |severity, datetime, progname, message|
+					severity_text = { "DEBUG" => "\u{1f527} #{severity}:", "INFO" => " \u{276f}", "WARN" => "\u{2757} #{severity}:",
+						"ERROR" => "\u{274c} #{severity}:", "FATAL" => "\u{2b55} #{severity}:", "UNKNOWN" => "\u{2753} #{severity}:"
+					}
+					"\t\t\t\t#{severity_text[severity]} #{message}\n"
+				end
+
 				logger.info "Ruby on Rails application detected."
 
 				# Setup rails env
@@ -70,6 +77,8 @@ module Smartcloud
 						Smartcloud::Apps::App.stop("#{new_container}")
 					end
 				end
+
+				logger.formatter = nil
 			end
 		end
 	end
