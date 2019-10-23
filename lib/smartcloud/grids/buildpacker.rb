@@ -77,7 +77,8 @@ module Smartcloud
 			def test_web_server?
 				logger.info "Setting up Web Server ..."
 
-				# tmp folder
+				# tmp folders
+				FileUtils.mkdir_p("tmp/pids")
 				FileUtils.mkdir_p("tmp/smartcloud")
 				FileUtils.rm_f("tmp/smartcloud/packed")
 

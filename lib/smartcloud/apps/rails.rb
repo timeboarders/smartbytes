@@ -37,6 +37,8 @@ module Smartcloud
 				if system("docker create \
 					--name='#{new_container}' \
 					--env-file='#{container_path}/env' \
+					--user `id -u`:`id -g` \
+					--workdir /app \
 					--expose='3000' \
 					--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
 					--volume='#{container_path_with_version}:/app' \
@@ -48,7 +50,7 @@ module Smartcloud
 					--network='nginx-network' \
 					smartcloud/buildpacks/rails", out: File::NULL)
 
-					system("docker network connect solr-network #{new_container}")
+					# system("docker network connect solr-network #{new_container}")
 					system("docker network connect mysql-network #{new_container}")
 
 					if system("docker start --attach #{new_container}")
