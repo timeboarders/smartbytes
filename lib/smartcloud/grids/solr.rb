@@ -18,20 +18,16 @@ module Smartcloud
 						end
 					end
 
-					print "-----> Settings permissions solr ... "
-					if system("sudo chown -R 8983:8983 #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data", out: File::NULL)
-						puts "done"
-					end
-
 					# Creating & Starting containers
 					print "-----> Creating container solr ... "
 					if system("docker create \
 						--name='solr' \
+						--user `id -u`:`id -g` \
 						#{"--publish='8983:8983'" if exposed == '--exposed'} \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data:/opt/solr/server/solr' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/solr:/var/solr' \
 						--restart='always' \
 						--network='solr-network' \
-						solr:7.5.0", out: File::NULL)
+						solr:8.2.0", out: File::NULL)
 
 						puts "done"
 						print "-----> Starting container solr ... "
@@ -62,6 +58,7 @@ module Smartcloud
 				end
 			end
 
+			# TODO: self.create_core method must be checked line by line to see if its working properly for solr8 and above
 			def self.create_core(*args)
 				args.flatten!
 				corename = args.empty? ? '' : args.shift
@@ -83,6 +80,7 @@ module Smartcloud
 				end
 			end
 
+			# TODO: self.destroy_core method must be checked line by line to see if its working properly for solr8 and above
 			def self.destroy_core(*args)
 				args.flatten!
 				corename = args.empty? ? '' : args.shift

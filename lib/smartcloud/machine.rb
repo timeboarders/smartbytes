@@ -182,7 +182,7 @@ module Smartcloud
 				'grids/grid-runner/apps/***',
 
 				'grids/grid-solr',
-				'grids/grid-solr/data/***',
+				'grids/grid-solr/solr/***',
 			]
 			files.join(',')
 		end
@@ -219,8 +219,8 @@ module Smartcloud
 				'grids/grid-runner/pre-receive',
 
 				'grids/grid-solr',
-				'grids/grid-solr/data',
-				'grids/grid-solr/data/.keep',
+				'grids/grid-solr/solr',
+				'grids/grid-solr/solr/.keep',
 
 				'tmp/***',
 			]
