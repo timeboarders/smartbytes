@@ -4,7 +4,7 @@ require 'smartcloud'
 
 if ARGV[0] == 'prereceive'
 	raise "Please provide appname, username, oldrev, newrev and refname" unless ARGV[1] && ARGV[2] && ARGV[3] && ARGV[4] && ARGV[5]
-	Smartcloud::Grids::Runner.prereceive_app(ARGV[1], ARGV[2], ARGV[3], ARGV[4], ARGV[5])
+	Smartcloud::Grids::Runner.prereceive(ARGV[1], ARGV[2], ARGV[3], ARGV[4], ARGV[5])
 elsif ARGV[0] == 'apps'
 	raise "Please provide appname" unless ARGV[2]
 	if ARGV[1] == 'create'

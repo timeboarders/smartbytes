@@ -24,12 +24,13 @@ module Smartcloud
 							--env LETSENCRYPT_HOST=#{Smartcloud.config.git_domain} \
 							--env LETSENCRYPT_EMAIL=#{Smartcloud.config.sysadmin_email} \
 							--env LETSENCRYPT_TEST=#{Smartcloud.config.letsencrypt_test} \
-							--env GIT_PROJECT_ROOT=#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/repositories \
+							--env GIT_PROJECT_ROOT=#{Smartcloud.config.user_home_path}/.smartcloud/apps/repositories \
 							--env GIT_HTTP_EXPORT_ALL="" \
 							--user `id -u` \
-							--workdir /home/`id -un`/.smartcloud/grids/grid-runner/apps \
+							--workdir /home/`id -un`/.smartcloud/apps \
 							--expose='9000' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
+							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/apps:#{Smartcloud.config.user_home_path}/.smartcloud/apps' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner:#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner' \
 							--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 							--restart='always' \
@@ -144,7 +145,7 @@ module Smartcloud
 				end
 			end
 
-			def self.prereceive_app(appname, username, oldrev, newrev, refname)
+			def self.prereceive(appname, username, oldrev, newrev, refname)
 				logger.formatter = proc do |severity, datetime, progname, message|
 					severity_text = { "DEBUG" => "\u{1f527} #{severity}:", "INFO" => " \u{276f}", "WARN" => "\u{2757} #{severity}:",
 						"ERROR" => "\u{274c} #{severity}:", "FATAL" => "\u{2b55} #{severity}:", "UNKNOWN" => "\u{2753} #{severity}:"
@@ -153,7 +154,7 @@ module Smartcloud
 				end
 
 				# Load vars and environment
-				container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/apps/containers/#{appname}"
+				container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/apps/containers/#{appname}"
 				env_vars = Smartcloud::Apps::App.get_env_vars(container_path)
 				return unless env_vars
 
