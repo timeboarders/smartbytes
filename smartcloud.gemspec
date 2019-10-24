@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
 		"source_code_uri" => "https://github.com/timeboardme/smartcloud"
 	}
 
-	s.executables 	= %w(smartcloud runner buildpacker)
+	s.executables 	= %w(smartcloud prereceiver buildpacker)
 end
