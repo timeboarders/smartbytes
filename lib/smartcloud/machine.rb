@@ -16,9 +16,10 @@ module Smartcloud
 		end
 
 		def start
-			Smartcloud::User.create_htpasswd_files
 			Smartcloud::Docker.install
-			Smartcloud::Engine.install
+
+			engine = Smartcloud::Engine.new
+			engine.install
 
 			ssh = Smartcloud::SSH.new
 			ssh.run "smartcloud buildpacker install"
@@ -30,7 +31,9 @@ module Smartcloud
 			ssh.run "smartcloud prereceiver uninstall"
 			ssh.run "smartcloud buildpacker uninstall"
 
-			Smartcloud::Engine.uninstall
+			engine = Smartcloud::Engine.new
+			engine.uninstall
+
 			Smartcloud::Docker.uninstall
 		end
 

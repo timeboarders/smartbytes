@@ -4,7 +4,11 @@ module Smartcloud
 		def initialize
 		end
 
-		def self.install
+		def install
+			self.uninstall
+
+			Smartcloud::User.create_htpasswd_files
+
 			ssh = Smartcloud::SSH.new
 			machine = Smartcloud::Machine.new
 
@@ -17,7 +21,6 @@ module Smartcloud
 			machine.sync first_sync: true
 
 			puts "-----> Creating image smartcloud ... "
-			ssh.run "docker rmi smartcloud"
 			ssh.run "docker image build -t smartcloud \
 					--build-arg SMARTCLOUD_VERSION=#{Smartcloud.version} \
 					--build-arg USER_NAME=`id -un` \
@@ -33,7 +36,9 @@ module Smartcloud
 			machine.sync
 		end
 
-		def self.uninstall
+		def uninstall
+			ssh = Smartcloud::SSH.new
+
 			ssh.run "sudo rm /usr/local/bin/smartcloud"
 			ssh.run "docker rmi smartcloud"
 		end
