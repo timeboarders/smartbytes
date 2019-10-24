@@ -41,6 +41,14 @@ elsif Smartcloud::Machine.smartcloud_server?
 	if command == 'run'
 		machine = Smartcloud::Machine.new
 		machine.run ARGV
+	elsif command == 'buildpacker'
+		buildpacker = Smartcloud::Buildpacker.new
+		action = ARGV.shift
+		if action == "install"
+			buildpacker.install
+		elsif action == "uninstall"
+			buildpacker.uninstall
+		end
 	elsif command == 'ps'
 		exec "docker ps #{ARGV.join(' ')}"
 	elsif command == 'logs'

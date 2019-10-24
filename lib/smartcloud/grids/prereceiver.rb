@@ -117,26 +117,9 @@ module Smartcloud
 						puts "done"
 					end
 				end
-
-				unless system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
-					print "-----> Creating image smartcloud/buildpacks/rails ... "
-					if system("docker image build -t smartcloud/buildpacks/rails \
-						--build-arg USER_UID=`id -u` \
-						--build-arg USER_NAME=`id -un` \
-						#{Smartcloud.config.root_path}/lib/smartcloud/engine/buildpacks/rails", out: File::NULL)
-						puts "done"
-					end
-				end
 			end
 			
 			def self.destroy_images
-				if system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
-					print "-----> Removing image smartcloud/buildpacks/rails ... "
-					if system("docker image rm smartcloud/buildpacks/rails", out: File::NULL)
-						puts "done"
-					end
-				end
-
 				if system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
 					print "-----> Removing image smartcloud/prereceiver ... "
 					if system("docker image rm smartcloud/prereceiver", out: File::NULL)
