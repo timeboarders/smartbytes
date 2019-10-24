@@ -6,13 +6,31 @@ module Smartcloud
 			def initialize
 			end
 
+			def install
+				self.uninstall
+				unless system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
+					print "-----> Creating image smartcloud/prereceiver ... "
+					if system("docker image build -t smartcloud/prereceiver \
+						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-prereceiver", out: File::NULL)
+						puts "done"
+					end
+				end
+			end
+
+			def uninstall
+				Smartcloud::Grids::Prereceiver.down
+				if system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
+					print "-----> Removing image smartcloud/prereceiver ... "
+					if system("docker image rm smartcloud/prereceiver", out: File::NULL)
+						puts "done"
+					end
+				end
+			end
+
 			def self.up
 				if Smartcloud::Docker.running?
 					# Creating swapfile
 					# self.create_swapfile
-
-					# Creating images
-					self.create_images
 
 					# Creating & Starting containers
 					if system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL) && system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
@@ -64,9 +82,6 @@ module Smartcloud
 						puts "-----> Container 'prereceiver' is currently not running."
 					end
 
-					# Removing images
-					self.destroy_images
-
 					# Removing swapfile
 					# self.destroy_swapfile
 				end
@@ -105,25 +120,6 @@ module Smartcloud
 						if system("sudo rm /swapfile", out: File::NULL)
 							puts "done"
 						end
-					end
-				end
-			end
-			
-			def self.create_images
-				unless system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
-					print "-----> Creating image smartcloud/prereceiver ... "
-					if system("docker image build -t smartcloud/prereceiver \
-						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-prereceiver", out: File::NULL)
-						puts "done"
-					end
-				end
-			end
-			
-			def self.destroy_images
-				if system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
-					print "-----> Removing image smartcloud/prereceiver ... "
-					if system("docker image rm smartcloud/prereceiver", out: File::NULL)
-						puts "done"
 					end
 				end
 			end

@@ -22,10 +22,12 @@ module Smartcloud
 
 			ssh = Smartcloud::SSH.new
 			ssh.run "smartcloud buildpacker install"
+			ssh.run "smartcloud prereceiver install"
 		end
 
 		def stop
 			ssh = Smartcloud::SSH.new
+			ssh.run "smartcloud prereceiver uninstall"
 			ssh.run "smartcloud buildpacker uninstall"
 
 			Smartcloud::Engine.uninstall

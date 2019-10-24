@@ -49,6 +49,14 @@ elsif Smartcloud::Machine.smartcloud_server?
 		elsif action == "uninstall"
 			buildpacker.uninstall
 		end
+	elsif command == 'prereceiver'
+		prereceiver = Smartcloud::Grids::Prereceiver.new
+		action = ARGV.shift
+		if action == "install"
+			prereceiver.install
+		elsif action == "uninstall"
+			prereceiver.uninstall
+		end
 	elsif command == 'ps'
 		exec "docker ps #{ARGV.join(' ')}"
 	elsif command == 'logs'
