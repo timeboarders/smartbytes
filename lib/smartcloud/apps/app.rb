@@ -39,8 +39,8 @@ module Smartcloud
 					# Initializing bare repo and pre-receive
 					Dir.chdir(repository_path) do
 						%x[git init --bare]
-						%x[chmod +x #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/pre-receive]
-						%x[ln -s #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner/pre-receive #{repository_path}/hooks/pre-receive]
+						%x[chmod +x #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-prereceiver/pre-receive]
+						%x[ln -s #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-prereceiver/pre-receive #{repository_path}/hooks/pre-receive]
 						puts "done"
 					end
 

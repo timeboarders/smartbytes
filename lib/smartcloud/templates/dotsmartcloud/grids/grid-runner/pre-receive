@@ -9,7 +9,7 @@ while read oldrev newrev refname; do
 	else
 	    REPOSITORY_BASENAME=$(basename $(readlink -nf "$PWD"/..))
 	fi
-	script --quiet --return --flush --command "runner prereceive $REPOSITORY_BASENAME $REMOTE_USER $oldrev $newrev $refname" /home/$(whoami)/.smartcloud/apps/containers/$REPOSITORY_BASENAME/typescript
+	script --quiet --return --flush --command "prereceiver prereceive $REPOSITORY_BASENAME $REMOTE_USER $oldrev $newrev $refname" /home/$(whoami)/.smartcloud/apps/containers/$REPOSITORY_BASENAME/typescript
 	if [ "$?" -eq 10 ]; then
 		exit 0
 	fi

@@ -4,17 +4,17 @@ require 'smartcloud'
 
 if ARGV[0] == 'prereceive'
 	raise "Please provide appname, username, oldrev, newrev and refname" unless ARGV[1] && ARGV[2] && ARGV[3] && ARGV[4] && ARGV[5]
-	Smartcloud::Grids::Runner.prereceive(ARGV[1], ARGV[2], ARGV[3], ARGV[4], ARGV[5])
+	Smartcloud::Grids::Prereceiver.prereceive(ARGV[1], ARGV[2], ARGV[3], ARGV[4], ARGV[5])
 elsif ARGV[0] == 'apps'
 	raise "Please provide appname" unless ARGV[2]
 	if ARGV[1] == 'create'
 		raise "Please provide username" unless ARGV[3]
-		Smartcloud::Grids::Runner.create_app(ARGV[2], ARGV[3])
+		Smartcloud::Grids::Prereceiver.create_app(ARGV[2], ARGV[3])
 	elsif ARGV[1] == 'start'
-		Smartcloud::Grids::Runner.start_app(ARGV[2])
+		Smartcloud::Grids::Prereceiver.start_app(ARGV[2])
 	elsif ARGV[1] == 'stop'
-		Smartcloud::Grids::Runner.stop_app(ARGV[2])
+		Smartcloud::Grids::Prereceiver.stop_app(ARGV[2])
 	elsif ARGV[1] == 'destroy'
-		Smartcloud::Grids::Runner.destroy_app(ARGV[2])
+		Smartcloud::Grids::Prereceiver.destroy_app(ARGV[2])
 	end
 end

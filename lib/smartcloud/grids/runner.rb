@@ -1,7 +1,7 @@
 # The main Smartcloud Grids Git driver
 module Smartcloud
 	module Grids
-		class Runner < Smartcloud::Base
+		class Prereceiver < Smartcloud::Base
 
 			def initialize
 			end
@@ -15,10 +15,10 @@ module Smartcloud
 					self.create_images
 
 					# Creating & Starting containers
-					if system("docker image inspect smartcloud/runner", [:out, :err] => File::NULL) && system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
-						print "-----> Creating container runner ... "
+					if system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL) && system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
+						print "-----> Creating container prereceiver ... "
 						if system("docker create \
-							--name='runner' \
+							--name='prereceiver' \
 							--env VIRTUAL_PROTO=fastcgi \
 							--env VIRTUAL_HOST=#{Smartcloud.config.git_domain} \
 							--env LETSENCRYPT_HOST=#{Smartcloud.config.git_domain} \
@@ -31,15 +31,15 @@ module Smartcloud
 							--expose='9000' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/apps:#{Smartcloud.config.user_home_path}/.smartcloud/apps' \
-							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner:#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-runner' \
+							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-prereceiver:#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-prereceiver' \
 							--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 							--restart='always' \
 							--network='nginx-network' \
-							smartcloud/runner", out: File::NULL)
+							smartcloud/prereceiver", out: File::NULL)
 							puts "done"
 
-							print "-----> Starting container runner ... "
-							if system("docker start runner", out: File::NULL)
+							print "-----> Starting container prereceiver ... "
+							if system("docker start prereceiver", out: File::NULL)
 								puts "done"
 							end
 						end
@@ -50,18 +50,18 @@ module Smartcloud
 			def self.down
 				if Smartcloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
-					if system("docker inspect -f '{{.State.Running}}' 'runner'", [:out, :err] => File::NULL)
-						print "-----> Stopping container runner ... "
-						if system("docker stop 'runner'", out: File::NULL)
+					if system("docker inspect -f '{{.State.Running}}' 'prereceiver'", [:out, :err] => File::NULL)
+						print "-----> Stopping container prereceiver ... "
+						if system("docker stop 'prereceiver'", out: File::NULL)
 							puts "done"
 
-							print "-----> Removing container runner ... "
-							if system("docker rm 'runner'", out: File::NULL)
+							print "-----> Removing container prereceiver ... "
+							if system("docker rm 'prereceiver'", out: File::NULL)
 								puts "done"
 							end
 						end
 					else
-						puts "-----> Container 'runner' is currently not running."
+						puts "-----> Container 'prereceiver' is currently not running."
 					end
 
 					# Removing images
@@ -110,10 +110,10 @@ module Smartcloud
 			end
 			
 			def self.create_images
-				unless system("docker image inspect smartcloud/runner", [:out, :err] => File::NULL)
-					print "-----> Creating image smartcloud/runner ... "
-					if system("docker image build -t smartcloud/runner \
-						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner", out: File::NULL)
+				unless system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
+					print "-----> Creating image smartcloud/prereceiver ... "
+					if system("docker image build -t smartcloud/prereceiver \
+						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-prereceiver", out: File::NULL)
 						puts "done"
 					end
 				end
@@ -123,7 +123,7 @@ module Smartcloud
 					if system("docker image build -t smartcloud/buildpacks/rails \
 						--build-arg USER_UID=`id -u` \
 						--build-arg USER_NAME=`id -un` \
-						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-runner/buildpacks/rails", out: File::NULL)
+						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-prereceiver/buildpacks/rails", out: File::NULL)
 						puts "done"
 					end
 				end
@@ -137,9 +137,9 @@ module Smartcloud
 					end
 				end
 
-				if system("docker image inspect smartcloud/runner", [:out, :err] => File::NULL)
-					print "-----> Removing image smartcloud/runner ... "
-					if system("docker image rm smartcloud/runner", out: File::NULL)
+				if system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
+					print "-----> Removing image smartcloud/prereceiver ... "
+					if system("docker image rm smartcloud/prereceiver", out: File::NULL)
 						puts "done"
 					end
 				end

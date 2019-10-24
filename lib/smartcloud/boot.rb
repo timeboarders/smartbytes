@@ -17,7 +17,7 @@ require 'smartcloud/user'
 require 'smartcloud/grids/mysql'
 require 'smartcloud/grids/solr'
 require 'smartcloud/grids/buildpacker'
-require 'smartcloud/grids/runner'
+require 'smartcloud/grids/prereceiver'
 require 'smartcloud/grids/nginx'
 
 require 'smartcloud/apps/app'

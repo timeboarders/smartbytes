@@ -201,8 +201,8 @@ module Smartcloud
 				'grids/grid-nginx/fastcgi.conf',
 				'grids/grid-nginx/nginx.tmpl',
 
-				'grids/grid-runner',
-				'grids/grid-runner/pre-receive',
+				'grids/grid-prereceiver',
+				'grids/grid-prereceiver/pre-receive',
 
 				'grids/grid-solr',
 				'grids/grid-solr/solr',
