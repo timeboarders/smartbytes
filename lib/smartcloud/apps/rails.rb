@@ -32,10 +32,12 @@ module Smartcloud
 				# Setup app folders needed for volumes. If this is not created then docker will create it while running the container,
 				# but the folder will have root user assigned instead of the current user.
 				FileUtils.mkdir_p("#{container_path}/app/vendor/bundle")
-				FileUtils.mkdir_p("#{container_path}/app/public")
+				FileUtils.mkdir_p("#{container_path}/app/public/assets")
+				FileUtils.mkdir_p("#{container_path}/app/public/packs")
 				FileUtils.mkdir_p("#{container_path}/app/node_modules")
 				FileUtils.mkdir_p("#{container_path_with_version}/vendor/bundle")
-				FileUtils.mkdir_p("#{container_path_with_version}/public")
+				FileUtils.mkdir_p("#{container_path_with_version}/public/assets")
+				FileUtils.mkdir_p("#{container_path_with_version}/public/packs")
 				FileUtils.mkdir_p("#{container_path_with_version}/node_modules")
 
 				# Creating & Starting container
@@ -53,7 +55,8 @@ module Smartcloud
 					--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
 					--volume='#{container_path_with_version}:/app' \
 					--volume='#{container_path}/app/vendor/bundle:/app/vendor/bundle' \
-					--volume='#{container_path}/app/public:/app/public' \
+					--volume='#{container_path}/app/public:/app/public/assets' \
+					--volume='#{container_path}/app/public:/app/public/packs' \
 					--volume='#{container_path}/app/node_modules:/app/node_modules' \
 					--restart='always' \
 					--init \
