@@ -28,6 +28,9 @@ if Smartcloud::Machine.smartcloud_local?
 	elsif command == 'app'
 		machine = Smartcloud::Machine.new
 		machine.app ARGV
+	elsif command == 'ps'
+		ssh = Smartcloud::SSH.new
+		ssh.run "smartcloud ps #{ARGV.join(' ')}"
 	elsif command == 'logs'
 		ssh = Smartcloud::SSH.new
 		ssh.run "smartcloud logs #{ARGV.join(' ')}"
@@ -38,6 +41,8 @@ elsif Smartcloud::Machine.smartcloud_server?
 	if command == 'run'
 		machine = Smartcloud::Machine.new
 		machine.run ARGV
+	elsif command == 'ps'
+		exec "docker ps #{ARGV.join(' ')}"
 	elsif command == 'logs'
 		exec "docker logs #{ARGV.join(' ')}"
 	elsif command == 'shell'
