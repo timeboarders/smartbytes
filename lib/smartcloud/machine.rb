@@ -187,9 +187,6 @@ module Smartcloud
 
 				'grids',
 
-				'grids/grid-buildpacker',
-				'grids/grid-buildpacker/.keep',
-
 				'grids/grid-mysql',
 				'grids/grid-mysql/data',
 				'grids/grid-mysql/data/.keep',

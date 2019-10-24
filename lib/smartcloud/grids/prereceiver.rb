@@ -123,7 +123,7 @@ module Smartcloud
 					if system("docker image build -t smartcloud/buildpacks/rails \
 						--build-arg USER_UID=`id -u` \
 						--build-arg USER_NAME=`id -un` \
-						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-prereceiver/buildpacks/rails", out: File::NULL)
+						#{Smartcloud.config.root_path}/lib/smartcloud/engine/buildpacks/rails", out: File::NULL)
 						puts "done"
 					end
 				end

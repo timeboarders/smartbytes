@@ -16,4 +16,4 @@ RUN apk add --update build-base && \
 # Gems
 RUN gem install bundler
 
-CMD ["buildpacker", "start"]
+CMD ["buildpacker", "pack"]

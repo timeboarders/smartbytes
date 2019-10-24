@@ -2,7 +2,7 @@
 
 require 'smartcloud'
 
-if ARGV[0] == 'start'
-	buildpacker = Smartcloud::Grids::Buildpacker.new
+if ARGV[0] == 'pack'
+	buildpacker = Smartcloud::Buildpacker.new
 	buildpacker.pack
 end
