@@ -55,8 +55,8 @@ module Smartcloud
 					--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
 					--volume='#{container_path_with_version}:/app' \
 					--volume='#{container_path}/app/vendor/bundle:/app/vendor/bundle' \
-					--volume='#{container_path}/app/public:/app/public/assets' \
-					--volume='#{container_path}/app/public:/app/public/packs' \
+					--volume='#{container_path}/app/public/assets:/app/public/assets' \
+					--volume='#{container_path}/app/public/packs:/app/public/packs' \
 					--volume='#{container_path}/app/node_modules:/app/node_modules' \
 					--restart='always' \
 					--init \
