@@ -20,6 +20,7 @@ require 'smartcloud/user'
 require 'smartcloud/grids/mysql'
 require 'smartcloud/grids/nginx'
 require 'smartcloud/grids/prereceiver'
+require 'smartcloud/grids/redmine'
 require 'smartcloud/grids/solr'
 
 require 'smartcloud/apps/app'

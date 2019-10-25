@@ -181,6 +181,9 @@ module Smartcloud
 				'grids/grid-nginx',
 				'grids/grid-nginx/certificates/***',
 
+				'grids/grid-redmine',
+				'grids/grid-redmine/files/***',
+
 				'grids/grid-solr',
 				'grids/grid-solr/solr/***',
 			]
@@ -216,6 +219,10 @@ module Smartcloud
 
 				'grids/grid-prereceiver',
 				'grids/grid-prereceiver/pre-receive',
+
+				'grids/grid-redmine',
+				'grids/grid-redmine/files',
+				'grids/grid-redmine/files/.keep',
 
 				'grids/grid-solr',
 				'grids/grid-solr/solr',
