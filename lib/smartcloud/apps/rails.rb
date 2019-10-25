@@ -95,7 +95,7 @@ module Smartcloud
 					end
 					exec "bundle", "exec", "puma", "--config", "config/puma.rb"
 				else
-					if bundle_install? && precompile_assets? && test_web_server?
+					if initial_setup? && bundle_install? && precompile_assets? && db_migrate? && test_web_server?
 						logger.formatter = nil
 
 						exit 0
@@ -109,6 +109,24 @@ module Smartcloud
 			end
 
 			private
+
+			# Perform initial_setup
+			def initial_setup?
+				logger.info "Performing initial setup ..."
+
+				exit_status = nil
+
+				# Fix for mysql2 gem to support sha256_password, until it is fixed in main mysql2 gem.
+				# https://github.com/brianmario/mysql2/issues/1023
+				exit_status = system("mkdir ./lib/mariadb && ln -s /usr/lib/mariadb/plugin ./lib/mariadb/plugin")
+
+				if exit_status
+					return true
+				else
+					logger.error "Could not complete initial setup."
+					return false
+				end
+			end
 
 			# Perform bundle install
 			def bundle_install?
@@ -146,6 +164,28 @@ module Smartcloud
 					return true
 				else
 					logger.error "Could not install Javascript dependencies or pre-compile assets."
+					return false
+				end
+			end
+
+			# Perform db_migrate
+			def db_migrate?
+				return true # remove this line when you want to start using db_migrate?
+
+				logger.info "Performing database migrations ..."
+
+				set_logger_formatter_tabs
+				exit_status = nil
+				Open3.popen2e("bundle", "exec", "rails", "db:migrate") do |stdin, stdout_and_stderr, wait_thr|
+					stdout_and_stderr.each { |line| logger.info "#{line}" }
+					exit_status = wait_thr.value.success?
+				end
+				set_logger_formatter_arrow
+
+				if exit_status
+					return true
+				else
+					logger.error "Could not complete database migrations."
 					return false
 				end
 			end
