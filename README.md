@@ -1,4 +1,6 @@
 # SmartCloud
+Git push should deploy.
+
 Smartcloud is a full-stack deployment framework for Rails optimized for programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration.
 
 Deploy your Rails apps to your own server with - git push production master
