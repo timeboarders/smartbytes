@@ -25,7 +25,8 @@ module Smartcloud
 				"sudo apt-get -y update",
 				"sudo apt-get -y install docker-ce",
 				"sudo usermod -aG docker $USER",
-				"docker run --rm hello-world"
+				"docker run --rm hello-world",
+				"docker rmi hello-world"
 			]
 			ssh.run commands
 
