@@ -12,6 +12,10 @@ module Smartcloud
 			name = args.shift
 			FileUtils.mkdir name
 			FileUtils.cp_r "#{Smartcloud.config.root_path}/lib/smartcloud/templates/dotsmartcloud/.", "#{name}"
+			FileUtils.chdir "#{name}" do
+				credentials = Smartcloud::Credentials.new
+				credentials.create
+			end
 			puts "New machine #{name} has been created."
 		end
 
@@ -194,6 +198,7 @@ module Smartcloud
 				'bin/***',
 
 				'config',
+				'config/credentials.yml.enc',
 				'config/environment.rb',
 
 				'grids',

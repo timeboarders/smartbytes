@@ -34,6 +34,9 @@ if Smartcloud::Machine.smartcloud_local?
 	elsif command == 'logs'
 		ssh = Smartcloud::SSH.new
 		ssh.run "smartcloud logs #{ARGV.join(' ')}"
+	elsif command == 'credentials:edit'
+		credentials = Smartcloud::Credentials.new
+		credentials.edit
 	else
 		puts "Specify a valid local command to execute."
 	end
