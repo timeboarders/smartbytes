@@ -38,6 +38,10 @@ module Smartcloud
 			FileUtils.rm(tmp_path) if tmp_path&.exist?
 		end
 
+		def read_key
+			read_env_key || read_key_file || handle_missing_key
+		end
+
 		def config
 			@config ||= deserialize(read).deep_symbolize_keys
 		end
@@ -55,21 +59,21 @@ module Smartcloud
 			    password: #{SecureRandom.hex(16)}
 
 			  mysql:
-			    host: 133.133.133.133
 			    port: 3306
 			    root_password: #{SecureRandom.hex(16)}
 			    username: #{SecureRandom.hex(8)}
 			    password: #{SecureRandom.hex(16)}
+			    database_name: #{SecureRandom.hex(4)}_production
 
 			  redmine:
 			    admin_username: admin
 			    admin_password: #{SecureRandom.hex(16)}
+			    secret_key_base: #{SecureRandom.hex(64)}
 			    database_host: mysql
 			    database_port: 3306
 			    database_username: #{SecureRandom.hex(8)}_redmine
 			    database_password: #{SecureRandom.hex(16)}
 			    database_name: #{SecureRandom.hex(4)}_redmine_production
-			    secret_key_base: #{SecureRandom.hex(64)}
 			    # plugins_migrate: true
 			YAML
 		end
@@ -97,10 +101,6 @@ module Smartcloud
 
 		def create_key
 			SecureRandom.hex(ActiveSupport::MessageEncryptor.key_len(CIPHER))
-		end
-
-		def read_key
-			read_env_key || read_key_file || handle_missing_key
 		end
 
 		def write_key

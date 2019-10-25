@@ -22,6 +22,7 @@ module Smartcloud
 
 			puts "-----> Creating image smartcloud ... "
 			ssh.run "docker image build -t smartcloud \
+					--build-arg SMARTCLOUD_MASTER_KEY=#{Smartcloud::Credentials.new.read_key} \
 					--build-arg SMARTCLOUD_VERSION=#{Smartcloud.version} \
 					--build-arg USER_NAME=`id -un` \
 					--build-arg USER_UID=`id -u` \
