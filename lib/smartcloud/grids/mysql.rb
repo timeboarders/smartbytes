@@ -22,9 +22,12 @@ module Smartcloud
 					print "-----> Creating container mysql ... "
 					if system("docker create \
 						--name='mysql' \
-						--env MYSQL_RANDOM_ROOT_PASSWORD=yes \
+						--env MYSQL_ROOT_PASSWORD=#{Smartcloud.credentials.mysql[:root_password]} \
+						--env MYSQL_USER=#{Smartcloud.credentials.mysql[:username]} \
+						--env MYSQL_PASSWORD=#{Smartcloud.credentials.mysql[:password]} \
+						--env MYSQL_DATABASE=#{Smartcloud.credentials.mysql[:database_name]} \
 						--user `id -u`:`id -g` \
-						#{"--publish='3306:3306'" if exposed == '--exposed'} \
+						#{"--publish='#{Smartcloud.credentials.mysql[:port]}:#{Smartcloud.credentials.mysql[:port]}'" if exposed == '--exposed'} \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-mysql/data:/var/lib/mysql' \
 						--restart='always' \
 						--network='mysql-network' \
