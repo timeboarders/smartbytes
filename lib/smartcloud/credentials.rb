@@ -47,29 +47,29 @@ module Smartcloud
 		def credentials_template
 			<<~YAML
 			  machine:
-			    hostname: yourhostname
+			    hostname: #{SecureRandom.hex(8)}
 			    host: 122.122.122.122
 			    port: 22
-			    root_password: yourrootpassword
-			    username: yourusername
-			    password: yourpassword
+			    root_password: #{SecureRandom.hex(16)}
+			    username: #{SecureRandom.hex(8)}
+			    password: #{SecureRandom.hex(16)}
 
 			  mysql:
 			    host: 133.133.133.133
 			    port: 3306
-			    root_password: yourmysqlrootpassword
-			    username: yourmysqlusername
-			    password: yourmysqlpassword
+			    root_password: #{SecureRandom.hex(16)}
+			    username: #{SecureRandom.hex(8)}
+			    password: #{SecureRandom.hex(16)}
 
 			  redmine:
 			    admin_username: admin
-			    admin_password: yourredmineadminpassword
+			    admin_password: #{SecureRandom.hex(16)}
 			    database_host: mysql
 			    database_port: 3306
-			    database_username: redmine
-			    database_password: yourredminedatabasepassword
-			    database_name: redmine_production
-			    secret_key_base: yourredminesecretkeybase
+			    database_username: #{SecureRandom.hex(8)}_redmine
+			    database_password: #{SecureRandom.hex(16)}
+			    database_name: #{SecureRandom.hex(4)}_redmine_production
+			    secret_key_base: #{SecureRandom.hex(64)}
 			    # plugins_migrate: true
 			YAML
 		end
