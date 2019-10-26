@@ -122,6 +122,9 @@ module Smartcloud
 						logger.fatal "This version name already exists ... Failed."
 						return
 					end
+				else
+					# Allow the push to complete for all other branches normally.
+					exit 10
 				end
 
 				logger.formatter = nil
