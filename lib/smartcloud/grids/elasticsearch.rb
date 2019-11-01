@@ -51,6 +51,7 @@ module Smartcloud
 						--env 'ES_JAVA_OPTS=-Xms512m -Xmx512m -Des.enforce.bootstrap.checks=true' \
 						--env bootstrap.memory_lock=true \
 						--ulimit memlock=-1:-1 \
+						--ulimit nofile=65535:65535 \
 						--user `id -u`:`id -g` \
 						#{"--publish='#{Smartcloud.credentials.elasticsearch[:port]}:#{Smartcloud.credentials.elasticsearch[:port]}'" if exposed == '--exposed'} \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-elasticsearch/data:/usr/share/elasticsearch/data' \
