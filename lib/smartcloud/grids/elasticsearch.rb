@@ -48,8 +48,8 @@ module Smartcloud
 						--name='elasticsearch' \
 						--env discovery.type=single-node \
 						--env cluster.name=elasticsearch-cluster \
-						--env bootstrap.memory_lock=true \
 						--env 'ES_JAVA_OPTS=-Xms512m -Xmx512m -Des.enforce.bootstrap.checks=true' \
+						--env bootstrap.memory_lock=true \
 						--ulimit memlock=-1:-1 \
 						--user `id -u`:`id -g` \
 						#{"--publish='#{Smartcloud.credentials.elasticsearch[:port]}:#{Smartcloud.credentials.elasticsearch[:port]}'" if exposed == '--exposed'} \
