@@ -184,6 +184,7 @@ module Smartcloud
 				'grids/grid-elasticsearch',
 				'grids/grid-elasticsearch/vm_max_map_count',
 				'grids/grid-elasticsearch/data/***',
+				'grids/grid-elasticsearch/logs/***',
 
 				'grids/grid-mysql',
 				'grids/grid-mysql/data/***',
@@ -219,6 +220,8 @@ module Smartcloud
 				'grids/grid-elasticsearch',
 				'grids/grid-elasticsearch/data',
 				'grids/grid-elasticsearch/data/.keep',
+				'grids/grid-elasticsearch/logs',
+				'grids/grid-elasticsearch/logs/.keep',
 
 				'grids/grid-mysql',
 				'grids/grid-mysql/data',

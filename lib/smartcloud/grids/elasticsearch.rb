@@ -54,6 +54,7 @@ module Smartcloud
 						--user `id -u`:`id -g` \
 						#{"--publish='#{Smartcloud.credentials.elasticsearch[:port]}:#{Smartcloud.credentials.elasticsearch[:port]}'" if exposed == '--exposed'} \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-elasticsearch/data:/usr/share/elasticsearch/data' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-elasticsearch/logs:/usr/share/elasticsearch/logs' \
 						--restart='always' \
 						--network='elasticsearch-network' \
 						elasticsearch:7.4.1", out: File::NULL)
