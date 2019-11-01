@@ -65,6 +65,9 @@ module Smartcloud
 			    password: #{SecureRandom.hex(16)}
 			    database_name: #{SecureRandom.hex(4)}_production
 
+  			  elasticsearch:
+  			    port: 9200
+
 			  redmine:
 			    admin_username: admin
 			    admin_password: #{SecureRandom.hex(16)}

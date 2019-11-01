@@ -17,6 +17,7 @@ require 'smartcloud/buildpacker'
 
 require 'smartcloud/user'
 
+require 'smartcloud/grids/elasticsearch'
 require 'smartcloud/grids/mysql'
 require 'smartcloud/grids/nginx'
 require 'smartcloud/grids/prereceiver'

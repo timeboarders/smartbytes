@@ -28,9 +28,15 @@ module Smartcloud
 			ssh = Smartcloud::SSH.new
 			ssh.run "smartcloud buildpacker install"
 			ssh.run "smartcloud prereceiver install"
+
+			elasticsearch = Smartcloud::Grids::Elasticsearch.new
+			elasticsearch.install
 		end
 
 		def stop
+			elasticsearch = Smartcloud::Grids::Elasticsearch.new
+			elasticsearch.uninstall
+
 			ssh = Smartcloud::SSH.new
 			ssh.run "smartcloud prereceiver uninstall"
 			ssh.run "smartcloud buildpacker uninstall"
@@ -175,6 +181,10 @@ module Smartcloud
 
 				'grids',
 
+				'grids/grid-elasticsearch',
+				'grids/grid-elasticsearch/vm_max_map_count',
+				'grids/grid-elasticsearch/data/***',
+
 				'grids/grid-mysql',
 				'grids/grid-mysql/data/***',
 
@@ -205,6 +215,10 @@ module Smartcloud
 				'config/environment.rb',
 
 				'grids',
+
+				'grids/grid-elasticsearch',
+				'grids/grid-elasticsearch/data',
+				'grids/grid-elasticsearch/data/.keep',
 
 				'grids/grid-mysql',
 				'grids/grid-mysql/data',
