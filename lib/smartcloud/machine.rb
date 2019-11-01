@@ -182,7 +182,6 @@ module Smartcloud
 				'grids',
 
 				'grids/grid-elasticsearch',
-				'grids/grid-elasticsearch/vm_max_map_count',
 				'grids/grid-elasticsearch/data/***',
 				'grids/grid-elasticsearch/logs/***',
 

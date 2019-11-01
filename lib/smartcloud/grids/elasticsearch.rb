@@ -10,10 +10,8 @@ module Smartcloud
 
 				print "-----> Creating settings for elasticsearch ... "
 
-				vm_max_map_count_filepath = "~/.smartcloud/grids/grid-elasticsearch/vm_max_map_count"
 				ssh = Smartcloud::SSH.new
-				ssh.run "sudo sysctl -b vm.max_map_count > #{vm_max_map_count_filepath}"
-				ssh.run "sudo sysctl -w vm.max_map_count=262144"
+				ssh.run "echo 'vm.max_map_count=262144' | sudo tee /etc/sysctl.d/60-smartcloud-elasticsearch.conf && sudo sysctl --system"
 
 				puts "done"
 			end
@@ -21,10 +19,9 @@ module Smartcloud
 			def uninstall
 				print "-----> Removing settings for elasticsearch ... "
 
-				vm_max_map_count_filepath = "~/.smartcloud/grids/grid-elasticsearch/vm_max_map_count"
 				ssh = Smartcloud::SSH.new
-				ssh.run "test -f #{vm_max_map_count_filepath} && sudo sysctl -w vm.max_map_count=$(cat #{vm_max_map_count_filepath})"
-				ssh.run "test -f #{vm_max_map_count_filepath} && rm #{vm_max_map_count_filepath}"
+				# NOTE: sysctl does not reset this setting until restart of system even after sudo sysctl --system is run.
+				ssh.run "test -f /etc/sysctl.d/60-smartcloud-elasticsearch.conf && sudo rm /etc/sysctl.d/60-smartcloud-elasticsearch.conf && sudo sysctl --system"
 
 				puts "done"
 			end
