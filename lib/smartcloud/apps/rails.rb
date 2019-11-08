@@ -118,7 +118,7 @@ module Smartcloud
 
 				# Fix for mysql2 gem to support sha256_password, until it is fixed in main mysql2 gem.
 				# https://github.com/brianmario/mysql2/issues/1023
-				exit_status = system("mkdir ./lib/mariadb && ln -s /usr/lib/mariadb/plugin ./lib/mariadb/plugin")
+				exit_status = system("mkdir -p ./lib/mariadb && ln -s /usr/lib/mariadb/plugin ./lib/mariadb/plugin")
 
 				if exit_status
 					return true
