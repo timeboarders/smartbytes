@@ -63,8 +63,9 @@ module Smartcloud
 					--network='nginx-network' \
 					smartcloud/buildpacks/rails", out: File::NULL)
 
-					system("docker network connect mysql-network #{new_container}")
 					system("docker network connect elasticsearch-network #{new_container}")
+					system("docker network connect minio-network #{new_container}")
+					system("docker network connect mysql-network #{new_container}")
 
 					if system("docker start --attach #{new_container}")
 						logger.debug "Starting Web Server ..."

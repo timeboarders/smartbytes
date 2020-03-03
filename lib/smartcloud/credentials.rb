@@ -58,6 +58,11 @@ module Smartcloud
 			    username: #{SecureRandom.hex(8)}
 			    password: #{SecureRandom.hex(16)}
 
+  			  minio:
+  			    port: 9000
+  			    access_key: #{SecureRandom.hex(8)}
+  			    secret_key: #{SecureRandom.hex(16)}
+
 			  mysql:
 			    port: 3306
 			    root_password: #{SecureRandom.hex(16)}

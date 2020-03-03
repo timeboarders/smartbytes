@@ -185,6 +185,9 @@ module Smartcloud
 				'grids/grid-elasticsearch/data/***',
 				'grids/grid-elasticsearch/logs/***',
 
+				'grids/grid-minio',
+				'grids/grid-minio/data/***',
+
 				'grids/grid-mysql',
 				'grids/grid-mysql/data/***',
 
@@ -221,6 +224,10 @@ module Smartcloud
 				'grids/grid-elasticsearch/data/.keep',
 				'grids/grid-elasticsearch/logs',
 				'grids/grid-elasticsearch/logs/.keep',
+
+				'grids/grid-minio',
+				'grids/grid-minio/data',
+				'grids/grid-minio/data/.keep',
 
 				'grids/grid-mysql',
 				'grids/grid-mysql/data',
