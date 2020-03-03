@@ -29,11 +29,11 @@ module Smartcloud
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-minio/data:/data' \
 						--restart='always' \
 						--network='minio-network' \
-						minio/minio:RELEASE.2020-02-27T00-23-05Z", out: File::NULL)
+						minio/minio:RELEASE.2020-02-27T00-23-05Z server /data", out: File::NULL)
 
 						puts "done"
 						print "-----> Starting container minio ... "
-						if system("docker start minio server /data", out: File::NULL)
+						if system("docker start minio", out: File::NULL)
 							puts "done"
 						end
 					end
