@@ -35,10 +35,12 @@ module Smartcloud
 				FileUtils.mkdir_p("#{container_path}/app/public/assets")
 				FileUtils.mkdir_p("#{container_path}/app/public/packs")
 				FileUtils.mkdir_p("#{container_path}/app/node_modules")
+				FileUtils.mkdir_p("#{container_path}/app/storage")
 				FileUtils.mkdir_p("#{container_path_with_version}/vendor/bundle")
 				FileUtils.mkdir_p("#{container_path_with_version}/public/assets")
 				FileUtils.mkdir_p("#{container_path_with_version}/public/packs")
 				FileUtils.mkdir_p("#{container_path_with_version}/node_modules")
+				FileUtils.mkdir_p("#{container_path_with_version}/storage")
 
 				# Creating & Starting container
 				container_id = `docker ps -a -q --filter='name=^#{appname}_1$' --filter='status=running'`.chomp
@@ -58,6 +60,7 @@ module Smartcloud
 					--volume='#{container_path}/app/public/assets:/app/public/assets' \
 					--volume='#{container_path}/app/public/packs:/app/public/packs' \
 					--volume='#{container_path}/app/node_modules:/app/node_modules' \
+					--volume='#{container_path}/app/storage:/app/storage' \
 					--restart='always' \
 					--init \
 					--network='nginx-network' \
