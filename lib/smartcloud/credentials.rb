@@ -68,7 +68,7 @@ module Smartcloud
 			    root_password: #{SecureRandom.hex(16)}
 			    username: #{SecureRandom.hex(8)}
 			    password: #{SecureRandom.hex(16)}
-			    database_name: #{SecureRandom.hex(4)}_production
+			    database_name: #{SecureRandom.hex(8)}_production
 
   			  elasticsearch:
   			    port: 9200
@@ -81,7 +81,7 @@ module Smartcloud
 			    database_port: 3306
 			    database_username: #{SecureRandom.hex(8)}_redmine
 			    database_password: #{SecureRandom.hex(16)}
-			    database_name: #{SecureRandom.hex(4)}_redmine_production
+			    database_name: #{SecureRandom.hex(8)}_redmine_production
 			    # plugins_migrate: true
 			YAML
 		end
