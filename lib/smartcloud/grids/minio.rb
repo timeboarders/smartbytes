@@ -22,14 +22,22 @@ module Smartcloud
 					print "-----> Creating container minio ... "
 					if system("docker create \
 						--name='minio' \
+						--env VIRTUAL_HOST=#{Smartcloud.credentials.minio[:hostname]}.#{Smartcloud.config.apps_domain} \
+						--env LETSENCRYPT_HOST=#{Smartcloud.credentials.minio[:hostname]}.#{Smartcloud.config.apps_domain} \
+						--env LETSENCRYPT_EMAIL=#{Smartcloud.config.sysadmin_email} \
+						--env LETSENCRYPT_TEST=false \
 						--env MINIO_ACCESS_KEY=#{Smartcloud.credentials.minio[:access_key]} \
 						--env MINIO_SECRET_KEY=#{Smartcloud.credentials.minio[:secret_key]} \
+						--env MINIO_BROWSER=#{Smartcloud.credentials.minio[:browser]} \
+						--env MINIO_WORM=#{Smartcloud.credentials.minio[:worm]} \
 						--user `id -u`:`id -g` \
 						#{"--publish='#{Smartcloud.credentials.minio[:port]}:#{Smartcloud.credentials.minio[:port]}'" if exposed == '--exposed'} \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-minio/data:/data' \
 						--restart='always' \
 						--network='minio-network' \
 						minio/minio:RELEASE.2020-02-27T00-23-05Z server /data", out: File::NULL)
+
+						system("docker network connect nginx-network minio")
 
 						puts "done"
 						print "-----> Starting container minio ... "

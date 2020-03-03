@@ -59,16 +59,19 @@ module Smartcloud
 			    password: #{SecureRandom.hex(16)}
 
   			  minio:
+  			    hostname: #{SecureRandom.hex(8)}
   			    port: 9000
   			    access_key: #{SecureRandom.hex(8)}
   			    secret_key: #{SecureRandom.hex(16)}
+  			    browser: on
+  			    worm: off
 
 			  mysql:
 			    port: 3306
 			    root_password: #{SecureRandom.hex(16)}
 			    username: #{SecureRandom.hex(8)}
 			    password: #{SecureRandom.hex(16)}
-			    database_name: #{SecureRandom.hex(8)}_production
+			    database_name: #{SecureRandom.hex(8)}
 
   			  elasticsearch:
   			    port: 9200
@@ -81,7 +84,7 @@ module Smartcloud
 			    database_port: 3306
 			    database_username: #{SecureRandom.hex(8)}_redmine
 			    database_password: #{SecureRandom.hex(16)}
-			    database_name: #{SecureRandom.hex(8)}_redmine_production
+			    database_name: #{SecureRandom.hex(8)}_redmine
 			    # plugins_migrate: true
 			YAML
 		end
