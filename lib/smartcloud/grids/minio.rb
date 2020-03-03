@@ -31,7 +31,6 @@ module Smartcloud
 						--env MINIO_BROWSER=#{Smartcloud.credentials.minio[:browser]} \
 						--env MINIO_WORM=#{Smartcloud.credentials.minio[:worm]} \
 						--user `id -u`:`id -g` \
-						#{"--publish='#{Smartcloud.credentials.minio[:port]}:#{Smartcloud.credentials.minio[:port]}'" if exposed == '--exposed'} \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-minio/data:/data' \
 						--restart='always' \
 						--network='minio-network' \

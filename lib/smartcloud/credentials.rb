@@ -60,7 +60,6 @@ module Smartcloud
 
   			  minio:
   			    hostname: #{SecureRandom.hex(8)}
-  			    port: 9000
   			    access_key: #{SecureRandom.hex(8)}
   			    secret_key: #{SecureRandom.hex(16)}
   			    browser: on
