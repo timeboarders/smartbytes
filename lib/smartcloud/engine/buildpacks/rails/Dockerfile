@@ -14,6 +14,6 @@ RUN apk add --update build-base && \
     rm -rf /var/cache/apk/*
 
 # Gems
-RUN gem install bundler
+RUN gem install bundler -v 2.1.4
 
 CMD ["buildpacker", "pack"]
