@@ -137,8 +137,14 @@ module Smartcloud
 				logger.info "Performing bundle install ..."
 
 				set_logger_formatter_tabs
+
+				unless system("bundle config set deployment 'true' && bundle config set clean 'true'")
+					logger.error "Could not complete bundle config setting."
+					return false
+				end
+
 				exit_status = nil
-				Open3.popen2e("bundle", "install", "--deployment", "--clean") do |stdin, stdout_and_stderr, wait_thr|
+				Open3.popen2e("bundle", "install") do |stdin, stdout_and_stderr, wait_thr|
 					stdout_and_stderr.each { |line| logger.info "#{line}" }
 					exit_status = wait_thr.value.success?
 				end
