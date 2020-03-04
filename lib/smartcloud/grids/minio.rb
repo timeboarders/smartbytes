@@ -46,7 +46,7 @@ module Smartcloud
 					end
 				end
 			end
-	
+
 			def self.down
 				if Smartcloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
@@ -65,7 +65,7 @@ module Smartcloud
 						puts "done"
 					end
 				end
-			end			
+			end
 		end
 	end
 end
