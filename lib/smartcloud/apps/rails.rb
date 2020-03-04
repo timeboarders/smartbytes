@@ -137,22 +137,14 @@ module Smartcloud
 				logger.info "Performing bundle install ..."
 
 				set_logger_formatter_tabs
-				exit_status1, exit_status2, exit_status3 = nil, nil, nil
-				Open3.popen2e("bundle", "config", "set", "clean", "'true'") do |stdin, stdout_and_stderr, wait_thr|
-					stdout_and_stderr.each { |line| logger.info "#{line}" }
-					exit_status1 = wait_thr.value.success?
-				end
-				Open3.popen2e("bundle", "config", "set", "deployment", "'true'") do |stdin, stdout_and_stderr, wait_thr|
-					stdout_and_stderr.each { |line| logger.info "#{line}" }
-					exit_status2 = wait_thr.value.success?
-				end
+				exit_status = nil
 				Open3.popen2e("bundle", "install", "--deployment", "--clean") do |stdin, stdout_and_stderr, wait_thr|
 					stdout_and_stderr.each { |line| logger.info "#{line}" }
-					exit_status3 = wait_thr.value.success?
+					exit_status = wait_thr.value.success?
 				end
 				set_logger_formatter_arrow
 
-				if exit_status1 && exit_status2 && exit_status3
+				if exit_status
 					return true
 				else
 					logger.error "Could not complete bundle install."
