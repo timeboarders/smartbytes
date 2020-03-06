@@ -36,6 +36,8 @@ module Smartcloud
 						--network='minio-network' \
 						minio/minio:RELEASE.2020-02-27T00-23-05Z server /data", out: File::NULL)
 
+						# The alias is necessary to support internal network requests directed to minio container using public url
+						system("docker network connect --alias #{Smartcloud.credentials.minio[:hostname]}.#{Smartcloud.config.apps_domain} minio-network nginx")
 						system("docker network connect nginx-network minio")
 
 						puts "done"
@@ -49,6 +51,10 @@ module Smartcloud
 
 			def self.down
 				if Smartcloud::Docker.running?
+					# Disconnecting networks
+					system("docker network disconnect nginx-network minio")
+					system("docker network disconnect minio-network nginx")
+
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container minio ... "
 					if system("docker stop 'minio'", out: File::NULL)
