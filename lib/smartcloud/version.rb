@@ -1,7 +1,7 @@
 # frozen_string_literal: false
 
 module Smartcloud
-	VERSION = "0.4.3".freeze
+	VERSION = "0.4.4".freeze
 
 	def self.version
 		@@version ||= VERSION
