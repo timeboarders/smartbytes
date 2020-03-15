@@ -239,6 +239,10 @@ module Smartcloud
 				'grids/grid-nextcloud',
 				'grids/grid-nextcloud/html',
 				'grids/grid-nextcloud/html/.keep',
+				'grids/grid-nextcloud/html/apps',
+				'grids/grid-nextcloud/html/apps/.keep',
+				'grids/grid-nextcloud/html/config',
+				'grids/grid-nextcloud/html/config/.keep',
 
 				'grids/grid-nginx',
 				'grids/grid-nginx/certificates',

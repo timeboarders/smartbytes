@@ -22,6 +22,8 @@ module Smartcloud
 						--env MYSQL_USER=#{Smartcloud.credentials.nextcloud[:database_username]} \
 						--env MYSQL_PASSWORD=#{Smartcloud.credentials.nextcloud[:database_password]} \
 						--env MYSQL_DATABASE=#{Smartcloud.credentials.nextcloud[:database_name]} \
+						--user `id -u`:`id -g` \
+						--sysctl net.ipv4.ip_unprivileged_port_start=0 \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nextcloud/html:/var/www/html' \
 						--restart='always' \
 						--network='nginx-network' \
