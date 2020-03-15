@@ -11,11 +11,11 @@ module Smartcloud
 					print "-----> Creating container nextcloud ... "
 					if system("docker create \
 						--name='nextcloud' \
-						--env VIRTUAL_HOST=nextcloud.#{Smartcloud.config.apps_domain} \
-						--env LETSENCRYPT_HOST=nextcloud.#{Smartcloud.config.apps_domain} \
+						--env VIRTUAL_HOST=#{Smartcloud.credentials.nextcloud[:hostname]}.#{Smartcloud.config.apps_domain} \
+						--env LETSENCRYPT_HOST=#{Smartcloud.credentials.nextcloud[:hostname]}.#{Smartcloud.config.apps_domain} \
 						--env LETSENCRYPT_EMAIL=#{Smartcloud.config.sysadmin_email} \
 						--env LETSENCRYPT_TEST=false \
-						--env NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.#{Smartcloud.config.apps_domain} \
+						--env NEXTCLOUD_TRUSTED_DOMAINS=#{Smartcloud.credentials.nextcloud[:hostname]}.#{Smartcloud.config.apps_domain} \
 						--env NEXTCLOUD_ADMIN_USER=#{Smartcloud.credentials.nextcloud[:admin_username]} \
 						--env NEXTCLOUD_ADMIN_PASSWORD=#{Smartcloud.credentials.nextcloud[:admin_password]} \
 						--env MYSQL_HOST=#{Smartcloud.credentials.nextcloud[:database_host]}:#{Smartcloud.credentials.nextcloud[:database_port]} \

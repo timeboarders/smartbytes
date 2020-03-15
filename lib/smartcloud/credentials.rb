@@ -73,6 +73,7 @@ module Smartcloud
 			    database_name: #{SecureRandom.hex(8)}
 
 			  nextcloud:
+			    hostname: #{SecureRandom.hex(8)}
 			    admin_username: #{SecureRandom.hex(8)}
 			    admin_password: #{SecureRandom.hex(16)}
 			    database_host: mysql
