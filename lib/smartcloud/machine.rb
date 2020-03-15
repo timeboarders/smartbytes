@@ -191,6 +191,9 @@ module Smartcloud
 				'grids/grid-mysql',
 				'grids/grid-mysql/data/***',
 
+				'grids/grid-nextcloud',
+				'grids/grid-nextcloud/html/***',
+
 				'grids/grid-nginx',
 				'grids/grid-nginx/certificates/***',
 
@@ -232,6 +235,10 @@ module Smartcloud
 				'grids/grid-mysql',
 				'grids/grid-mysql/data',
 				'grids/grid-mysql/data/.keep',
+
+				'grids/grid-nextcloud',
+				'grids/grid-nextcloud/html',
+				'grids/grid-nextcloud/html/.keep',
 
 				'grids/grid-nginx',
 				'grids/grid-nginx/certificates',

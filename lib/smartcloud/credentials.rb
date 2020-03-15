@@ -72,6 +72,15 @@ module Smartcloud
 			    password: #{SecureRandom.hex(16)}
 			    database_name: #{SecureRandom.hex(8)}
 
+			  nextcloud:
+			    admin_username: #{SecureRandom.hex(8)}
+			    admin_password: #{SecureRandom.hex(16)}
+			    database_host: mysql
+			    database_port: 3306
+			    database_username: #{SecureRandom.hex(8)}_nextcloud
+			    database_password: #{SecureRandom.hex(16)}
+			    database_name: #{SecureRandom.hex(8)}_nextcloud
+
   			  elasticsearch:
   			    port: 9200
 
