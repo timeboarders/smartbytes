@@ -16,6 +16,7 @@ module Smartcloud
 						--env LETSENCRYPT_EMAIL=#{Smartcloud.config.sysadmin_email} \
 						--env LETSENCRYPT_TEST=false \
 						--env NEXTCLOUD_TRUSTED_DOMAINS=#{Smartcloud.credentials.nextcloud[:hostname]}.#{Smartcloud.config.apps_domain} \
+						--env NC_overwriteprotocol=https \
 						--env NEXTCLOUD_ADMIN_USER=#{Smartcloud.credentials.nextcloud[:admin_username]} \
 						--env NEXTCLOUD_ADMIN_PASSWORD=#{Smartcloud.credentials.nextcloud[:admin_password]} \
 						--env MYSQL_HOST=#{Smartcloud.credentials.nextcloud[:database_host]}:#{Smartcloud.credentials.nextcloud[:database_port]} \
