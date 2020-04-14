@@ -254,6 +254,10 @@ module Smartcloud
 				'grids/grid-prereceiver',
 				'grids/grid-prereceiver/pre-receive',
 
+				'grids/grid-redis',
+				'grids/grid-redis/data',
+				'grids/grid-redis/data/.keep',
+
 				'grids/grid-redmine',
 				'grids/grid-redmine/files',
 				'grids/grid-redmine/files/.keep',
