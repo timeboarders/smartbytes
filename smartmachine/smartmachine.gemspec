@@ -7,4 +7,6 @@ Gem::Specification.new do |s|
 	s.email       	= 'hello@timeboard.me'
 	s.homepage    	= 'https://rubygems.org/gems/smartmachine'
 	s.license     	= 'MIT'
+
+	s.files	= ["MIT-LICENSE", "README.md"]
 end

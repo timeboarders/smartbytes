@@ -8,5 +8,5 @@ Gem::Specification.new do |s|
 	s.homepage    	= 'https://rubygems.org/gems/smartbytes'
 	s.license     	= 'MIT'
 
-	s.files	= ["README.md"]
+	s.files	= ["MIT-LICENSE", "README.md"]
 end
