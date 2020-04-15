@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative "lib/smartcloud/version"
+version = File.read(File.expand_path("SMARTBYTES_VERSION", __dir__)).strip
 
 Gem::Specification.new do |s|
 	s.name        	= 'smartcloud'
-	s.version     	= Smartcloud.version
+	s.version     	= version
 	s.summary     	= "Full-stack deployment framework for Rails."
 	s.description 	= "Smartcloud is a full-stack deployment framework for rails optimized for programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration."
 

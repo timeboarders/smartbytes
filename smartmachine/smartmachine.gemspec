@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+version = File.read(File.expand_path("SMARTBYTES_VERSION", __dir__)).strip
+
 Gem::Specification.new do |s|
 	s.name        	= 'smartmachine'
-	s.version     	= "0.0.0"
+	s.version     	= version
 	s.summary     	= "SmartMachine"
 	s.description 	= "A safe place for SmartMachine."
 	s.authors     	= ["Timeboard"]

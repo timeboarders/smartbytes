@@ -1,7 +1,9 @@
 # frozen_string_literal: false
 
+version = File.read(File.expand_path("SMARTBYTES_VERSION", __dir__)).strip
+
 module Smartcloud
-	VERSION = "0.5.3".freeze
+	VERSION = version.freeze
 
 	def self.version
 		@@version ||= VERSION
