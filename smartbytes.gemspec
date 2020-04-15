@@ -13,4 +13,7 @@ Gem::Specification.new do |s|
 	s.license     	= 'MIT'
 
 	s.files	= ["MIT-LICENSE", "README.md"]
+
+	s.add_dependency "smartcloud", version
+	s.add_dependency "smartmachine", version
 end
