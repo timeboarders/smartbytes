@@ -1,0 +1,9 @@
+# Welcome to SmartMachine
+
+## What's SmartMachine?
+
+Wait for it :)
+
+## License
+
+SmartMachine is released under the [MIT License](https://opensource.org/licenses/MIT).
