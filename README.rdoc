@@ -1,9 +1,9 @@
-# Welcome to Smartbytes
+= Welcome to Smartbytes
 
-## What's Smartbytes?
+== What's Smartbytes?
 
 Wait for it :)
 
-## License
+== License
 
 Smartbytes is released under the [MIT License](https://opensource.org/licenses/MIT).
