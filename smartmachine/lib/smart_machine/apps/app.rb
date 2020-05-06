@@ -1,14 +1,14 @@
-# The main SmartCloud App driver
-module SmartCloud
+# The main SmartMachine App driver
+module SmartMachine
 	module Apps
-		class App < SmartCloud::Base
+		class App < SmartMachine::Base
 			def initialize
 			end
 
 			# Creating App!
 			#
 			# Example:
-			#   >> SmartCloud::Apps::Rails.create
+			#   >> SmartMachine::Apps::Rails.create
 			#   => Creation Complete
 			#
 			# Arguments:
@@ -21,9 +21,9 @@ module SmartCloud
 
 				raise "Please provide appname and username" if appname.empty? || username.empty?
 
-				if SmartCloud::Docker.running?
-					repository_path = "#{SmartCloud.config.user_home_path}/.smartcloud/apps/repositories/#{appname}.git"
-					container_path = "#{SmartCloud.config.user_home_path}/.smartcloud/apps/containers/#{appname}"
+				if SmartMachine::Docker.running?
+					repository_path = "#{SmartMachine.config.user_home_path}/.smartmachine/apps/repositories/#{appname}.git"
+					container_path = "#{SmartMachine.config.user_home_path}/.smartmachine/apps/containers/#{appname}"
 					print "-----> Creating Application ... "
 
 					# Checking if app with given name already exists
@@ -39,14 +39,14 @@ module SmartCloud
 					# Initializing bare repo and pre-receive
 					Dir.chdir(repository_path) do
 						%x[git init --bare]
-						%x[chmod +x #{SmartCloud.config.user_home_path}/.smartcloud/grids/grid-prereceiver/pre-receive]
-						%x[ln -s #{SmartCloud.config.user_home_path}/.smartcloud/grids/grid-prereceiver/pre-receive #{repository_path}/hooks/pre-receive]
+						%x[chmod +x #{SmartMachine.config.user_home_path}/.smartmachine/grids/grid-prereceiver/pre-receive]
+						%x[ln -s #{SmartMachine.config.user_home_path}/.smartmachine/grids/grid-prereceiver/pre-receive #{repository_path}/hooks/pre-receive]
 						puts "done"
 					end
 
 					# Creating Environment File
-					if File.exist?("#{SmartCloud.config.user_home_path}/.smartcloud/config/environment.rb")
-						require "#{SmartCloud.config.user_home_path}/.smartcloud/config/environment"
+					if File.exist?("#{SmartMachine.config.user_home_path}/.smartmachine/config/environment.rb")
+						require "#{SmartMachine.config.user_home_path}/.smartmachine/config/environment"
 					end
 					unless File.exist? "#{container_path}/env"
 						print "-----> Creating App Environment ... "
@@ -56,9 +56,9 @@ module SmartCloud
 							KEEP_RELEASES=3
 
 							## Docker
-							VIRTUAL_HOST=#{appname}.#{SmartCloud.config.apps_domain}
-							LETSENCRYPT_HOST=#{appname}.#{SmartCloud.config.apps_domain}
-							LETSENCRYPT_EMAIL=#{SmartCloud.config.sysadmin_email}
+							VIRTUAL_HOST=#{appname}.#{SmartMachine.config.apps_domain}
+							LETSENCRYPT_HOST=#{appname}.#{SmartMachine.config.apps_domain}
+							LETSENCRYPT_EMAIL=#{SmartMachine.config.sysadmin_email}
 							LETSENCRYPT_TEST=false
 						HEREDOC
 						puts "done" if system("echo '#{page}' > #{container_path}/env")
@@ -72,14 +72,14 @@ module SmartCloud
 
 				raise "Please provide appname" if appname.empty?
 
-				if SmartCloud::Docker.running?
+				if SmartMachine::Docker.running?
 					# Stopping & Removing old container
 					self.stop(appname)
 
 					# Destroying Directories
 					print "-----> Deleting App #{appname} ... "
-					repository_path = "#{SmartCloud.config.user_home_path}/.smartcloud/apps/repositories/#{appname}.git"
-					container_path = "#{SmartCloud.config.user_home_path}/.smartcloud/apps/containers/#{appname}"
+					repository_path = "#{SmartMachine.config.user_home_path}/.smartmachine/apps/repositories/#{appname}.git"
+					container_path = "#{SmartMachine.config.user_home_path}/.smartmachine/apps/containers/#{appname}"
 					FileUtils.rm_r(repository_path)
 					FileUtils.rm_r(container_path)
 					puts "done"
@@ -100,8 +100,8 @@ module SmartCloud
 					"\t\t\t\t#{severity_text[severity]} #{message}\n"
 				end
 
-				if SmartCloud::Docker.running?
-					container_path = "#{SmartCloud.config.user_home_path}/.smartcloud/apps/containers/#{appname}"
+				if SmartMachine::Docker.running?
+					container_path = "#{SmartMachine.config.user_home_path}/.smartmachine/apps/containers/#{appname}"
 
 					Dir.chdir("#{container_path}/releases") do
 						# Getting App Version
@@ -113,7 +113,7 @@ module SmartCloud
 
 						logger.info "Launching Application ..."
 
-						app = SmartCloud::Apps::Rails.new
+						app = SmartMachine::Apps::Rails.new
 						app.start(appname, container_path, container_path_with_version)
 					end
 				end
@@ -129,7 +129,7 @@ module SmartCloud
 
 				container_name = appname
 
-				if SmartCloud::Docker.running?
+				if SmartMachine::Docker.running?
 					container_id = `docker ps -a -q --filter='name=^#{container_name}$'`.chomp
 					unless container_id.empty?
 						logger.debug "Stopping & Removing container #{container_name} ..."
@@ -143,7 +143,7 @@ module SmartCloud
 			end
 
 			def self.clean_up(container_path)
-				env_vars = SmartCloud::Apps::App.get_env_vars(container_path)
+				env_vars = SmartMachine::Apps::App.get_env_vars(container_path)
 				return unless env_vars
 
 				logger.info "Cleaning up ..."

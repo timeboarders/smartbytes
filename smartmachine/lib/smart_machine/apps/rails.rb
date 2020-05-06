@@ -1,7 +1,7 @@
-# The main SmartCloud Apps Rails driver
-module SmartCloud
+# The main SmartMachine Apps Rails driver
+module SmartMachine
 	module Apps
-		class Rails < SmartCloud::Base
+		class Rails < SmartMachine::Base
 			def initialize
 			end
 
@@ -47,14 +47,14 @@ module SmartCloud
 				new_container = container_id.empty? ? "#{appname}_1" : "#{appname}_2"
 				old_container = container_id.empty? ? "#{appname}_2" : "#{appname}_1"
 
-				SmartCloud::Apps::App.stop("#{new_container}")
+				SmartMachine::Apps::App.stop("#{new_container}")
 				if system("docker create \
 					--name='#{new_container}' \
 					--env-file='#{container_path}/env' \
 					--user `id -u`:`id -g` \
 					--workdir /app \
 					--expose='3000' \
-					--volume='#{SmartCloud.config.user_home_path}/.smartcloud/config:#{SmartCloud.config.user_home_path}/.smartcloud/config' \
+					--volume='#{SmartMachine.config.user_home_path}/.smartmachine/config:#{SmartMachine.config.user_home_path}/.smartmachine/config' \
 					--volume='#{container_path_with_version}:/app' \
 					--volume='#{container_path}/app/vendor/bundle:/app/vendor/bundle' \
 					--volume='#{container_path}/app/public/assets:/app/public/assets' \
@@ -64,7 +64,7 @@ module SmartCloud
 					--restart='always' \
 					--init \
 					--network='nginx-network' \
-					smartcloud/buildpacks/rails", out: File::NULL)
+					smartmachine/buildpacks/rails", out: File::NULL)
 
 					system("docker network connect elasticsearch-network #{new_container}")
 					system("docker network connect minio-network #{new_container}")
@@ -75,13 +75,13 @@ module SmartCloud
 						if system("docker start #{new_container}", out: File::NULL)
 							sleep 7
 							logger.info "Web Server started successfully."
-							SmartCloud::Apps::App.stop(old_container)
-							SmartCloud::Apps::App.clean_up(container_path)
+							SmartMachine::Apps::App.stop(old_container)
+							SmartMachine::Apps::App.clean_up(container_path)
 							logger.info "Launched Application ... Success."
 							exit 10
 						end
 					else
-						SmartCloud::Apps::App.stop("#{new_container}")
+						SmartMachine::Apps::App.stop("#{new_container}")
 					end
 				end
 
@@ -91,9 +91,9 @@ module SmartCloud
 			def pack
 				set_logger_formatter_arrow
 
-				if File.exist? "tmp/smartcloud/packed"
+				if File.exist? "tmp/smartmachine/packed"
 					begin
-						pid = File.read('tmp/smartcloud/packed').to_i
+						pid = File.read('tmp/smartmachine/packed').to_i
 						Process.kill('QUIT', pid)
 					rescue Errno::ESRCH # No such process
 					end
@@ -206,8 +206,8 @@ module SmartCloud
 
 				# tmp folders
 				FileUtils.mkdir_p("tmp/pids")
-				FileUtils.mkdir_p("tmp/smartcloud")
-				FileUtils.rm_f("tmp/smartcloud/packed")
+				FileUtils.mkdir_p("tmp/smartmachine")
+				FileUtils.rm_f("tmp/smartmachine/packed")
 
 				# Spawn Process
 				pid = Process.spawn("bundle", "exec", "puma", "--config", "config/puma.rb", out: File::NULL)
@@ -220,7 +220,7 @@ module SmartCloud
 				status = nil
 				begin
 					Process.kill(0, pid)
-					system("echo '#{pid}' > tmp/smartcloud/packed")
+					system("echo '#{pid}' > tmp/smartmachine/packed")
 					status = true
 				rescue Errno::ESRCH # No such process
 					logger.info "Web Server could not start"
