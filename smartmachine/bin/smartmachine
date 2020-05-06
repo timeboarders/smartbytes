@@ -9,7 +9,7 @@ if command == '--version'
 	return
 end
 
-if SmartMachine::Machine.smartmachine_local?
+if SmartMachine::Machine.machine_local?
 	if command == 'start'
 		machine = SmartMachine::Machine.new
 		machine.start
@@ -40,7 +40,7 @@ if SmartMachine::Machine.smartmachine_local?
 	else
 		puts "Specify a valid local command to execute."
 	end
-elsif SmartMachine::Machine.smartmachine_server?
+elsif SmartMachine::Machine.machine_server?
 	if command == 'run'
 		machine = SmartMachine::Machine.new
 		machine.run ARGV

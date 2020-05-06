@@ -9,7 +9,7 @@ if command == '--version'
 	return
 end
 
-if SmartCloud::Machine.smartcloud_local?
+if SmartCloud::Machine.cloud_local?
 	if command == 'start'
 		machine = SmartCloud::Machine.new
 		machine.start
@@ -40,7 +40,7 @@ if SmartCloud::Machine.smartcloud_local?
 	else
 		puts "Specify a valid local command to execute."
 	end
-elsif SmartCloud::Machine.smartcloud_server?
+elsif SmartCloud::Machine.cloud_server?
 	if command == 'run'
 		machine = SmartCloud::Machine.new
 		machine.run ARGV

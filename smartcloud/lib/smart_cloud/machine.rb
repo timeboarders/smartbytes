@@ -142,11 +142,11 @@ module Smartcloud
 			# sudo fail2ban-client status
 		end
 
-		def self.smartcloud_local?
+		def self.cloud_local?
 			File.file?("./config/master.key")
 		end
 
-		def self.smartcloud_server?
+		def self.cloud_server?
 			File.directory?("#{Smartcloud.config.user_home_path}/.smartcloud")
 		end
 
