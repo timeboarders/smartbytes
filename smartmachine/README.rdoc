@@ -1,9 +1,11 @@
 = SmartMachine
+
 Git push should deploy.
 
 SmartMachine is a full-stack deployment framework for rails optimized for admin programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration.
 
 Deploy your Rails apps to your own server with - git push production master
+
 
 == How it Works
 
@@ -13,62 +15,73 @@ After you run the below commands, you get.
 3. Setup and installation of docker based Mysql, Solr, Nginx, App Prereceiver.
 4. Deployment of your Rails apps to your own server with - git push production master
 
+
 == Setup a New Machine - Ubuntu 18.04 LTS
+
 1. Getting Started with Linode:
 
-+https://www.linode.com/docs/getting-started/+
+    https://www.linode.com/docs/getting-started/
 
 2. How to Secure Your Server:
 
-+https://www.linode.com/docs/security/securing-your-server/+
+    https://www.linode.com/docs/security/securing-your-server/
+
 
 == Install SmartMachine
+
 1. Install Ruby:
 
-+$ sudo apt-get install ruby-full+
+    $ sudo apt-get install ruby-full
 
 2. Add gem executables to PATH (remember to check ruby version in the path):
 
-+$ echo 'export PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"' >> ~/.bashrc && source ~/.bashrc+
+    $ echo 'export PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"' >> ~/.bashrc && source ~/.bashrc
 
 3. Install smartmachine for current user:
 
-+$ gem install smartmachine --user-install+
+    $ gem install smartmachine --user-install
 
 4. Initialize smartmachine:
 
-+$ smartmachine init+
+    $ smartmachine init
+
 
 == TODO - Setup Machine
 1. Getting Started and Securing your Server:
 
-+$ smartmachine machine install+
+    $ smartmachine machine install
+
 
 == Install Docker
+
 1. Run docker install command:
 
-+$ smartmachine docker install+
+    $ smartmachine docker install
 
 2. Add UFW rules for Docker as specified at the end of installation.
 
+
 == Starting Grids as per Choice
+
 1. Start mysql grid:
 
-+$ smartmachine grids mysql up+
+    $ smartmachine grids mysql up
 
 2. Start solr grid:
 
-+$ smartmachine grids solr up+
+    $ smartmachine grids solr up
 
 3. Start nginx grid:
 
-+$ smartmachine grids nginx up+
+    $ smartmachine grids nginx up
 
 4. Start prereceiver grid:
 
-+$ smartmachine grids prereceiver up+
+    $ smartmachine grids prereceiver up
+
 
 == TODO - Creating New App
+
 1. Creating a new bare app on the server:
 
-+$ smartmachine apps create <USERNAME> <APPNAME>+
+    $ smartmachine apps create <USERNAME> <APPNAME>
