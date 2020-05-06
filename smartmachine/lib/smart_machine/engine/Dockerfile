@@ -16,12 +16,12 @@ RUN apk add --update build-base && \
 	apk add --update git && \
     rm -rf /var/cache/apk/*
 
-# smartcloud gem
-ARG SMARTCLOUD_VERSION
-COPY ./smartcloud-$SMARTCLOUD_VERSION.gem ./smartcloud-$SMARTCLOUD_VERSION.gem
-RUN gem install --no-document smartcloud-$SMARTCLOUD_VERSION.gem && \
-	rm ./smartcloud-$SMARTCLOUD_VERSION.gem
+# smartmachine gem
+ARG SMARTMACHINE_VERSION
+COPY ./smartmachine-$SMARTMACHINE_VERSION.gem ./smartmachine-$SMARTMACHINE_VERSION.gem
+RUN gem install --no-document smartmachine-$SMARTMACHINE_VERSION.gem && \
+	rm ./smartmachine-$SMARTMACHINE_VERSION.gem
 
-# smartcloud master key
-ARG SMARTCLOUD_MASTER_KEY
-ENV SMARTCLOUD_MASTER_KEY=$SMARTCLOUD_MASTER_KEY
+# smartmachine master key
+ARG SMARTMACHINE_MASTER_KEY
+ENV SMARTMACHINE_MASTER_KEY=$SMARTMACHINE_MASTER_KEY
