@@ -1,7 +1,7 @@
-# The main Smartcloud Grids Nginx driver
-module Smartcloud
+# The main SmartCloud Grids Nginx driver
+module SmartCloud
 	module Grids
-		class Nginx < Smartcloud::Base
+		class Nginx < SmartCloud::Base
 			def initialize
 			end
 	
@@ -9,7 +9,7 @@ module Smartcloud
 				args.flatten!
 				exposed = args.empty? ? '' : args.shift
 
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					# Creating volumes
 					print "-----> Creating volume nginx-confd ... "
 					if system("docker volume create nginx-confd", out: File::NULL)
@@ -42,9 +42,9 @@ module Smartcloud
 						--volume='nginx-confd:/etc/nginx/conf.d/' \
 						--volume='nginx-vhost:/etc/nginx/vhost.d/' \
 						--volume='nginx-shtml:/usr/share/nginx/html' \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/nginx/certificates:/etc/nginx/certs' \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro' \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/nginx/htpasswd:/etc/nginx/htpasswd:ro' \
+						--volume='#{SmartCloud.config.user_home_path}/.smartcloud/grids/nginx/certificates:/etc/nginx/certs' \
+						--volume='#{SmartCloud.config.user_home_path}/.smartcloud/grids/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro' \
+						--volume='#{SmartCloud.config.user_home_path}/.smartcloud/grids/nginx/htpasswd:/etc/nginx/htpasswd:ro' \
 						--restart='always' \
 						--network='nginx-network' \
 						nginx:alpine", out: File::NULL)
@@ -60,7 +60,7 @@ module Smartcloud
 					if system("docker create \
 						--name='nginx-gen' \
 						--volumes-from nginx \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/nginx/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro' \
+						--volume='#{SmartCloud.config.user_home_path}/.smartcloud/grids/nginx/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro' \
 						--volume='/var/run/docker.sock:/tmp/docker.sock:ro' \
 						--restart='always' \
 						--network='nginx-network' \
@@ -79,7 +79,7 @@ module Smartcloud
 						--name='nginx-letsencrypt' \
 						--env NGINX_PROXY_CONTAINER=nginx \
 						--env NGINX_DOCKER_GEN_CONTAINER=nginx-gen \
-						--env DEFAULT_EMAIL=#{Smartcloud.config.sysadmin_email} \
+						--env DEFAULT_EMAIL=#{SmartCloud.config.sysadmin_email} \
 						--volumes-from nginx \
 						--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 						--restart='always' \
@@ -96,7 +96,7 @@ module Smartcloud
 			end
 
 			def self.down
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container nginx-letsencrypt ... "
 					if system("docker stop 'nginx-letsencrypt'", out: File::NULL)

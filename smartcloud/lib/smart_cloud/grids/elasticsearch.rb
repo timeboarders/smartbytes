@@ -1,7 +1,7 @@
-# The main Smartcloud Grids Elasticsearch driver
-module Smartcloud
+# The main SmartCloud Grids Elasticsearch driver
+module SmartCloud
 	module Grids
-		class Elasticsearch < Smartcloud::Base
+		class Elasticsearch < SmartCloud::Base
 			def initialize
 			end
 
@@ -10,7 +10,7 @@ module Smartcloud
 
 				print "-----> Creating settings for elasticsearch ... "
 
-				ssh = Smartcloud::SSH.new
+				ssh = SmartCloud::SSH.new
 				ssh.run "echo 'vm.max_map_count=262144' | sudo tee /etc/sysctl.d/60-smartcloud-elasticsearch.conf && sudo sysctl --system"
 
 				puts "done"
@@ -19,7 +19,7 @@ module Smartcloud
 			def uninstall
 				print "-----> Removing settings for elasticsearch ... "
 
-				ssh = Smartcloud::SSH.new
+				ssh = SmartCloud::SSH.new
 				# NOTE: sysctl does not reset this setting until restart of system even after sudo sysctl --system is run.
 				ssh.run "test -f /etc/sysctl.d/60-smartcloud-elasticsearch.conf && sudo rm /etc/sysctl.d/60-smartcloud-elasticsearch.conf && sudo sysctl --system"
 
@@ -30,7 +30,7 @@ module Smartcloud
 				args.flatten!
 				exposed = args.empty? ? '' : args.shift
 
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					# Creating networks
 					unless system("docker network inspect elasticsearch-network", [:out, :err] => File::NULL)
 						print "-----> Creating network elasticsearch-network ... "
@@ -50,9 +50,9 @@ module Smartcloud
 						--ulimit memlock=-1:-1 \
 						--ulimit nofile=65535:65535 \
 						--user `id -u`:`id -g` \
-						#{"--publish='#{Smartcloud.credentials.elasticsearch[:port]}:#{Smartcloud.credentials.elasticsearch[:port]}'" if exposed == '--exposed'} \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/elasticsearch/data:/usr/share/elasticsearch/data' \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/elasticsearch/logs:/usr/share/elasticsearch/logs' \
+						#{"--publish='#{SmartCloud.credentials.elasticsearch[:port]}:#{SmartCloud.credentials.elasticsearch[:port]}'" if exposed == '--exposed'} \
+						--volume='#{SmartCloud.config.user_home_path}/.smartcloud/grids/elasticsearch/data:/usr/share/elasticsearch/data' \
+						--volume='#{SmartCloud.config.user_home_path}/.smartcloud/grids/elasticsearch/logs:/usr/share/elasticsearch/logs' \
 						--restart='always' \
 						--network='elasticsearch-network' \
 						elasticsearch:7.4.1", out: File::NULL)
@@ -67,7 +67,7 @@ module Smartcloud
 			end
 	
 			def self.down
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container elasticsearch ... "
 					if system("docker stop 'elasticsearch'", out: File::NULL)

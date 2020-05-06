@@ -1,7 +1,7 @@
-# The main Smartcloud Grids Git driver
-module Smartcloud
+# The main SmartCloud Grids Git driver
+module SmartCloud
 	module Grids
-		class Prereceiver < Smartcloud::Base
+		class Prereceiver < SmartCloud::Base
 
 			def initialize
 			end
@@ -11,14 +11,14 @@ module Smartcloud
 				unless system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
 					print "-----> Creating image smartcloud/prereceiver ... "
 					if system("docker image build -t smartcloud/prereceiver \
-						#{Smartcloud.config.root_path}/lib/smartcloud/grids/prereceiver", out: File::NULL)
+						#{SmartCloud.config.root_path}/lib/smartcloud/grids/prereceiver", out: File::NULL)
 						puts "done"
 					end
 				end
 			end
 
 			def uninstall
-				Smartcloud::Grids::Prereceiver.down
+				SmartCloud::Grids::Prereceiver.down
 				if system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
 					print "-----> Removing image smartcloud/prereceiver ... "
 					if system("docker image rm smartcloud/prereceiver", out: File::NULL)
@@ -28,24 +28,24 @@ module Smartcloud
 			end
 
 			def self.up
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					if system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL) && system("docker image inspect smartcloud/buildpacks/rails", [:out, :err] => File::NULL)
 						print "-----> Creating container prereceiver ... "
 						if system("docker create \
 							--name='prereceiver' \
 							--env VIRTUAL_PROTO=fastcgi \
-							--env VIRTUAL_HOST=#{Smartcloud.config.git_domain} \
-							--env LETSENCRYPT_HOST=#{Smartcloud.config.git_domain} \
-							--env LETSENCRYPT_EMAIL=#{Smartcloud.config.sysadmin_email} \
-							--env LETSENCRYPT_TEST=#{Smartcloud.config.letsencrypt_test} \
-							--env GIT_PROJECT_ROOT=#{Smartcloud.config.user_home_path}/.smartcloud/apps/repositories \
+							--env VIRTUAL_HOST=#{SmartCloud.config.git_domain} \
+							--env LETSENCRYPT_HOST=#{SmartCloud.config.git_domain} \
+							--env LETSENCRYPT_EMAIL=#{SmartCloud.config.sysadmin_email} \
+							--env LETSENCRYPT_TEST=#{SmartCloud.config.letsencrypt_test} \
+							--env GIT_PROJECT_ROOT=#{SmartCloud.config.user_home_path}/.smartcloud/apps/repositories \
 							--env GIT_HTTP_EXPORT_ALL="" \
 							--user `id -u` \
 							--workdir /home/`id -un`/.smartcloud/apps \
 							--expose='9000' \
-							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
-							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/apps:#{Smartcloud.config.user_home_path}/.smartcloud/apps' \
-							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/prereceiver:#{Smartcloud.config.user_home_path}/.smartcloud/grids/prereceiver' \
+							--volume='#{SmartCloud.config.user_home_path}/.smartcloud/config:#{SmartCloud.config.user_home_path}/.smartcloud/config' \
+							--volume='#{SmartCloud.config.user_home_path}/.smartcloud/apps:#{SmartCloud.config.user_home_path}/.smartcloud/apps' \
+							--volume='#{SmartCloud.config.user_home_path}/.smartcloud/grids/prereceiver:#{SmartCloud.config.user_home_path}/.smartcloud/grids/prereceiver' \
 							--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 							--restart='always' \
 							--network='nginx-network' \
@@ -62,7 +62,7 @@ module Smartcloud
 			end
 	
 			def self.down
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					if system("docker inspect -f '{{.State.Running}}' 'prereceiver'", [:out, :err] => File::NULL)
 						print "-----> Stopping container prereceiver ... "
@@ -89,8 +89,8 @@ module Smartcloud
 				end
 
 				# Load vars and environment
-				container_path = "#{Smartcloud.config.user_home_path}/.smartcloud/apps/containers/#{appname}"
-				env_vars = Smartcloud::Apps::App.get_env_vars(container_path)
+				container_path = "#{SmartCloud.config.user_home_path}/.smartcloud/apps/containers/#{appname}"
+				env_vars = SmartCloud::Apps::App.get_env_vars(container_path)
 				return unless env_vars
 
 				# Verify the user and ensure the user is correct and has access to this repository
@@ -113,7 +113,7 @@ module Smartcloud
 						FileUtils.mkdir_p(container_path_with_version)
 						if system("git archive #{newrev} | tar -x -C #{container_path_with_version}")
 							# Start App
-							Smartcloud::Apps::App.start(appname)
+							SmartCloud::Apps::App.start(appname)
 						else
 							logger.fatal "Could not extract new app version ... Failed."
 							return

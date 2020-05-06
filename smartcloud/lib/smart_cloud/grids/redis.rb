@@ -1,12 +1,12 @@
-# The main Smartcloud Grids Redis driver
-module Smartcloud
+# The main SmartCloud Grids Redis driver
+module SmartCloud
 	module Grids
-		class Redis < Smartcloud::Base
+		class Redis < SmartCloud::Base
 			def initialize
 			end
 
 			def self.up
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					# Creating networks
 					unless system("docker network inspect redis-network", [:out, :err] => File::NULL)
 						print "-----> Creating network redis-network ... "
@@ -20,7 +20,7 @@ module Smartcloud
 					if system("docker create \
 						--name='redis' \
 						--user `id -u`:`id -g` \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/redis/data:/data' \
+						--volume='#{SmartCloud.config.user_home_path}/.smartcloud/grids/redis/data:/data' \
 						--restart='always' \
 						--network='redis-network' \
 						redis:6.0-rc3-alpine3.11 redis-server --appendonly yes", out: File::NULL)
@@ -35,7 +35,7 @@ module Smartcloud
 			end
 
 			def self.down
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container redis ... "
 					if system("docker stop 'redis'", out: File::NULL)

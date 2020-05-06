@@ -1,7 +1,7 @@
-# The main Smartcloud Grids Solr driver
-module Smartcloud
+# The main SmartCloud Grids Solr driver
+module SmartCloud
 	module Grids
-		class Solr < Smartcloud::Base
+		class Solr < SmartCloud::Base
 			def initialize
 			end
 
@@ -9,7 +9,7 @@ module Smartcloud
 				args.flatten!
 				exposed = args.empty? ? '' : args.shift
 
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					# Creating networks
 					unless system("docker network inspect solr-network", [:out, :err] => File::NULL)
 						print "-----> Creating network solr-network ... "
@@ -24,7 +24,7 @@ module Smartcloud
 						--name='solr' \
 						--user `id -u`:`id -g` \
 						#{"--publish='8983:8983'" if exposed == '--exposed'} \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/solr/solr:/var/solr' \
+						--volume='#{SmartCloud.config.user_home_path}/.smartcloud/grids/solr/solr:/var/solr' \
 						--restart='always' \
 						--network='solr-network' \
 						solr:8.2.0", out: File::NULL)
@@ -39,7 +39,7 @@ module Smartcloud
 			end
 	
 			def self.down
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container solr ... "
 					if system("docker stop 'solr'", out: File::NULL)
@@ -63,15 +63,15 @@ module Smartcloud
 				args.flatten!
 				corename = args.empty? ? '' : args.shift
 
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					puts "-----> Creating core #{corename} ... "
 					if system("docker exec -it --user=solr solr solr create_core -c #{corename}")
 						system("docker exec -it --user=solr solr solr config -c #{corename} -p 8983 -action set-user-property -property update.autoCreateFields -value false")
 						puts "done"
 
 						print "-----> Copying core files ... "
-						system("sudo cp -r #{Smartcloud.config.root_path}/lib/smartcloud/grids/solr/sunspot/conf/* #{Smartcloud.config.user_home_path}/.smartcloud/grids/solr/data/#{corename}/conf/")
-						if system("sudo chown -R 8983:8983 #{Smartcloud.config.user_home_path}/.smartcloud/grids/solr/data/#{corename}/conf", out: File::NULL)
+						system("sudo cp -r #{SmartCloud.config.root_path}/lib/smartcloud/grids/solr/sunspot/conf/* #{SmartCloud.config.user_home_path}/.smartcloud/grids/solr/data/#{corename}/conf/")
+						if system("sudo chown -R 8983:8983 #{SmartCloud.config.user_home_path}/.smartcloud/grids/solr/data/#{corename}/conf", out: File::NULL)
 							puts "done"
 						end
 					else
@@ -85,7 +85,7 @@ module Smartcloud
 				args.flatten!
 				corename = args.empty? ? '' : args.shift
 
-				if Smartcloud::Docker.running?
+				if SmartCloud::Docker.running?
 					puts "-----> Removing core #{corename} ... "
 					if system("docker exec -it --user=solr solr solr delete -c #{corename}")
 						puts "done"
