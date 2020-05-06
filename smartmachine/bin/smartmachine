@@ -1,51 +1,51 @@
 #!/usr/bin/env ruby
 
-require 'smart_cloud'
+require 'smart_machine'
 
 command = ARGV.shift
 
 if command == '--version'
-	puts "SmartCloud #{SmartCloud.version}"
+	puts "SmartMachine #{SmartMachine.version}"
 	return
 end
 
-if SmartCloud::Machine.smartcloud_local?
+if SmartMachine::Machine.smartmachine_local?
 	if command == 'start'
-		machine = SmartCloud::Machine.new
+		machine = SmartMachine::Machine.new
 		machine.start
 	elsif command == 'stop'
-		machine = SmartCloud::Machine.new
+		machine = SmartMachine::Machine.new
 		machine.stop
 	elsif command == 'ssh'
-		machine = SmartCloud::Machine.new
+		machine = SmartMachine::Machine.new
 		machine.ssh
 	elsif command == 'sync'
-		machine = SmartCloud::Machine.new
+		machine = SmartMachine::Machine.new
 		machine.sync
 	elsif command == 'grid'
-		machine = SmartCloud::Machine.new
+		machine = SmartMachine::Machine.new
 		machine.grid ARGV
 	elsif command == 'app'
-		machine = SmartCloud::Machine.new
+		machine = SmartMachine::Machine.new
 		machine.app ARGV
 	elsif command == 'ps'
-		ssh = SmartCloud::SSH.new
-		ssh.run "smartcloud ps #{ARGV.join(' ')}"
+		ssh = SmartMachine::SSH.new
+		ssh.run "smartmachine ps #{ARGV.join(' ')}"
 	elsif command == 'logs'
-		ssh = SmartCloud::SSH.new
-		ssh.run "smartcloud logs #{ARGV.join(' ')}"
+		ssh = SmartMachine::SSH.new
+		ssh.run "smartmachine logs #{ARGV.join(' ')}"
 	elsif command == 'credentials:edit'
-		credentials = SmartCloud::Credentials.new
+		credentials = SmartMachine::Credentials.new
 		credentials.edit
 	else
 		puts "Specify a valid local command to execute."
 	end
-elsif SmartCloud::Machine.smartcloud_server?
+elsif SmartMachine::Machine.smartmachine_server?
 	if command == 'run'
-		machine = SmartCloud::Machine.new
+		machine = SmartMachine::Machine.new
 		machine.run ARGV
 	elsif command == 'buildpacker'
-		buildpacker = SmartCloud::Buildpacker.new
+		buildpacker = SmartMachine::Buildpacker.new
 		action = ARGV.shift
 		if action == "install"
 			buildpacker.install
@@ -53,7 +53,7 @@ elsif SmartCloud::Machine.smartcloud_server?
 			buildpacker.uninstall
 		end
 	elsif command == 'prereceiver'
-		prereceiver = SmartCloud::Grids::Prereceiver.new
+		prereceiver = SmartMachine::Grids::Prereceiver.new
 		action = ARGV.shift
 		if action == "install"
 			prereceiver.install
@@ -72,9 +72,9 @@ elsif SmartCloud::Machine.smartcloud_server?
 else
 	if command == 'new'
 		raise "Please specify a machine name" if ARGV.empty?
-		machine = SmartCloud::Machine.new
+		machine = SmartMachine::Machine.new
 		machine.create ARGV
 	else
-		puts "Specify a valid smartcloud command to execute. Are you in the correct directory to run this command?"
+		puts "Specify a valid smartmachine command to execute. Are you in the correct directory to run this command?"
 	end
 end

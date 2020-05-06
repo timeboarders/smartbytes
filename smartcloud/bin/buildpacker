@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require 'smartcloud'
+require 'smart_cloud'
 
 if ARGV[0] == 'pack'
-	buildpacker = Smartcloud::Buildpacker.new
+	buildpacker = SmartCloud::Buildpacker.new
 	buildpacker.pack
 end
