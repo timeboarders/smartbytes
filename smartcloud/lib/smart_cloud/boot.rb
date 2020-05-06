@@ -1,30 +1,30 @@
-# The main Smartcloud Boot driver
-module Smartcloud
-	class Boot < Smartcloud::Base
+# The main SmartCloud Boot driver
+module SmartCloud
+	class Boot < SmartCloud::Base
 		def initialize
 		end
 	end
 end
 
-require 'smartcloud/credentials'
+require 'smart_cloud/credentials'
 
-require 'smartcloud/ssh'
-require 'smartcloud/machine'
+require 'smart_cloud/ssh'
+require 'smart_cloud/machine'
 
-require 'smartcloud/docker'
-require 'smartcloud/engine'
-require 'smartcloud/buildpacker'
+require 'smart_cloud/docker'
+require 'smart_cloud/engine'
+require 'smart_cloud/buildpacker'
 
-require 'smartcloud/user'
+require 'smart_cloud/user'
 
-require 'smartcloud/grids/elasticsearch'
-require 'smartcloud/grids/minio'
-require 'smartcloud/grids/mysql'
-require 'smartcloud/grids/nextcloud'
-require 'smartcloud/grids/nginx'
-require 'smartcloud/grids/prereceiver'
-require 'smartcloud/grids/redmine'
-require 'smartcloud/grids/solr'
+require 'smart_cloud/grids/elasticsearch'
+require 'smart_cloud/grids/minio'
+require 'smart_cloud/grids/mysql'
+require 'smart_cloud/grids/nextcloud'
+require 'smart_cloud/grids/nginx'
+require 'smart_cloud/grids/prereceiver'
+require 'smart_cloud/grids/redmine'
+require 'smart_cloud/grids/solr'
 
-require 'smartcloud/apps/app'
-require 'smartcloud/apps/rails'
+require 'smart_cloud/apps/app'
+require 'smart_cloud/apps/rails'

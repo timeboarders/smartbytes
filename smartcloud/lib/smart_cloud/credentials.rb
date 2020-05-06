@@ -3,9 +3,9 @@ require "tmpdir"
 require "active_support/message_encryptor"
 require "active_support/core_ext/hash/keys"
 
-# The main Smartcloud Credentials driver
-module Smartcloud
-	class Credentials < Smartcloud::Base
+# The main SmartCloud Credentials driver
+module SmartCloud
+	class Credentials < SmartCloud::Base
 
 		CIPHER = "aes-256-gcm"
 

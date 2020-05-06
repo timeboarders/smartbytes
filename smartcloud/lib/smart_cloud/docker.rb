@@ -1,6 +1,6 @@
-# The main Smartcloud Docker driver
-module Smartcloud
-	class Docker < Smartcloud::Base
+# The main SmartCloud Docker driver
+module SmartCloud
+	class Docker < SmartCloud::Base
 		def initialize
 		end
 
@@ -13,7 +13,7 @@ module Smartcloud
 		# Arguments:
 		#   none
 		def self.install
-			ssh = Smartcloud::SSH.new
+			ssh = SmartCloud::SSH.new
 
 			puts "-----> Installing Docker"
 			commands = [
@@ -53,7 +53,7 @@ module Smartcloud
 		# Arguments:
 		#   none
 		def self.uninstall
-			ssh = Smartcloud::SSH.new
+			ssh = SmartCloud::SSH.new
 
 			puts "-----> Uninstalling Docker Compose"
 			ssh.run "sudo rm /usr/local/bin/docker-compose"

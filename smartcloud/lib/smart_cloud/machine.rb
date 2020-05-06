@@ -1,8 +1,8 @@
 require "net/ssh"
 
-# The main Smartcloud Machine driver
-module Smartcloud
-	class Machine < Smartcloud::Base
+# The main SmartCloud Machine driver
+module SmartCloud
+	class Machine < SmartCloud::Base
 		def initialize
 		end
 
@@ -11,58 +11,58 @@ module Smartcloud
 
 			name = args.shift
 			FileUtils.mkdir name
-			FileUtils.cp_r "#{Smartcloud.config.root_path}/lib/smartcloud/templates/dotsmartcloud/.", "#{name}"
+			FileUtils.cp_r "#{SmartCloud.config.root_path}/lib/smartcloud/templates/dotsmartcloud/.", "#{name}"
 			FileUtils.chdir "#{name}" do
-				credentials = Smartcloud::Credentials.new
+				credentials = SmartCloud::Credentials.new
 				credentials.create
 			end
 			puts "New machine #{name} has been created."
 		end
 
 		def start
-			Smartcloud::Docker.install
+			SmartCloud::Docker.install
 
-			engine = Smartcloud::Engine.new
+			engine = SmartCloud::Engine.new
 			engine.install
 
-			ssh = Smartcloud::SSH.new
+			ssh = SmartCloud::SSH.new
 			ssh.run "smartcloud buildpacker install"
 			ssh.run "smartcloud prereceiver install"
 
-			elasticsearch = Smartcloud::Grids::Elasticsearch.new
+			elasticsearch = SmartCloud::Grids::Elasticsearch.new
 			elasticsearch.install
 		end
 
 		def stop
-			elasticsearch = Smartcloud::Grids::Elasticsearch.new
+			elasticsearch = SmartCloud::Grids::Elasticsearch.new
 			elasticsearch.uninstall
 
-			ssh = Smartcloud::SSH.new
+			ssh = SmartCloud::SSH.new
 			ssh.run "smartcloud prereceiver uninstall"
 			ssh.run "smartcloud buildpacker uninstall"
 
-			engine = Smartcloud::Engine.new
+			engine = SmartCloud::Engine.new
 			engine.uninstall
 
-			Smartcloud::Docker.uninstall
+			SmartCloud::Docker.uninstall
 		end
 
 		def grid(*args)
 			args.flatten!
 
-			ssh = Smartcloud::SSH.new
+			ssh = SmartCloud::SSH.new
 			ssh.run "smartcloud run grid #{args.join(" ")}"
 		end
 
 		def app(*args)
 			args.flatten!
 
-			ssh = Smartcloud::SSH.new
+			ssh = SmartCloud::SSH.new
 			ssh.run "smartcloud run app #{args.join(" ")}"
 		end
 
 		def ssh
-			ssh = Smartcloud::SSH.new
+			ssh = SmartCloud::SSH.new
 			ssh.login
 		end
 
@@ -80,7 +80,7 @@ module Smartcloud
 				raise "Invalid run command. Please try again."
 			end
 
-			controller = "Smartcloud::#{controller_type.capitalize}::#{controller_name.capitalize}"
+			controller = "SmartCloud::#{controller_type.capitalize}::#{controller_name.capitalize}"
 			action = args.shift.to_sym
 
 			args.empty? ? Object.const_get(controller).public_send(action) : Object.const_get(controller).public_send(action, args)
@@ -147,7 +147,7 @@ module Smartcloud
 		end
 
 		def self.server?
-			File.directory?("#{Smartcloud.config.user_home_path}/.smartcloud")
+			File.directory?("#{SmartCloud.config.user_home_path}/.smartcloud")
 		end
 
 		def sync(first_sync = false)
@@ -167,12 +167,12 @@ module Smartcloud
 
 		def sync_pull
 			puts "-----> Sync pulling ... "
-			system("rsync -azumv --delete --include={#{sync_pull_files_list}} --exclude=* -e ssh #{Smartcloud.credentials.machine[:username]}@#{Smartcloud.credentials.machine[:host]}:~/.smartcloud/ .")
+			system("rsync -azumv --delete --include={#{sync_pull_files_list}} --exclude=* -e ssh #{SmartCloud.credentials.machine[:username]}@#{SmartCloud.credentials.machine[:host]}:~/.smartcloud/ .")
 		end
 
 		def sync_push
 			puts "-----> Sync pushing ... "
-			system("rsync -azumv --delete --include={#{sync_push_files_list}} --exclude=* -e ssh ./ #{Smartcloud.credentials.machine[:username]}@#{Smartcloud.credentials.machine[:host]}:~/.smartcloud")
+			system("rsync -azumv --delete --include={#{sync_push_files_list}} --exclude=* -e ssh ./ #{SmartCloud.credentials.machine[:username]}@#{SmartCloud.credentials.machine[:host]}:~/.smartcloud")
 		end
 
 		def sync_pull_files_list

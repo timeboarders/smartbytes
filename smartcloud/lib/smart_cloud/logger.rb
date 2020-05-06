@@ -2,10 +2,10 @@ require "logger"
 
 $stdout.sync = true
 
-module Smartcloud
+module SmartCloud
 	module Logger
 	  def logger
-	    @logger ||= Smartcloud::Logger.logger_for(self.class.name)
+	    @logger ||= SmartCloud::Logger.logger_for(self.class.name)
 	  end
 
 	  # Use a hash class-ivar to cache a unique Logger per class:
@@ -14,7 +14,7 @@ module Smartcloud
 	  def self.included(base)
 		class << base
 			def logger
-			  @logger ||= Smartcloud::Logger.logger_for(self.name)
+			  @logger ||= SmartCloud::Logger.logger_for(self.name)
 			end
 		end
 	  end
@@ -26,7 +26,7 @@ module Smartcloud
 
 	    def configure_logger_for(classname)
 	      logger = ::Logger.new($stdout)
-		  logger.level = ::Logger.const_get("#{Smartcloud.config.logger_level}".upcase)
+		  logger.level = ::Logger.const_get("#{SmartCloud.config.logger_level}".upcase)
 	      logger.progname = classname
 	      logger
 	    end

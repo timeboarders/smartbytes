@@ -1,14 +1,14 @@
 require "net/ssh"
 
-# The main Smartcloud SSH driver
-module Smartcloud
-	class SSH < Smartcloud::Base
+# The main SmartCloud SSH driver
+module SmartCloud
+	class SSH < SmartCloud::Base
 		def initialize
 		end
 
 		def run(*commands)
 			commands.flatten!
-			Net::SSH.start(Smartcloud.credentials.machine[:host], Smartcloud.credentials.machine[:username], { port: Smartcloud.credentials.machine[:port], password: Smartcloud.credentials.machine[:password] }) do |ssh|
+			Net::SSH.start(SmartCloud.credentials.machine[:host], SmartCloud.credentials.machine[:username], { port: SmartCloud.credentials.machine[:port], password: SmartCloud.credentials.machine[:password] }) do |ssh|
 				channel = ssh.open_channel do |channel, success|
 					channel.request_pty do |channel, success|
 						channel.exec commands.join(';') do |channel, success|
@@ -18,7 +18,7 @@ module Smartcloud
 								$stdout.print data
 
 								if data =~ /^\[sudo\] password for /
-									channel.send_data "#{Smartcloud.credentials.machine[:password]}\n"
+									channel.send_data "#{SmartCloud.credentials.machine[:password]}\n"
 								end
 							end
 
@@ -37,7 +37,7 @@ module Smartcloud
 		end
 
 		def login
-			exec "ssh #{Smartcloud.credentials.machine[:username]}@#{Smartcloud.credentials.machine[:host]}"
+			exec "ssh #{SmartCloud.credentials.machine[:username]}@#{SmartCloud.credentials.machine[:host]}"
 		end
 	end
 end

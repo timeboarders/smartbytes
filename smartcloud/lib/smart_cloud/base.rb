@@ -1,9 +1,9 @@
-require 'smartcloud/logger'
+require 'smart_cloud/logger'
 require "active_support/inflector"
 
-module Smartcloud
+module SmartCloud
 	class Base
-		include Smartcloud::Logger
+		include SmartCloud::Logger
 
 		def initialize
 		end		

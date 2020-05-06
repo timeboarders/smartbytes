@@ -2,9 +2,9 @@ require 'yaml'
 require "base64"
 require 'bcrypt'
 
-# The main Smartcloud User driver
-module Smartcloud
-	class User < Smartcloud::Base
+# The main SmartCloud User driver
+module SmartCloud
+	class User < SmartCloud::Base
 		def initialize
 		end
 

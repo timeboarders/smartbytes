@@ -1,7 +1,7 @@
 require 'open3'
 
-module Smartcloud
-	class Buildpacker < Smartcloud::Base
+module SmartCloud
+	class Buildpacker < SmartCloud::Base
 		def initialize
 		end
 
@@ -12,7 +12,7 @@ module Smartcloud
 				if system("docker image build -t smartcloud/buildpacks/rails \
 					--build-arg USER_UID=`id -u` \
 					--build-arg USER_NAME=`id -un` \
-					#{Smartcloud.config.root_path}/lib/smartcloud/engine/buildpacks/rails", out: File::NULL)
+					#{SmartCloud.config.root_path}/lib/smartcloud/engine/buildpacks/rails", out: File::NULL)
 					puts "done"
 				end
 			end
@@ -29,7 +29,7 @@ module Smartcloud
 
 		def pack
 			if File.exist? "bin/rails"
-				rails = Smartcloud::Apps::Rails.new
+				rails = SmartCloud::Apps::Rails.new
 				rails.pack
 			end
 		end
