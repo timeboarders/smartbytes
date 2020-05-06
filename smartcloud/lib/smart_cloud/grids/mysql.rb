@@ -28,7 +28,7 @@ module Smartcloud
 						--env MYSQL_DATABASE=#{Smartcloud.credentials.mysql[:database_name]} \
 						--user `id -u`:`id -g` \
 						#{"--publish='#{Smartcloud.credentials.mysql[:port]}:#{Smartcloud.credentials.mysql[:port]}'" if exposed == '--exposed'} \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-mysql/data:/var/lib/mysql' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/mysql/data:/var/lib/mysql' \
 						--restart='always' \
 						--network='mysql-network' \
 						mysql:8.0.18", out: File::NULL)

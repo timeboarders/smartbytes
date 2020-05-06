@@ -25,7 +25,7 @@ module Smartcloud
 						--env MYSQL_DATABASE=#{Smartcloud.credentials.nextcloud[:database_name]} \
 						--user `id -u`:`id -g` \
 						--sysctl net.ipv4.ip_unprivileged_port_start=0 \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-nextcloud/html:/var/www/html' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/nextcloud/html:/var/www/html' \
 						--restart='always' \
 						--network='nginx-network' \
 						nextcloud:18.0.2-apache", out: File::NULL)

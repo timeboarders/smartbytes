@@ -24,7 +24,7 @@ module Smartcloud
 						--name='solr' \
 						--user `id -u`:`id -g` \
 						#{"--publish='8983:8983'" if exposed == '--exposed'} \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/solr:/var/solr' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/solr/solr:/var/solr' \
 						--restart='always' \
 						--network='solr-network' \
 						solr:8.2.0", out: File::NULL)
@@ -70,8 +70,8 @@ module Smartcloud
 						puts "done"
 
 						print "-----> Copying core files ... "
-						system("sudo cp -r #{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-solr/sunspot/conf/* #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data/#{corename}/conf/")
-						if system("sudo chown -R 8983:8983 #{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-solr/data/#{corename}/conf", out: File::NULL)
+						system("sudo cp -r #{Smartcloud.config.root_path}/lib/smartcloud/grids/solr/sunspot/conf/* #{Smartcloud.config.user_home_path}/.smartcloud/grids/solr/data/#{corename}/conf/")
+						if system("sudo chown -R 8983:8983 #{Smartcloud.config.user_home_path}/.smartcloud/grids/solr/data/#{corename}/conf", out: File::NULL)
 							puts "done"
 						end
 					else

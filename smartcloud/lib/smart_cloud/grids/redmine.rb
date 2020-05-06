@@ -23,7 +23,7 @@ module Smartcloud
 						--env REDMINE_DB_DATABASE=#{Smartcloud.credentials.redmine[:database_name]} \
 						--env REDMINE_PLUGINS_MIGRATE=#{Smartcloud.credentials.redmine[:plugins_migrate]} \
 						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/apps/repositories:/repositories:ro' \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-redmine/files:/usr/src/redmine/files' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/redmine/files:/usr/src/redmine/files' \
 						--restart='always' \
 						--network='nginx-network' \
 						redmine:4.0.5-alpine", out: File::NULL)

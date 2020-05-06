@@ -20,7 +20,7 @@ module Smartcloud
 					if system("docker create \
 						--name='redis' \
 						--user `id -u`:`id -g` \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-redis/data:/data' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/redis/data:/data' \
 						--restart='always' \
 						--network='redis-network' \
 						redis:6.0-rc3-alpine3.11 redis-server --appendonly yes", out: File::NULL)

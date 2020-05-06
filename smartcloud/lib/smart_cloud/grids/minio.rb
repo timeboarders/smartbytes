@@ -31,7 +31,7 @@ module Smartcloud
 						--env MINIO_BROWSER=#{Smartcloud.credentials.minio[:browser]} \
 						--env MINIO_WORM=#{Smartcloud.credentials.minio[:worm]} \
 						--user `id -u`:`id -g` \
-						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-minio/data:/data' \
+						--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/minio/data:/data' \
 						--restart='always' \
 						--network='minio-network' \
 						minio/minio:RELEASE.2020-02-27T00-23-05Z server /data", out: File::NULL)

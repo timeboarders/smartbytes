@@ -11,7 +11,7 @@ module Smartcloud
 				unless system("docker image inspect smartcloud/prereceiver", [:out, :err] => File::NULL)
 					print "-----> Creating image smartcloud/prereceiver ... "
 					if system("docker image build -t smartcloud/prereceiver \
-						#{Smartcloud.config.root_path}/lib/smartcloud/grids/grid-prereceiver", out: File::NULL)
+						#{Smartcloud.config.root_path}/lib/smartcloud/grids/prereceiver", out: File::NULL)
 						puts "done"
 					end
 				end
@@ -45,7 +45,7 @@ module Smartcloud
 							--expose='9000' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/config:#{Smartcloud.config.user_home_path}/.smartcloud/config' \
 							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/apps:#{Smartcloud.config.user_home_path}/.smartcloud/apps' \
-							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-prereceiver:#{Smartcloud.config.user_home_path}/.smartcloud/grids/grid-prereceiver' \
+							--volume='#{Smartcloud.config.user_home_path}/.smartcloud/grids/prereceiver:#{Smartcloud.config.user_home_path}/.smartcloud/grids/prereceiver' \
 							--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 							--restart='always' \
 							--network='nginx-network' \
