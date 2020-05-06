@@ -40,7 +40,7 @@ if SmartCloud::Machine.local?
 	else
 		puts "Specify a valid local command to execute."
 	end
-elsif SmartCloud::Machine.server?
+elsif SmartCloud::Machine.remote?
 	if command == 'run'
 		machine = SmartCloud::Machine.new
 		machine.run ARGV

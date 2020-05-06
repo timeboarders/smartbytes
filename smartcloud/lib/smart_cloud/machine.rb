@@ -146,7 +146,7 @@ module SmartCloud
 			File.file?("./config/master.key")
 		end
 
-		def self.server?
+		def self.remote?
 			File.directory?("#{SmartCloud.config.user_home_path}/.smartcloud")
 		end
 

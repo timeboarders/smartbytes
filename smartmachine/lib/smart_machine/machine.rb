@@ -146,7 +146,7 @@ module SmartMachine
 			File.file?("./config/master.key")
 		end
 
-		def self.server?
+		def self.remote?
 			File.directory?("#{SmartMachine.config.user_home_path}/.smartmachine")
 		end
 

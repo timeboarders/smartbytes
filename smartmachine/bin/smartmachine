@@ -40,7 +40,7 @@ if SmartMachine::Machine.local?
 	else
 		puts "Specify a valid local command to execute."
 	end
-elsif SmartMachine::Machine.server?
+elsif SmartMachine::Machine.remote?
 	if command == 'run'
 		machine = SmartMachine::Machine.new
 		machine.run ARGV
