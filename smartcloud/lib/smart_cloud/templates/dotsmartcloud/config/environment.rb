@@ -3,17 +3,17 @@
 # => NOTE: Ensure that the specified top-level domains are pointing to this server ip address using DNS records.
 
 # Top-level naked domain to be used for subdomains of apps.
-Smartcloud.config.apps_domain = "yourdomain.com"
+SmartCloud.config.apps_domain = "yourdomain.com"
 
 # domain to be used for git prereceiver
-Smartcloud.config.git_domain = "git.yourdomain.com"
+SmartCloud.config.git_domain = "git.yourdomain.com"
 
 # Sysadmin email id.
-Smartcloud.config.sysadmin_email = "admin@yourdomain.com"
+SmartCloud.config.sysadmin_email = "admin@yourdomain.com"
 
 # letsencrypt test boolean to be used
-Smartcloud.config.letsencrypt_test = false
+SmartCloud.config.letsencrypt_test = false
 
 # logger level
 # DEBUG, INFO, WARN, ERROR, FATAL, UNKNOWN
-Smartcloud.config.logger_level = "INFO"
+SmartCloud.config.logger_level = "INFO"
