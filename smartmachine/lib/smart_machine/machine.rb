@@ -191,14 +191,8 @@ module SmartMachine
 				'grids/grid-mysql',
 				'grids/grid-mysql/data/***',
 
-				'grids/grid-nextcloud',
-				'grids/grid-nextcloud/html/***',
-
 				'grids/grid-nginx',
 				'grids/grid-nginx/certificates/***',
-
-				'grids/grid-redmine',
-				'grids/grid-redmine/files/***',
 
 				'grids/grid-solr',
 				'grids/grid-solr/solr/***',
@@ -236,14 +230,6 @@ module SmartMachine
 				'grids/grid-mysql/data',
 				'grids/grid-mysql/data/.keep',
 
-				'grids/grid-nextcloud',
-				'grids/grid-nextcloud/html',
-				'grids/grid-nextcloud/html/.keep',
-				'grids/grid-nextcloud/html/apps',
-				'grids/grid-nextcloud/html/apps/.keep',
-				'grids/grid-nextcloud/html/config',
-				'grids/grid-nextcloud/html/config/.keep',
-
 				'grids/grid-nginx',
 				'grids/grid-nginx/certificates',
 				'grids/grid-nginx/certificates/.keep',
@@ -257,10 +243,6 @@ module SmartMachine
 				'grids/grid-redis',
 				'grids/grid-redis/data',
 				'grids/grid-redis/data/.keep',
-
-				'grids/grid-redmine',
-				'grids/grid-redmine/files',
-				'grids/grid-redmine/files/.keep',
 
 				'grids/grid-solr',
 				'grids/grid-solr/solr',
