@@ -2,14 +2,14 @@
 
 version = File.read(File.expand_path("SMARTBYTES_VERSION", __dir__)).strip
 
-module SmartCloud
+module SmartMachine
 	VERSION = version.freeze
 
 	def self.version
 		@@version ||= VERSION
 	end
 
-	def self.smart_cloud_major_version
-		@smart_cloud_major_version ||= VERSION.split(".").first.to_i
+	def self.smart_machine_major_version
+		@smart_machine_major_version ||= VERSION.split(".").first.to_i
 	end
 end
