@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'smart_cloud'
-
-if ARGV[0] == 'prereceive'
-	raise "Please provide appname, username, oldrev, newrev and refname" unless ARGV[1] && ARGV[2] && ARGV[3] && ARGV[4] && ARGV[5]
-	SmartCloud::Grids::Prereceiver.prereceive(ARGV[1], ARGV[2], ARGV[3], ARGV[4], ARGV[5])
-end

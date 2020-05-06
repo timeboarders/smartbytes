@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 	s.email       	= "hello@timeboard.me"
 	s.homepage    	= "https://github.com/timeboarders/smartbytes"
 
-	s.executables 	= %w(smartcloud prereceiver buildpacker)
+	s.executables 	= %w(smartcloud)
 
 	s.files        	= Dir["CHANGELOG.rdoc", "MIT-LICENSE", "README.rdoc", "bin/**/*", "bin/**/.keep", "lib/**/*", "lib/**/.keep"]
 
