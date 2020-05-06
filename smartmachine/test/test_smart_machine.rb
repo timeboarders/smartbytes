@@ -1,9 +1,9 @@
 require 'minitest/autorun'
-require 'smartcloud'
+require 'smartmachine'
 
-class SmartcloudTest < Minitest::Test
+class SmartMachineTest < Minitest::Test
 	# def test_docker_install
 	# 	assert_equal "Hello World",
-	# 		Smartcloud::Docker.install
+	# 		SmartMachine::Docker.install
 	# end
 end
