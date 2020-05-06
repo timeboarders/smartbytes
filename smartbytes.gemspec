@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-version = File.read(File.expand_path("../SMARTBYTES_VERSION", __dir__)).strip
+version = File.read(File.expand_path("./SMARTBYTES_VERSION", __dir__)).strip
 
 Gem::Specification.new do |s|
 	s.platform    	= Gem::Platform::RUBY
