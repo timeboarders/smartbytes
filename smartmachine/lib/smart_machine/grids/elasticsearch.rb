@@ -6,22 +6,26 @@ module SmartMachine
 			end
 
 			def install
-				print "-----> Creating settings for elasticsearch ... "
+				puts "-----> Installing Elasticsearch"
 
+				print "-----> Creating settings for elasticsearch ... "
 				ssh = SmartMachine::SSH.new
 				ssh.run "echo 'vm.max_map_count=262144' | sudo tee /etc/sysctl.d/60-smartmachine-elasticsearch.conf && sudo sysctl --system"
-
 				puts "done"
+
+				puts "-----> Elasticsearch Installation Complete"
 			end
 
 			def uninstall
-				print "-----> Removing settings for elasticsearch ... "
+				puts "-----> Uninstalling Elasticsearch"
 
+				print "-----> Removing settings for elasticsearch ... "
 				ssh = SmartMachine::SSH.new
 				# NOTE: sysctl does not reset this setting until restart of system even after sudo sysctl --system is run.
 				ssh.run "test -f /etc/sysctl.d/60-smartmachine-elasticsearch.conf && sudo rm /etc/sysctl.d/60-smartmachine-elasticsearch.conf && sudo sysctl --system"
-
 				puts "done"
+
+				puts "-----> Elasticsearch Uninstallation Complete"
 			end
 
 			def update
