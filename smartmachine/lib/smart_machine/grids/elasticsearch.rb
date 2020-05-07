@@ -6,8 +6,6 @@ module SmartMachine
 			end
 
 			def install
-				self.uninstall
-
 				print "-----> Creating settings for elasticsearch ... "
 
 				ssh = SmartMachine::SSH.new
@@ -24,6 +22,11 @@ module SmartMachine
 				ssh.run "test -f /etc/sysctl.d/60-smartmachine-elasticsearch.conf && sudo rm /etc/sysctl.d/60-smartmachine-elasticsearch.conf && sudo sysctl --system"
 
 				puts "done"
+			end
+
+			def update
+				self.uninstall
+				self.install
 			end
 
 			def self.up(*args)

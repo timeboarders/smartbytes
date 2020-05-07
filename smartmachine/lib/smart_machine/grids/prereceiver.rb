@@ -7,18 +7,45 @@ module SmartMachine
 			end
 
 			def install
+				puts "-----> Installing Prereceiver"
+
+				ssh = SmartMachine::SSH.new
+				commands = ["smartmachine prereceiver create"]
+				ssh.run commands
+
+				puts "-----> Prereceiver Installation Complete"
+			end
+
+			def uninstall
+				puts "-----> Uninstalling Prereceiver"
+
+				ssh = SmartMachine::SSH.new
+				commands = ["smartmachine prereceiver destroy"]
+				ssh.run commands
+
+				puts "-----> Prereceiver Uninstallation Complete"
+			end
+
+			def update
 				self.uninstall
+				self.install
+			end
+
+			def create
 				unless system("docker image inspect smartmachine/prereceiver", [:out, :err] => File::NULL)
 					print "-----> Creating image smartmachine/prereceiver ... "
 					if system("docker image build -t smartmachine/prereceiver \
 						#{SmartMachine.config.root_path}/lib/smart_machine/grids/prereceiver", out: File::NULL)
 						puts "done"
+
+						SmartMachine::Grids::Prereceiver.up
 					end
 				end
 			end
 
-			def uninstall
+			def destroy
 				SmartMachine::Grids::Prereceiver.down
+
 				if system("docker image inspect smartmachine/prereceiver", [:out, :err] => File::NULL)
 					print "-----> Removing image smartmachine/prereceiver ... "
 					if system("docker image rm smartmachine/prereceiver", out: File::NULL)
