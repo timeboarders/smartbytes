@@ -77,7 +77,6 @@ module SmartMachine
 		end
 
 		def update
-			self.install
 		end
 
 		def add_ufw_rules
