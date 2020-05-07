@@ -51,7 +51,7 @@ module SmartCloud
 		def credentials_template
 			<<~YAML
 			  machine:
-			    hostname: #{SecureRandom.hex(8)}
+			    name: #{SecureRandom.hex(8)}
 			    host: 122.122.122.122
 			    port: 22
 			    root_password: #{SecureRandom.hex(16)}
