@@ -72,29 +72,8 @@ module SmartMachine
 			    password: #{SecureRandom.hex(16)}
 			    database_name: #{SecureRandom.hex(8)}
 
-			  nextcloud:
-			    hostname: #{SecureRandom.hex(8)}
-			    admin_username: #{SecureRandom.hex(8)}
-			    admin_password: #{SecureRandom.hex(16)}
-			    database_host: mysql
-			    database_port: 3306
-			    database_username: #{SecureRandom.hex(8)}_nextcloud
-			    database_password: #{SecureRandom.hex(16)}
-			    database_name: #{SecureRandom.hex(8)}_nextcloud
-
   			  elasticsearch:
   			    port: 9200
-
-			  redmine:
-			    admin_username: admin
-			    admin_password: #{SecureRandom.hex(16)}
-			    secret_key_base: #{SecureRandom.hex(64)}
-			    database_host: mysql
-			    database_port: 3306
-			    database_username: #{SecureRandom.hex(8)}_redmine
-			    database_password: #{SecureRandom.hex(16)}
-			    database_name: #{SecureRandom.hex(8)}_redmine
-			    # plugins_migrate: true
 			YAML
 		end
 
