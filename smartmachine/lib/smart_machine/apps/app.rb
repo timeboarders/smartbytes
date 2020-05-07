@@ -39,8 +39,8 @@ module SmartMachine
 					# Initializing bare repo and pre-receive
 					Dir.chdir(repository_path) do
 						%x[git init --bare]
-						%x[chmod +x #{SmartMachine.config.user_home_path}/.smartmachine/grids/grid-prereceiver/pre-receive]
-						%x[ln -s #{SmartMachine.config.user_home_path}/.smartmachine/grids/grid-prereceiver/pre-receive #{repository_path}/hooks/pre-receive]
+						%x[chmod +x #{SmartMachine.config.user_home_path}/.smartmachine/grids/prereceiver/pre-receive]
+						%x[ln -s #{SmartMachine.config.user_home_path}/.smartmachine/grids/prereceiver/pre-receive #{repository_path}/hooks/pre-receive]
 						puts "done"
 					end
 

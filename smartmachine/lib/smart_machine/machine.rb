@@ -187,21 +187,21 @@ module SmartMachine
 
 				'grids',
 
-				'grids/grid-elasticsearch',
-				'grids/grid-elasticsearch/data/***',
-				'grids/grid-elasticsearch/logs/***',
+				'grids/elasticsearch',
+				'grids/elasticsearch/data/***',
+				'grids/elasticsearch/logs/***',
 
-				'grids/grid-minio',
-				'grids/grid-minio/data/***',
+				'grids/minio',
+				'grids/minio/data/***',
 
-				'grids/grid-mysql',
-				'grids/grid-mysql/data/***',
+				'grids/mysql',
+				'grids/mysql/data/***',
 
-				'grids/grid-nginx',
-				'grids/grid-nginx/certificates/***',
+				'grids/nginx',
+				'grids/nginx/certificates/***',
 
-				'grids/grid-solr',
-				'grids/grid-solr/solr/***',
+				'grids/solr',
+				'grids/solr/solr/***',
 			]
 			files.join(',')
 		end
@@ -222,37 +222,37 @@ module SmartMachine
 
 				'grids',
 
-				'grids/grid-elasticsearch',
-				'grids/grid-elasticsearch/data',
-				'grids/grid-elasticsearch/data/.keep',
-				'grids/grid-elasticsearch/logs',
-				'grids/grid-elasticsearch/logs/.keep',
+				'grids/elasticsearch',
+				'grids/elasticsearch/data',
+				'grids/elasticsearch/data/.keep',
+				'grids/elasticsearch/logs',
+				'grids/elasticsearch/logs/.keep',
 
-				'grids/grid-minio',
-				'grids/grid-minio/data',
-				'grids/grid-minio/data/.keep',
+				'grids/minio',
+				'grids/minio/data',
+				'grids/minio/data/.keep',
 
-				'grids/grid-mysql',
-				'grids/grid-mysql/data',
-				'grids/grid-mysql/data/.keep',
+				'grids/mysql',
+				'grids/mysql/data',
+				'grids/mysql/data/.keep',
 
-				'grids/grid-nginx',
-				'grids/grid-nginx/certificates',
-				'grids/grid-nginx/certificates/.keep',
-				'grids/grid-nginx/htpasswd/***',
-				'grids/grid-nginx/fastcgi.conf',
-				'grids/grid-nginx/nginx.tmpl',
+				'grids/nginx',
+				'grids/nginx/certificates',
+				'grids/nginx/certificates/.keep',
+				'grids/nginx/htpasswd/***',
+				'grids/nginx/fastcgi.conf',
+				'grids/nginx/nginx.tmpl',
 
-				'grids/grid-prereceiver',
-				'grids/grid-prereceiver/pre-receive',
+				'grids/prereceiver',
+				'grids/prereceiver/pre-receive',
 
-				'grids/grid-redis',
-				'grids/grid-redis/data',
-				'grids/grid-redis/data/.keep',
+				'grids/redis',
+				'grids/redis/data',
+				'grids/redis/data/.keep',
 
-				'grids/grid-solr',
-				'grids/grid-solr/solr',
-				'grids/grid-solr/solr/.keep',
+				'grids/solr',
+				'grids/solr/solr',
+				'grids/solr/solr/.keep',
 
 				'tmp/***',
 			]

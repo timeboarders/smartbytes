@@ -9,7 +9,7 @@ module SmartCloud
 		end
 
 		def self.create_htpasswd_files
-			htpasswd_dirpath = "#{Dir.pwd}/grids/grid-nginx/htpasswd"
+			htpasswd_dirpath = "#{Dir.pwd}/grids/nginx/htpasswd"
 
 			# Remove existing htpasswd_dirpath
 			FileUtils.rm_r htpasswd_dirpath if Dir.exist?(htpasswd_dirpath)
@@ -25,7 +25,7 @@ module SmartCloud
 				users.each do |user, password|
 					file_data += "#{user}:#{BCrypt::Password.create(password)}\n"
 				end
-				File.open("#{Dir.pwd}/grids/grid-nginx/htpasswd/#{domainname}", "w") { |file| file.write(file_data) }
+				File.open("#{Dir.pwd}/grids/nginx/htpasswd/#{domainname}", "w") { |file| file.write(file_data) }
 			end
 		end
 
