@@ -1,4 +1,4 @@
-FROM smartcloud:latest
+FROM smartmachine:latest
 LABEL maintainer="Timeboard <hello@timeboard.me>"
 
 # FCGI Essentials
