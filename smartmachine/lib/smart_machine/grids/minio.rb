@@ -22,8 +22,8 @@ module SmartMachine
 					print "-----> Creating container minio ... "
 					if system("docker create \
 						--name='minio' \
-						--env VIRTUAL_HOST=#{SmartMachine.credentials.minio[:hostname]}.#{SmartMachine.config.apps_domain} \
-						--env LETSENCRYPT_HOST=#{SmartMachine.credentials.minio[:hostname]}.#{SmartMachine.config.apps_domain} \
+						--env VIRTUAL_HOST=#{SmartMachine.credentials.minio[:name]}.#{SmartMachine.config.apps_domain} \
+						--env LETSENCRYPT_HOST=#{SmartMachine.credentials.minio[:name]}.#{SmartMachine.config.apps_domain} \
 						--env LETSENCRYPT_EMAIL=#{SmartMachine.config.sysadmin_email} \
 						--env LETSENCRYPT_TEST=false \
 						--env MINIO_ACCESS_KEY=#{SmartMachine.credentials.minio[:access_key]} \
@@ -37,7 +37,7 @@ module SmartMachine
 						minio/minio:RELEASE.2020-02-27T00-23-05Z server /data", out: File::NULL)
 
 						# The alias is necessary to support internal network requests directed to minio container using public url
-						system("docker network connect --alias #{SmartMachine.credentials.minio[:hostname]}.#{SmartMachine.config.apps_domain} minio-network nginx")
+						system("docker network connect --alias #{SmartMachine.credentials.minio[:name]}.#{SmartMachine.config.apps_domain} minio-network nginx")
 						system("docker network connect nginx-network minio")
 
 						puts "done"

@@ -59,7 +59,7 @@ module SmartMachine
 			    password: #{SecureRandom.hex(16)}
 
   			  minio:
-  			    hostname: #{SecureRandom.hex(8)}
+  			    name: #{SecureRandom.hex(8)}
   			    access_key: #{SecureRandom.hex(8)}
   			    secret_key: #{SecureRandom.hex(16)}
   			    browser: on
