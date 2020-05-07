@@ -58,20 +58,6 @@ module SmartCloud
 			    username: #{SecureRandom.hex(8)}
 			    password: #{SecureRandom.hex(16)}
 
-  			  minio:
-  			    hostname: #{SecureRandom.hex(8)}
-  			    access_key: #{SecureRandom.hex(8)}
-  			    secret_key: #{SecureRandom.hex(16)}
-  			    browser: on
-  			    worm: off
-
-			  mysql:
-			    port: 3306
-			    root_password: #{SecureRandom.hex(16)}
-			    username: #{SecureRandom.hex(8)}
-			    password: #{SecureRandom.hex(16)}
-			    database_name: #{SecureRandom.hex(8)}
-
 			  nextcloud:
 			    hostname: #{SecureRandom.hex(8)}
 			    admin_username: #{SecureRandom.hex(8)}
@@ -81,9 +67,6 @@ module SmartCloud
 			    database_username: #{SecureRandom.hex(8)}_nextcloud
 			    database_password: #{SecureRandom.hex(16)}
 			    database_name: #{SecureRandom.hex(8)}_nextcloud
-
-  			  elasticsearch:
-  			    port: 9200
 
 			  redmine:
 			    admin_username: admin
