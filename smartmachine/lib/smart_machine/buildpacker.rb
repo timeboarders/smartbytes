@@ -6,19 +6,45 @@ module SmartMachine
 		end
 
 		def install
+			puts "-----> Installing Buildpacker"
+
+			ssh = SmartMachine::SSH.new
+			commands = ["smartmachine buildpacker create"]
+			ssh.run commands
+
+			puts "-----> Buildpacker Installation Complete"
+		end
+
+		def uninstall
+			puts "-----> Uninstalling Buildpacker"
+
+			ssh = SmartMachine::SSH.new
+			commands = ["smartmachine buildpacker destroy"]
+			ssh.run commands
+
+			puts "-----> Buildpacker Uninstallation Complete"
+		end
+
+		def update
 			self.uninstall
+			self.install
+		end
+
+		def create
+			self.destroy
+
 			unless system("docker image inspect smartmachine/buildpacks/rails", [:out, :err] => File::NULL)
 				print "-----> Creating image smartmachine/buildpacks/rails ... "
 				if system("docker image build -t smartmachine/buildpacks/rails \
 					--build-arg USER_UID=`id -u` \
 					--build-arg USER_NAME=`id -un` \
-					#{SmartMachine.config.root_path}/lib/smartmachine/engine/buildpacks/rails", out: File::NULL)
+					#{SmartMachine.config.root_path}/lib/smart_machine/engine/buildpacks/rails", out: File::NULL)
 					puts "done"
 				end
 			end
 		end
 
-		def uninstall
+		def destroy
 			if system("docker image inspect smartmachine/buildpacks/rails", [:out, :err] => File::NULL)
 				print "-----> Removing image smartmachine/buildpacks/rails ... "
 				if system("docker image rm smartmachine/buildpacks/rails", out: File::NULL)
