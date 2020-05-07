@@ -1,80 +1,68 @@
 #!/usr/bin/env ruby
 
-require 'smart_machine'
+require "smart_machine"
 
 command = ARGV.shift
 
-if command == '--version'
-	puts "SmartMachine #{SmartMachine.version}"
-	return
-end
+machine = SmartMachine::Machine.new
+command = "" unless machine.local? || machine.remote?
 
-if SmartMachine::Machine.local?
-	if command == 'start'
-		machine = SmartMachine::Machine.new
-		machine.start
-	elsif command == 'stop'
-		machine = SmartMachine::Machine.new
-		machine.stop
-	elsif command == 'ssh'
-		machine = SmartMachine::Machine.new
-		machine.ssh
-	elsif command == 'sync'
-		machine = SmartMachine::Machine.new
-		machine.sync
-	elsif command == 'grid'
-		machine = SmartMachine::Machine.new
-		machine.grid ARGV
-	elsif command == 'app'
-		machine = SmartMachine::Machine.new
-		machine.app ARGV
-	elsif command == 'ps'
-		ssh = SmartMachine::SSH.new
-		ssh.run "smartmachine ps #{ARGV.join(' ')}"
-	elsif command == 'logs'
-		ssh = SmartMachine::SSH.new
-		ssh.run "smartmachine logs #{ARGV.join(' ')}"
-	elsif command == 'credentials:edit'
-		credentials = SmartMachine::Credentials.new
-		credentials.edit
-	else
-		puts "Specify a valid local command to execute."
-	end
-elsif SmartMachine::Machine.remote?
-	if command == 'run'
-		machine = SmartMachine::Machine.new
-		machine.run ARGV
-	elsif command == 'buildpacker'
-		buildpacker = SmartMachine::Buildpacker.new
-		action = ARGV.shift
-		if action == "install"
-			buildpacker.install
-		elsif action == "uninstall"
-			buildpacker.uninstall
-		end
-	elsif command == 'prereceiver'
-		prereceiver = SmartMachine::Grids::Prereceiver.new
-		action = ARGV.shift
-		if action == "install"
-			prereceiver.install
-		elsif action == "uninstall"
-			prereceiver.uninstall
-		end
-	elsif command == 'ps'
-		exec "docker ps #{ARGV.join(' ')}"
-	elsif command == 'logs'
-		exec "docker logs #{ARGV.join(' ')}"
-	elsif command == 'shell'
-		exec '/bin/sh -c sh'
-	else
-		puts "Specify a valid server command to execute."
-	end
+case command
+when "new"
+	machine.create ARGV
+
+when "credentials:edit"
+	credentials = SmartMachine::Credentials.new
+	credentials.edit
+
+when "environment:edit"
+	system("#{ENV['EDITOR']} config/environment.rb")
+
+when "users:edit"
+	system("#{ENV['EDITOR']} config/users.yml")
+
+when "ssh"
+	machine.ssh
+
+when "install"
+	machine.install
+
+when "update"
+	machine.update
+
+when "uninstall"
+	machine.uninstall
+
+when "grids"
+	machine.grids ARGV
+
+when "apps"
+	machine.apps ARGV
+
+when "ps"
+	machine.ps ARGV
+
+when "logs"
+	machine.logs ARGV
+
+when "sync"
+	sync = SmartMachine::Sync.new
+	sync.run
+
+when "--version"
+	puts "SmartMachine #{SmartMachine.version}"
+
+when "buildpacker"
+	action = ARGV.shift
+	buildpacker = SmartMachine::Buildpacker.new
+	buildpacker.public_send(action, *ARGV)
+
+when "prereceiver"
+	action = ARGV.shift
+	prereceiver = SmartMachine::Grids::Prereceiver.new
+	prereceiver.public_send(action, *ARGV)
+
 else
-	if command == 'new'
-		raise "Please specify a machine name" if ARGV.empty?
-		machine = SmartMachine::Machine.new
-		machine.create ARGV
-	else
-		puts "Specify a valid smartmachine command to execute. Are you in the correct directory to run this command?"
-	end
+	puts "Specify a valid smartmachine command to execute. Are you in the correct directory to run this command?"
+
 end
