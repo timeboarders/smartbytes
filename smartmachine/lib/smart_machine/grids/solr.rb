@@ -70,7 +70,7 @@ module SmartMachine
 						puts "done"
 
 						print "-----> Copying core files ... "
-						system("sudo cp -r #{SmartMachine.config.root_path}/lib/smartmachine/grids/solr/sunspot/conf/* #{SmartMachine.config.user_home_path}/.smartmachine/grids/solr/data/#{corename}/conf/")
+						system("sudo cp -r #{SmartMachine.config.root_path}/lib/smart_machine/grids/solr/sunspot/conf/* #{SmartMachine.config.user_home_path}/.smartmachine/grids/solr/data/#{corename}/conf/")
 						if system("sudo chown -R 8983:8983 #{SmartMachine.config.user_home_path}/.smartmachine/grids/solr/data/#{corename}/conf", out: File::NULL)
 							puts "done"
 						end

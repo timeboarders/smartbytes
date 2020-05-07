@@ -11,7 +11,7 @@ module SmartMachine
 				unless system("docker image inspect smartmachine/prereceiver", [:out, :err] => File::NULL)
 					print "-----> Creating image smartmachine/prereceiver ... "
 					if system("docker image build -t smartmachine/prereceiver \
-						#{SmartMachine.config.root_path}/lib/smartmachine/grids/prereceiver", out: File::NULL)
+						#{SmartMachine.config.root_path}/lib/smart_machine/grids/prereceiver", out: File::NULL)
 						puts "done"
 					end
 				end
