@@ -9,12 +9,15 @@ module SmartMachine
 		def create(*args)
 			args.flatten!
 
+			raise "Please specify a machine name" if ARGV.empty?
+
 			name = args.shift
 			FileUtils.mkdir name
-			FileUtils.cp_r "#{SmartMachine.config.root_path}/lib/smartmachine/templates/dotsmartmachine/.", "#{name}"
+			FileUtils.cp_r "#{SmartMachine.config.root_path}/lib/smart_machine/templates/dotsmartmachine/.", "#{name}"
 			FileUtils.chdir "#{name}" do
 				credentials = SmartMachine::Credentials.new
 				credentials.create
+				system("git init && git add . && git commit -m 'initial commit'")
 			end
 			puts "New machine #{name} has been created."
 		end
