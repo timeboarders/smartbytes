@@ -7,8 +7,6 @@ module SmartMachine
 		def install
 			puts "-----> Installing SmartMachine Engine"
 
-			self.uninstall
-
 			SmartMachine::User.create_htpasswd_files
 
 			ssh = SmartMachine::SSH.new
@@ -54,6 +52,11 @@ module SmartMachine
 			ssh.run "docker rmi smartmachine"
 
 			puts "-----> SmartMachine Engine Uninstallation Complete"
+		end
+
+		def update
+			self.uninstall
+			self.install
 		end
 	end
 end
