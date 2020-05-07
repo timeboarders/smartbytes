@@ -1,15 +1,10 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
-version = File.read(File.expand_path("SMARTBYTES_VERSION", __dir__)).strip
+require_relative "gem_version"
 
 module SmartCloud
-	VERSION = version.freeze
-
+	# Returns the version of the currently loaded SmartCloud as a <tt>Gem::Version</tt>
 	def self.version
-		@@version ||= VERSION
-	end
-
-	def self.smart_cloud_major_version
-		@smart_cloud_major_version ||= VERSION.split(".").first.to_i
+		gem_version
 	end
 end
