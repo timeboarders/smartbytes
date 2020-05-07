@@ -76,6 +76,10 @@ module SmartMachine
 			puts "-----> Docker Uninstallation Complete"
 		end
 
+		def update
+			self.install
+		end
+
 		def add_ufw_rules
 			puts '-----> Add the following rules to the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
 			puts '# BEGIN UFW AND DOCKER
