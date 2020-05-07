@@ -7,12 +7,11 @@ module SmartCloud
 		# Installing Docker!
 		#
 		# Example:
-		#   >> Docker.install
 		#   => Installation Complete
 		#
 		# Arguments:
 		#   none
-		def self.install
+		def install
 			ssh = SmartCloud::SSH.new
 
 			puts "-----> Installing Docker"
@@ -47,12 +46,11 @@ module SmartCloud
 		# Uninstalling Docker!
 		#
 		# Example:
-		#   >> Docker.uninstall
 		#   => Uninstallation Complete
 		#
 		# Arguments:
 		#   none
-		def self.uninstall
+		def uninstall
 			ssh = SmartCloud::SSH.new
 
 			puts "-----> Uninstalling Docker Compose"
@@ -71,7 +69,7 @@ module SmartCloud
 			puts "-----> You must delete any edited configuration files manually."
 		end
 
-		def self.add_ufw_rules
+		def add_ufw_rules
 			puts '-----> Add the following rules to the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
 			puts '# BEGIN UFW AND DOCKER
 			*filter
@@ -104,7 +102,7 @@ module SmartCloud
 			# system("sudo ufw reload")
 		end
 
-		def self.remove_ufw_rules
+		def remove_ufw_rules
 			puts '-----> Remove the following rules at the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
 			puts '# BEGIN UFW AND DOCKER
 			*filter

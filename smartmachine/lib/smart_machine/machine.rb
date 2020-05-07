@@ -27,8 +27,8 @@ module SmartMachine
 			ssh.login
 		end
 
-		def start
-			SmartMachine::Docker.install
+		def install
+			SmartMachine::Docker.new.install
 
 			engine = SmartMachine::Engine.new
 			engine.install
@@ -41,7 +41,10 @@ module SmartMachine
 			elasticsearch.install
 		end
 
-		def stop
+		def update
+		end
+
+		def uninstall
 			elasticsearch = SmartMachine::Grids::Elasticsearch.new
 			elasticsearch.uninstall
 
@@ -52,7 +55,7 @@ module SmartMachine
 			engine = SmartMachine::Engine.new
 			engine.uninstall
 
-			SmartMachine::Docker.uninstall
+			SmartMachine::Docker.new.uninstall
 		end
 
 		def grid(*args)

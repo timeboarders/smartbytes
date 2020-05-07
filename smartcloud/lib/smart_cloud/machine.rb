@@ -20,7 +20,7 @@ module SmartCloud
 		end
 
 		def start
-			SmartCloud::Docker.install
+			SmartCloud::Docker.new.install
 
 			engine = SmartCloud::Engine.new
 			engine.install
@@ -44,7 +44,7 @@ module SmartCloud
 			engine = SmartCloud::Engine.new
 			engine.uninstall
 
-			SmartCloud::Docker.uninstall
+			SmartCloud::Docker.new.uninstall
 		end
 
 		def grid(*args)
