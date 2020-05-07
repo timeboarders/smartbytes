@@ -11,6 +11,7 @@ module SmartMachine
 
 			ssh = SmartMachine::SSH.new
 			machine = SmartMachine::Machine.new
+			sync = SmartMachine::Sync.new
 
 			system("mkdir -p ./tmp/engine")
 			system("cp #{SmartMachine.config.root_path}/lib/smartmachine/engine/Dockerfile ./tmp/engine/Dockerfile")
@@ -18,7 +19,7 @@ module SmartMachine
 			gem_file_path = File.expand_path("../../cache/smartmachine-#{SmartMachine.version}.gem", SmartMachine.config.root_path)
 			system("cp #{gem_file_path} ./tmp/engine/smartmachine-#{SmartMachine.version}.gem")
 
-			machine.sync first_sync: true
+			sync.run only: :push
 
 			puts "-----> Creating image smartmachine ... "
 			ssh.run "docker image build -t smartmachine \
@@ -34,7 +35,9 @@ module SmartMachine
 			system("rm ./tmp/engine/Dockerfile")
 			system("rm ./tmp/engine/smartmachine-#{SmartMachine.version}.gem")
 
-			machine.sync
+			sync.run
+
+			puts "-----> SmartMachine Engine Installation Complete"
 		end
 
 		def uninstall

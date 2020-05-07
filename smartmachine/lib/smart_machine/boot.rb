@@ -14,6 +14,7 @@ require 'smart_machine/machine'
 require 'smart_machine/docker'
 require 'smart_machine/engine'
 require 'smart_machine/buildpacker'
+require 'smart_machine/sync'
 
 require 'smart_machine/user'
 
