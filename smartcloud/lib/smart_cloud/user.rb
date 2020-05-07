@@ -18,14 +18,14 @@ module SmartCloud
 			FileUtils.mkdir htpasswd_dirpath
 
 			# Add hostfiles to htpasswd_dirpath
-			self.get_users_from_file.each do |hostname, users|
+			self.get_users_from_file.each do |domainname, users|
 				next unless users
 
 				file_data = ""
 				users.each do |user, password|
 					file_data += "#{user}:#{BCrypt::Password.create(password)}\n"
 				end
-				File.open("#{Dir.pwd}/grids/grid-nginx/htpasswd/#{hostname}", "w") { |file| file.write(file_data) }
+				File.open("#{Dir.pwd}/grids/grid-nginx/htpasswd/#{domainname}", "w") { |file| file.write(file_data) }
 			end
 		end
 
