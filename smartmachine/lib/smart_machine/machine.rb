@@ -28,48 +28,78 @@ module SmartMachine
 		end
 
 		def install
-			SmartMachine::Docker.new.install
+			docker = SmartMachine::Docker.new
+			docker.install
 
 			engine = SmartMachine::Engine.new
 			engine.install
 
-			ssh = SmartMachine::SSH.new
-			ssh.run "smartmachine buildpacker install"
-			ssh.run "smartmachine prereceiver install"
+			buildpacker = SmartMachine::Buildpacker.new
+			buildpacker.install
+
+			prereceiver = SmartMachine::Grids::Prereceiver.new
+			prereceiver.install
 
 			elasticsearch = SmartMachine::Grids::Elasticsearch.new
 			elasticsearch.install
-		end
-
-		def update
 		end
 
 		def uninstall
 			elasticsearch = SmartMachine::Grids::Elasticsearch.new
 			elasticsearch.uninstall
 
-			ssh = SmartMachine::SSH.new
-			ssh.run "smartmachine prereceiver uninstall"
-			ssh.run "smartmachine buildpacker uninstall"
+			prereceiver = SmartMachine::Grids::Prereceiver.new
+			prereceiver.uninstall
+
+			buildpacker = SmartMachine::Buildpacker.new
+			buildpacker.uninstall
 
 			engine = SmartMachine::Engine.new
 			engine.uninstall
 
-			SmartMachine::Docker.new.uninstall
+			docker = SmartMachine::Docker.new
+			docker.uninstall
 		end
 
-		def grid(*args)
+		def update
+			docker = SmartMachine::Docker.new
+			docker.update
+
+			engine = SmartMachine::Engine.new
+			engine.update
+
+			buildpacker = SmartMachine::Buildpacker.new
+			buildpacker.update
+
+			prereceiver = SmartMachine::Grids::Prereceiver.new
+			prereceiver.update
+
+			elasticsearch = SmartMachine::Grids::Elasticsearch.new
+			elasticsearch.update
+		end
+
+		def grids(*args)
 			args.flatten!
 
 			ssh = SmartMachine::SSH.new
 			ssh.run "smartmachine run grid #{args.join(" ")}"
 		end
 
-		def app(*args)
+		def apps(*args)
 			args.flatten!
 
 			ssh = SmartMachine::SSH.new
 			ssh.run "smartmachine run app #{args.join(" ")}"
+		end
+
+		def ps(*args)
+			ssh = SmartMachine::SSH.new
+			ssh.run "docker ps #{args.join(' ')}"
+		end
+
+		def logs(*args)
+			ssh = SmartMachine::SSH.new
+			ssh.run "docker logs #{args.join(' ')}"
 		end
 
 		# Works only for class methods of the class as no instance of the class is created
@@ -148,11 +178,11 @@ module SmartMachine
 			# sudo fail2ban-client status
 		end
 
-		def self.local?
+		def local?
 			File.file?("./config/master.key")
 		end
 
-		def self.remote?
+		def remote?
 			File.directory?("#{SmartMachine.config.user_home_path}/.smartmachine")
 		end
 	end
