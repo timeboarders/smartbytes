@@ -22,6 +22,11 @@ module SmartMachine
 			puts "New machine #{name} has been created."
 		end
 
+		def ssh
+			ssh = SmartMachine::SSH.new
+			ssh.login
+		end
+
 		def start
 			SmartMachine::Docker.install
 
@@ -62,11 +67,6 @@ module SmartMachine
 
 			ssh = SmartMachine::SSH.new
 			ssh.run "smartmachine run app #{args.join(" ")}"
-		end
-
-		def ssh
-			ssh = SmartMachine::SSH.new
-			ssh.login
 		end
 
 		# Works only for class methods of the class as no instance of the class is created
