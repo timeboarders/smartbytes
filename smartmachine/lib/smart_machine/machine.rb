@@ -167,12 +167,12 @@ module SmartMachine
 
 		def sync_pull
 			puts "-----> Sync pulling ... "
-			system("rsync -azumv --delete --include={#{sync_pull_files_list}} --exclude=* -e ssh #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:host]}:~/.smartmachine/ .")
+			system("rsync -azumv --delete --include={#{sync_pull_files_list}} --exclude=* -e ssh #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:address]}:~/.smartmachine/ .")
 		end
 
 		def sync_push
 			puts "-----> Sync pushing ... "
-			system("rsync -azumv --delete --include={#{sync_push_files_list}} --exclude=* -e ssh ./ #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:host]}:~/.smartmachine")
+			system("rsync -azumv --delete --include={#{sync_push_files_list}} --exclude=* -e ssh ./ #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:address]}:~/.smartmachine")
 		end
 
 		def sync_pull_files_list

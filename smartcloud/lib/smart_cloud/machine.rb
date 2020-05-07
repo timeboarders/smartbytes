@@ -167,12 +167,12 @@ module SmartCloud
 
 		def sync_pull
 			puts "-----> Sync pulling ... "
-			system("rsync -azumv --delete --include={#{sync_pull_files_list}} --exclude=* -e ssh #{SmartCloud.credentials.machine[:username]}@#{SmartCloud.credentials.machine[:host]}:~/.smartcloud/ .")
+			system("rsync -azumv --delete --include={#{sync_pull_files_list}} --exclude=* -e ssh #{SmartCloud.credentials.machine[:username]}@#{SmartCloud.credentials.machine[:address]}:~/.smartcloud/ .")
 		end
 
 		def sync_push
 			puts "-----> Sync pushing ... "
-			system("rsync -azumv --delete --include={#{sync_push_files_list}} --exclude=* -e ssh ./ #{SmartCloud.credentials.machine[:username]}@#{SmartCloud.credentials.machine[:host]}:~/.smartcloud")
+			system("rsync -azumv --delete --include={#{sync_push_files_list}} --exclude=* -e ssh ./ #{SmartCloud.credentials.machine[:username]}@#{SmartCloud.credentials.machine[:address]}:~/.smartcloud")
 		end
 
 		def sync_pull_files_list

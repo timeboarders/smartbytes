@@ -8,7 +8,7 @@ module SmartCloud
 
 		def run(*commands)
 			commands.flatten!
-			Net::SSH.start(SmartCloud.credentials.machine[:host], SmartCloud.credentials.machine[:username], { port: SmartCloud.credentials.machine[:port], password: SmartCloud.credentials.machine[:password] }) do |ssh|
+			Net::SSH.start(SmartCloud.credentials.machine[:address], SmartCloud.credentials.machine[:username], { port: SmartCloud.credentials.machine[:port], password: SmartCloud.credentials.machine[:password] }) do |ssh|
 				channel = ssh.open_channel do |channel, success|
 					channel.request_pty do |channel, success|
 						channel.exec commands.join(';') do |channel, success|
@@ -37,7 +37,7 @@ module SmartCloud
 		end
 
 		def login
-			exec "ssh #{SmartCloud.credentials.machine[:username]}@#{SmartCloud.credentials.machine[:host]}"
+			exec "ssh #{SmartCloud.credentials.machine[:username]}@#{SmartCloud.credentials.machine[:address]}"
 		end
 	end
 end

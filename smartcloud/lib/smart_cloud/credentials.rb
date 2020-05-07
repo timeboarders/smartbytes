@@ -52,7 +52,7 @@ module SmartCloud
 			<<~YAML
 			  machine:
 			    name: #{SecureRandom.hex(8)}
-			    host: 122.122.122.122
+			    address: 122.122.122.122
 			    port: 22
 			    root_password: #{SecureRandom.hex(16)}
 			    username: #{SecureRandom.hex(8)}

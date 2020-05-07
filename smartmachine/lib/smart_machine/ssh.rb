@@ -8,7 +8,7 @@ module SmartMachine
 
 		def run(*commands)
 			commands.flatten!
-			Net::SSH.start(SmartMachine.credentials.machine[:host], SmartMachine.credentials.machine[:username], { port: SmartMachine.credentials.machine[:port], password: SmartMachine.credentials.machine[:password] }) do |ssh|
+			Net::SSH.start(SmartMachine.credentials.machine[:address], SmartMachine.credentials.machine[:username], { port: SmartMachine.credentials.machine[:port], password: SmartMachine.credentials.machine[:password] }) do |ssh|
 				channel = ssh.open_channel do |channel, success|
 					channel.request_pty do |channel, success|
 						channel.exec commands.join(';') do |channel, success|
@@ -37,7 +37,7 @@ module SmartMachine
 		end
 
 		def login
-			exec "ssh #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:host]}"
+			exec "ssh #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:address]}"
 		end
 	end
 end
