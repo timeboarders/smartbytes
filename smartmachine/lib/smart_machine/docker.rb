@@ -40,7 +40,7 @@ module SmartMachine
 
 			self.add_ufw_rules
 
-			puts "-----> Installation Complete"
+			puts "-----> Docker Installation Complete"
 		end
 
 		# Uninstalling Docker!
