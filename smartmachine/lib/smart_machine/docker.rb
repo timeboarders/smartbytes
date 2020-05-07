@@ -12,9 +12,11 @@ module SmartMachine
 		# Arguments:
 		#   none
 		def install
+			puts "-----> Installing Docker"
+
 			ssh = SmartMachine::SSH.new
 
-			puts "-----> Installing Docker"
+			print "-----> Installing Docker Engine ... "
 			commands = [
 				"sudo apt-get -y update",
 				"sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common",
@@ -28,8 +30,9 @@ module SmartMachine
 				"docker rmi hello-world"
 			]
 			ssh.run commands
+			puts "done"
 
-			puts "-----> Installing Docker Compose"
+			print "-----> Installing Docker Compose ... "
 			commands = [
 				"sudo curl -L --fail https://github.com/docker/compose/releases/download/1.24.0/run.sh -o /usr/local/bin/docker-compose",
 				"sudo chmod +x /usr/local/bin/docker-compose",
@@ -37,6 +40,7 @@ module SmartMachine
 				"sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose"
 			]
 			ssh.run commands
+			puts "done"
 
 			self.add_ufw_rules
 
@@ -51,22 +55,25 @@ module SmartMachine
 		# Arguments:
 		#   none
 		def uninstall
+			puts "-----> Uninstalling Docker"
+
 			ssh = SmartMachine::SSH.new
 
-			puts "-----> Uninstalling Docker Compose"
-			ssh.run "sudo rm /usr/local/bin/docker-compose"
-
-			puts "-----> Uninstalling Docker"
-			commands = [
-				"sudo apt-get purge docker-ce",
-				"sudo rm -rf /var/lib/docker"
-			]
+			print "-----> Uninstalling Docker Compose ... "
+			commands = ["sudo rm /usr/local/bin/docker-compose"]
 			ssh.run commands
+			puts "done"
+
+			print "-----> Uninstalling Docker Engine ... "
+			commands = ["sudo apt-get purge docker-ce", "sudo rm -rf /var/lib/docker"]
+			ssh.run commands
+			puts "done"
 
 			self.remove_ufw_rules
 
-			puts "-----> Uninstallation Complete"
 			puts "-----> You must delete any edited configuration files manually."
+
+			puts "-----> Docker Uninstallation Complete"
 		end
 
 		def add_ufw_rules
