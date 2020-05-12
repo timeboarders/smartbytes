@@ -10,7 +10,7 @@ module SmartMachine
 				puts "-----> Installing Prereceiver"
 
 				ssh = SmartMachine::SSH.new
-				commands = ["smartmachine prereceiver create"]
+				commands = ["smartmachine runner prereceiver create"]
 				ssh.run commands
 
 				puts "-----> Prereceiver Installation Complete"
@@ -20,7 +20,7 @@ module SmartMachine
 				puts "-----> Uninstalling Prereceiver"
 
 				ssh = SmartMachine::SSH.new
-				commands = ["smartmachine prereceiver destroy"]
+				commands = ["smartmachine runner prereceiver destroy"]
 				ssh.run commands
 
 				puts "-----> Prereceiver Uninstallation Complete"
@@ -32,10 +32,11 @@ module SmartMachine
 			end
 
 			def create
-				unless system("docker image inspect smartmachine/prereceiver", [:out, :err] => File::NULL)
-					print "-----> Creating image smartmachine/prereceiver ... "
-					if system("docker image build -t smartmachine/prereceiver \
-						#{SmartMachine.config.root_path}/lib/smart_machine/grids/prereceiver", out: File::NULL)
+				unless system("docker image inspect #{prereceiver_image_name}", [:out, :err] => File::NULL)
+					print "-----> Creating image #{prereceiver_image_name} ... "
+					if system("docker image build -t #{prereceiver_image_name} \
+									--build-arg SMARTMACHINE_VERSION=#{SmartMachine.version} \
+									#{SmartMachine.config.root_path}/lib/smart_machine/grids/prereceiver", out: File::NULL)
 						puts "done"
 
 						SmartMachine::Grids::Prereceiver.up
@@ -46,9 +47,9 @@ module SmartMachine
 			def destroy
 				SmartMachine::Grids::Prereceiver.down
 
-				if system("docker image inspect smartmachine/prereceiver", [:out, :err] => File::NULL)
-					print "-----> Removing image smartmachine/prereceiver ... "
-					if system("docker image rm smartmachine/prereceiver", out: File::NULL)
+				if system("docker image inspect #{prereceiver_image_name}", [:out, :err] => File::NULL)
+					print "-----> Removing image #{prereceiver_image_name} ... "
+					if system("docker image rm #{prereceiver_image_name}", out: File::NULL)
 						puts "done"
 					end
 				end
@@ -56,8 +57,8 @@ module SmartMachine
 
 			def self.up
 				if SmartMachine::Docker.running?
-					if system("docker image inspect smartmachine/prereceiver", [:out, :err] => File::NULL) && system("docker image inspect smartmachine/buildpacks/rails", [:out, :err] => File::NULL)
-						print "-----> Creating container prereceiver ... "
+					if system("docker image inspect #{prereceiver_image_name}", [:out, :err] => File::NULL) && system("docker image inspect #{buildpacker_image_name}", [:out, :err] => File::NULL)
+						print "-----> Creating container prereceiver with image #{prereceiver_image_name} ... "
 						if system("docker create \
 							--name='prereceiver' \
 							--env VIRTUAL_PROTO=fastcgi \
@@ -76,10 +77,10 @@ module SmartMachine
 							--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 							--restart='always' \
 							--network='nginx-network' \
-							smartmachine/prereceiver", out: File::NULL)
+							#{prereceiver_image_name}", out: File::NULL)
 							puts "done"
 
-							print "-----> Starting container prereceiver ... "
+							print "-----> Starting container prereceiver with image #{prereceiver_image_name} ... "
 							if system("docker start prereceiver", out: File::NULL)
 								puts "done"
 							end
@@ -92,11 +93,11 @@ module SmartMachine
 				if SmartMachine::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					if system("docker inspect -f '{{.State.Running}}' 'prereceiver'", [:out, :err] => File::NULL)
-						print "-----> Stopping container prereceiver ... "
+						print "-----> Stopping container prereceiver with image #{prereceiver_image_name} ... "
 						if system("docker stop 'prereceiver'", out: File::NULL)
 							puts "done"
 
-							print "-----> Removing container prereceiver ... "
+							print "-----> Removing container prereceiver with image #{prereceiver_image_name} ... "
 							if system("docker rm 'prereceiver'", out: File::NULL)
 								puts "done"
 							end
@@ -155,6 +156,14 @@ module SmartMachine
 				end
 
 				logger.formatter = nil
+			end
+
+			def buildpacker_image_name
+				Buildpacker.new.buildpacker_image_name
+			end
+
+			def prereceiver_image_name
+				"smartmachine/prereceiver:#{SmartMachine.version}"
 			end
 		end
 	end
