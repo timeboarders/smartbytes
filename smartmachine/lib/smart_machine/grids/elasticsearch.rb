@@ -1,6 +1,6 @@
 # The main SmartMachine Grids Elasticsearch driver
 module SmartMachine
-	module Grids
+	class Grids
 		class Elasticsearch < SmartMachine::Base
 			def initialize
 			end

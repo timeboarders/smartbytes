@@ -1,6 +1,6 @@
 # The main SmartMachine Grids Minio driver
 module SmartMachine
-	module Grids
+	class Grids
 		class Minio < SmartMachine::Base
 			def initialize
 			end

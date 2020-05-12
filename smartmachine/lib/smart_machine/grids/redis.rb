@@ -1,6 +1,6 @@
 # The main SmartMachine Grids Redis driver
 module SmartMachine
-	module Grids
+	class Grids
 		class Redis < SmartMachine::Base
 			def initialize
 			end

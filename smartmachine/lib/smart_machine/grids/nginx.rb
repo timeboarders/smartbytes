@@ -1,6 +1,6 @@
 # The main SmartMachine Grids Nginx driver
 module SmartMachine
-	module Grids
+	class Grids
 		class Nginx < SmartMachine::Base
 			def initialize
 			end

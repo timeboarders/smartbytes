@@ -1,6 +1,6 @@
 # The main SmartMachine Grids Solr driver
 module SmartMachine
-	module Grids
+	class Grids
 		class Solr < SmartMachine::Base
 			def initialize
 			end

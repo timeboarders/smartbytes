@@ -1,6 +1,6 @@
 # The main SmartMachine Grids Mysql driver
 module SmartMachine
-	module Grids
+	class Grids
 		class Mysql < SmartMachine::Base
 			def initialize
 			end
