@@ -1,6 +1,6 @@
 # The main SmartMachine Grids Git driver
 module SmartMachine
-	module Grids
+	class Grids
 		class Prereceiver < SmartMachine::Base
 
 			def initialize
