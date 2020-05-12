@@ -22,7 +22,7 @@ module SmartMachine
 			sync.run only: :push
 
 			print "-----> Creating image for SmartMachine ... "
-			ssh.run "docker image build -t smartmachine \
+			ssh.run "docker image build -t #{engine_image_name} \
 					--build-arg SMARTMACHINE_MASTER_KEY=#{SmartMachine::Credentials.new.read_key} \
 					--build-arg SMARTMACHINE_VERSION=#{SmartMachine.version} \
 					--build-arg USER_NAME=`id -un` \
@@ -49,7 +49,7 @@ module SmartMachine
 			ssh = SmartMachine::SSH.new
 
 			ssh.run "sudo rm /usr/local/bin/smartmachine"
-			ssh.run "docker rmi smartmachine"
+			ssh.run "docker rmi #{engine_image_name}"
 
 			puts "-----> SmartMachine Engine Uninstallation Complete"
 		end
@@ -57,6 +57,10 @@ module SmartMachine
 		def update
 			self.uninstall
 			self.install
+		end
+
+		def engine_image_name
+			"smartmachine:#{SmartMachine.version}"
 		end
 	end
 end
