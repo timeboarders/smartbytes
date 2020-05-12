@@ -1,4 +1,6 @@
-FROM smartmachine:latest
+ARG SMARTMACHINE_VERSION
+
+FROM smartmachine:$SMARTMACHINE_VERSION
 LABEL maintainer="Timeboard <hello@timeboard.me>"
 
 # Ruby on Rails Essentials

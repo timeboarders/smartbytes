@@ -9,7 +9,7 @@ module SmartMachine
 			puts "-----> Installing Buildpacker"
 
 			ssh = SmartMachine::SSH.new
-			commands = ["smartmachine buildpacker create"]
+			commands = ["smartmachine runner buildpacker create"]
 			ssh.run commands
 
 			puts "-----> Buildpacker Installation Complete"
@@ -19,7 +19,7 @@ module SmartMachine
 			puts "-----> Uninstalling Buildpacker"
 
 			ssh = SmartMachine::SSH.new
-			commands = ["smartmachine buildpacker destroy"]
+			commands = ["smartmachine runner buildpacker destroy"]
 			ssh.run commands
 
 			puts "-----> Buildpacker Uninstallation Complete"
@@ -33,9 +33,10 @@ module SmartMachine
 		def create
 			self.destroy
 
-			unless system("docker image inspect smartmachine/buildpacks/rails", [:out, :err] => File::NULL)
-				print "-----> Creating image smartmachine/buildpacks/rails ... "
-				if system("docker image build -t smartmachine/buildpacks/rails \
+			unless system("docker image inspect #{buildpacker_image_name}", [:out, :err] => File::NULL)
+				print "-----> Creating image #{buildpacker_image_name} ... "
+				if system("docker image build -t #{buildpacker_image_name} \
+					--build-arg SMARTMACHINE_VERSION=#{SmartMachine.version} \
 					--build-arg USER_UID=`id -u` \
 					--build-arg USER_NAME=`id -un` \
 					#{SmartMachine.config.root_path}/lib/smart_machine/engine/buildpacks/rails", out: File::NULL)
@@ -45,9 +46,9 @@ module SmartMachine
 		end
 
 		def destroy
-			if system("docker image inspect smartmachine/buildpacks/rails", [:out, :err] => File::NULL)
-				print "-----> Removing image smartmachine/buildpacks/rails ... "
-				if system("docker image rm smartmachine/buildpacks/rails", out: File::NULL)
+			if system("docker image inspect #{buildpacker_image_name}", [:out, :err] => File::NULL)
+				print "-----> Removing image #{buildpacker_image_name} ... "
+				if system("docker image rm #{buildpacker_image_name}", out: File::NULL)
 					puts "done"
 				end
 			end
@@ -97,5 +98,9 @@ module SmartMachine
 		# 		end
 		# 	end
 		# end
+
+		def buildpacker_image_name
+			"smartmachine/buildpacks/rails:#{SmartMachine.version}"
+		end
 	end
 end
