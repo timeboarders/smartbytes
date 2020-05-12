@@ -9,117 +9,114 @@ module SmartMachine
 		def create(*args)
 			args.flatten!
 
-			raise "Please specify a machine name" if ARGV.empty?
+			raise "Please specify a machine name" if args.empty?
 
 			name = args.shift
-			FileUtils.mkdir name
-			FileUtils.cp_r "#{SmartMachine.config.root_path}/lib/smart_machine/templates/dotsmartmachine/.", "#{name}"
-			FileUtils.chdir "#{name}" do
-				credentials = SmartMachine::Credentials.new
-				credentials.create
-				system("git init && git add . && git commit -m 'initial commit'")
-			end
+			pathname = File.expand_path "./#{name}"
+
+			self.setup_dotsmartmachine(pathname)
+
 			puts "New machine #{name} has been created."
 		end
 
-		def ssh
-			ssh = SmartMachine::SSH.new
-			ssh.login
+		def init_local(*args)
+			args.flatten!
+
+			pathname = File.expand_path "~/.smartmachine"
+
+			if args.delete("--force")
+				puts "Removing all the data to reinitialize."
+				FileUtils.rmtree(pathname)
+			end
+
+			if Dir.exist?(pathname)
+				puts "SmartMachine Local already initialized. If you want to delete all the data and reinitialize, please use the --force option."
+				return
+			end
+
+			self.setup_dotsmartmachine(pathname)
+
+			puts "SmartMachine Local Initialised."
 		end
 
-		def install
-			docker = SmartMachine::Docker.new
-			docker.install
+		def installer(*args)
+			args.flatten!
 
-			engine = SmartMachine::Engine.new
-			engine.install
+			action = args.shift
 
-			buildpacker = SmartMachine::Buildpacker.new
-			buildpacker.install
+			if args.empty? || args.delete("docker")
+				docker = SmartMachine::Docker.new
+				docker.public_send(action)
+			end
 
-			prereceiver = SmartMachine::Grids::Prereceiver.new
-			prereceiver.install
+			if args.empty? || args.delete("engine")
+				engine = SmartMachine::Engine.new
+				engine.public_send(action)
+			end
 
-			elasticsearch = SmartMachine::Grids::Elasticsearch.new
-			elasticsearch.install
-		end
+			if args.empty? || args.delete("buildpacker")
+				buildpacker = SmartMachine::Buildpacker.new
+				buildpacker.public_send(action)
+			end
 
-		def uninstall
-			elasticsearch = SmartMachine::Grids::Elasticsearch.new
-			elasticsearch.uninstall
+			if args.empty? || args.delete("prereceiver")
+				prereceiver = SmartMachine::Grids::Prereceiver.new
+				prereceiver.public_send(action)
+			end
 
-			prereceiver = SmartMachine::Grids::Prereceiver.new
-			prereceiver.uninstall
-
-			buildpacker = SmartMachine::Buildpacker.new
-			buildpacker.uninstall
-
-			engine = SmartMachine::Engine.new
-			engine.uninstall
-
-			docker = SmartMachine::Docker.new
-			docker.uninstall
-		end
-
-		def update
-			docker = SmartMachine::Docker.new
-			docker.update
-
-			engine = SmartMachine::Engine.new
-			engine.update
-
-			buildpacker = SmartMachine::Buildpacker.new
-			buildpacker.update
-
-			prereceiver = SmartMachine::Grids::Prereceiver.new
-			prereceiver.update
-
-			elasticsearch = SmartMachine::Grids::Elasticsearch.new
-			elasticsearch.update
+			if args.empty? || args.delete("elasticsearch")
+				elasticsearch = SmartMachine::Grids::Elasticsearch.new
+				elasticsearch.public_send(action)
+			end
 		end
 
 		def grids(*args)
 			args.flatten!
 
-			ssh = SmartMachine::SSH.new
-			ssh.run "smartmachine run grid #{args.join(" ")}"
+			if args.delete("--local")
+				exec "smartmachine runner grids #{args.join(" ")}"
+			else
+				ssh = SmartMachine::SSH.new
+				ssh.run "smartmachine runner grids #{args.join(" ")}"
+			end
 		end
 
 		def apps(*args)
 			args.flatten!
 
-			ssh = SmartMachine::SSH.new
-			ssh.run "smartmachine run app #{args.join(" ")}"
+			if args.delete("--local")
+				exec "smartmachine runner apps #{args.join(" ")}"
+			else
+				ssh = SmartMachine::SSH.new
+				ssh.run "smartmachine runner apps #{args.join(" ")}"
+			end
 		end
 
 		def ps(*args)
-			ssh = SmartMachine::SSH.new
-			ssh.run "docker ps #{args.join(' ')}"
+			args.flatten!
+
+			if args.delete("--local")
+				exec "docker ps #{args.join(' ')}"
+			else
+				ssh = SmartMachine::SSH.new
+				ssh.run "docker ps #{args.join(' ')}"
+			end
 		end
 
 		def logs(*args)
-			ssh = SmartMachine::SSH.new
-			ssh.run "docker logs #{args.join(' ')}"
-		end
-
-		# Works only for class methods of the class as no instance of the class is created
-		def run(*args)
 			args.flatten!
 
-			controller_type = args.shift.pluralize
-
-			if controller_type == "grids"
-				controller_name = args.shift
-			elsif  controller_type == "apps"
-				controller_name = "app"
+			if args.delete("--local")
+				exec "docker logs #{args.join(' ')}"
 			else
-				raise "Invalid run command. Please try again."
+				ssh = SmartMachine::SSH.new
+				ssh.run "docker logs #{args.join(' ')}"
 			end
+		end
 
-			controller = "SmartMachine::#{controller_type.capitalize}::#{controller_name.capitalize}"
-			action = args.shift.to_sym
-
-			args.empty? ? Object.const_get(controller).public_send(action) : Object.const_get(controller).public_send(action, args)
+		def ssh
+			ssh = SmartMachine::SSH.new
+			ssh.login
 		end
 
 		def getting_started
@@ -178,12 +175,18 @@ module SmartMachine
 			# sudo fail2ban-client status
 		end
 
-		def local?
+		def in_local_machine_dir?
 			File.file?("./config/master.key")
 		end
 
-		def remote?
-			File.directory?("#{SmartMachine.config.user_home_path}/.smartmachine")
+		def setup_dotsmartmachine(pathname)
+			FileUtils.mkdir pathname
+			FileUtils.cp_r "#{SmartMachine.config.root_path}/lib/smart_machine/templates/dotsmartmachine/.", pathname
+			FileUtils.chdir pathname do
+				credentials = SmartMachine::Credentials.new
+				credentials.create
+				system("git init && git add . && git commit -m 'initial commit'")
+			end	
 		end
 	end
 end
