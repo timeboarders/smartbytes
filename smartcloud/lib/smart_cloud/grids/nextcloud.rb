@@ -1,6 +1,6 @@
 # The main SmartCloud Grids Minio driver
 module SmartCloud
-	module Grids
+	class Grids
 		class Nextcloud < SmartCloud::Base
 			def initialize
 			end
