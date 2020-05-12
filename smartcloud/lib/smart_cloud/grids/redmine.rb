@@ -1,6 +1,6 @@
 # The main SmartCloud Grids Redmine driver
 module SmartCloud
-	module Grids
+	class Grids
 		class Redmine < SmartCloud::Base
 			def initialize
 			end
