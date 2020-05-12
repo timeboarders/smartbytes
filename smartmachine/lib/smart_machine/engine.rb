@@ -32,7 +32,7 @@ module SmartMachine
 			puts "done"
 
 			print "-----> Adding SmartMachine to PATH ... "
-			ssh.run "echo #{smartmachine_binary_template} > ~/.smartmachine/bin/smartmachine.sh"
+			ssh.run "echo '#{smartmachine_binary_template}' > ~/.smartmachine/bin/smartmachine.sh"
 			ssh.run "chmod +x ~/.smartmachine/bin/smartmachine.sh && sudo ln -sf ~/.smartmachine/bin/smartmachine.sh /usr/local/bin/smartmachine"
 			puts "done"
 
