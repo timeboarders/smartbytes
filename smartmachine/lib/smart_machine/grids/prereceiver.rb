@@ -27,8 +27,8 @@ module SmartMachine
 			end
 
 			def update
-				self.uninstall
-				self.install
+				uninstall
+				install
 			end
 
 			def create
@@ -39,13 +39,13 @@ module SmartMachine
 									#{SmartMachine.config.root_path}/lib/smart_machine/grids/prereceiver", out: File::NULL)
 						puts "done"
 
-						SmartMachine::Grids::Prereceiver.up
+						up
 					end
 				end
 			end
 
 			def destroy
-				SmartMachine::Grids::Prereceiver.down
+				down
 
 				if system("docker image inspect #{prereceiver_image_name}", [:out, :err] => File::NULL)
 					print "-----> Removing image #{prereceiver_image_name} ... "
