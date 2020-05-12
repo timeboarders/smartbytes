@@ -1,6 +1,6 @@
 # The main SmartMachine Apps Rails driver
 module SmartMachine
-	module Apps
+	class Apps
 		class Rails < SmartMachine::Base
 			def initialize
 			end

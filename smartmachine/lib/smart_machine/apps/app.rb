@@ -1,6 +1,6 @@
 # The main SmartMachine App driver
 module SmartMachine
-	module Apps
+	class Apps
 		class App < SmartMachine::Base
 			def initialize
 			end
