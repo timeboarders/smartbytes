@@ -18,6 +18,7 @@ require 'smart_machine/sync'
 
 require 'smart_machine/user'
 
+require 'smart_machine/grids'
 require 'smart_machine/grids/elasticsearch'
 require 'smart_machine/grids/minio'
 require 'smart_machine/grids/mysql'
@@ -25,5 +26,6 @@ require 'smart_machine/grids/nginx'
 require 'smart_machine/grids/prereceiver'
 require 'smart_machine/grids/solr'
 
+require 'smart_machine/apps'
 require 'smart_machine/apps/app'
 require 'smart_machine/apps/rails'
