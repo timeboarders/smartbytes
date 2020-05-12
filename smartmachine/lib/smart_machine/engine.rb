@@ -22,7 +22,7 @@ module SmartMachine
 			sync.run only: :push
 
 			print "-----> Creating image for SmartMachine ... "
-			ssh.run "docker image build -t #{engine_image_name} \
+			ssh.run "docker image build --quiet --tag #{engine_image_name} \
 					--build-arg SMARTMACHINE_MASTER_KEY=#{SmartMachine::Credentials.new.read_key} \
 					--build-arg SMARTMACHINE_VERSION=#{SmartMachine.version} \
 					--build-arg USER_NAME=`id -un` \
