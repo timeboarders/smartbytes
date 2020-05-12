@@ -5,7 +5,7 @@ module SmartMachine
 			def initialize
 			end
 
-			def self.up(*args)
+			def up(*args)
 				args.flatten!
 				exposed = args.empty? ? '' : args.shift
 
@@ -38,7 +38,7 @@ module SmartMachine
 				end
 			end
 	
-			def self.down
+			def down
 				if SmartMachine::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container solr ... "

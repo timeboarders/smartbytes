@@ -5,7 +5,7 @@ module SmartMachine
 			def initialize
 			end
 
-			def self.up
+			def up
 				if SmartMachine::Docker.running?
 					# Creating networks
 					unless system("docker network inspect redis-network", [:out, :err] => File::NULL)
@@ -34,7 +34,7 @@ module SmartMachine
 				end
 			end
 
-			def self.down
+			def down
 				if SmartMachine::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					print "-----> Stopping container redis ... "

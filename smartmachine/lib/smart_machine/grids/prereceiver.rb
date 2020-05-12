@@ -55,7 +55,7 @@ module SmartMachine
 				end
 			end
 
-			def self.up
+			def up
 				if SmartMachine::Docker.running?
 					if system("docker image inspect #{prereceiver_image_name}", [:out, :err] => File::NULL) && system("docker image inspect #{buildpacker_image_name}", [:out, :err] => File::NULL)
 						print "-----> Creating container prereceiver with image #{prereceiver_image_name} ... "
@@ -89,7 +89,7 @@ module SmartMachine
 				end
 			end
 	
-			def self.down
+			def down
 				if SmartMachine::Docker.running?
 					# Stopping & Removing containers - in reverse order
 					if system("docker inspect -f '{{.State.Running}}' 'prereceiver'", [:out, :err] => File::NULL)

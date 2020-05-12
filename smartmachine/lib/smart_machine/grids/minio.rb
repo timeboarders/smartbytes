@@ -5,7 +5,7 @@ module SmartMachine
 			def initialize
 			end
 
-			def self.up(*args)
+			def up(*args)
 				args.flatten!
 				exposed = args.empty? ? '' : args.shift
 
@@ -49,7 +49,7 @@ module SmartMachine
 				end
 			end
 
-			def self.down
+			def down
 				if SmartMachine::Docker.running?
 					# Disconnecting networks
 					system("docker network disconnect nginx-network minio")
