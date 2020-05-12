@@ -44,27 +44,27 @@ module SmartMachine
 
 			action = args.shift
 
-			if args.empty? || args.include? "docker"
+			if args.empty? || args.include?("docker")
 				docker = SmartMachine::Docker.new
 				docker.public_send(action)
 			end
 
-			if args.empty? || args.include? "engine"
+			if args.empty? || args.include?("engine")
 				engine = SmartMachine::Engine.new
 				engine.public_send(action)
 			end
 
-			if args.empty? || args.include? "buildpacker"
+			if args.empty? || args.include?("buildpacker")
 				buildpacker = SmartMachine::Buildpacker.new
 				buildpacker.public_send(action)
 			end
 
-			if args.empty? || args.include? "prereceiver"
+			if args.empty? || args.include?("prereceiver")
 				prereceiver = SmartMachine::Grids::Prereceiver.new
 				prereceiver.public_send(action)
 			end
 
-			if args.empty? || args.include? "elasticsearch"
+			if args.empty? || args.include?("elasticsearch")
 				elasticsearch = SmartMachine::Grids::Elasticsearch.new
 				elasticsearch.public_send(action)
 			end
