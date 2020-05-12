@@ -32,6 +32,7 @@ module SmartMachine
 			puts "done"
 
 			print "-----> Adding SmartMachine to PATH ... "
+			ssh.run "echo #{smartmachine_binary_template} > ~/.smartmachine/bin/smartmachine.sh"
 			ssh.run "chmod +x ~/.smartmachine/bin/smartmachine.sh && sudo ln -sf ~/.smartmachine/bin/smartmachine.sh /usr/local/bin/smartmachine"
 			puts "done"
 
@@ -57,6 +58,20 @@ module SmartMachine
 		def update
 			self.uninstall
 			self.install
+		end
+
+		def smartmachine_binary_template
+			<<~BASH
+				#!/bin/bash
+
+				docker run -it --rm \
+					-v "/home/$(whoami)/.smartmachine:/home/$(whoami)/.smartmachine" \
+					-v "/var/run/docker.sock:/var/run/docker.sock" \
+					-w "/home/$(whoami)/.smartmachine" \
+					-u `id -u` \
+					--entrypoint "smartmachine" \
+					#{engine_image_name} "$@"
+			BASH
 		end
 
 		def engine_image_name

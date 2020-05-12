@@ -31,6 +31,8 @@ module SmartMachine
 			files = [
 				'apps/***',
 
+				'bin/***',
+
 				'grids',
 
 				'grids/elasticsearch',
@@ -59,8 +61,6 @@ module SmartMachine
 				'apps/containers/.keep',
 				'apps/repositories',
 				'apps/repositories/.keep',
-
-				'bin/***',
 
 				'config',
 				'config/credentials.yml.enc',
