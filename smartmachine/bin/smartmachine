@@ -5,64 +5,77 @@ require "smart_machine"
 command = ARGV.shift
 
 machine = SmartMachine::Machine.new
-command = "" unless machine.local? || machine.remote?
 
 case command
 when "new"
 	machine.create ARGV
+	return
 
-when "credentials:edit"
-	credentials = SmartMachine::Credentials.new
-	credentials.edit
-
-when "environment:edit"
-	system("#{ENV['EDITOR']} config/environment.rb")
-
-when "users:edit"
-	system("#{ENV['EDITOR']} config/users.yml")
-
-when "ssh"
-	machine.ssh
-
-when "install"
-	machine.install
-
-when "update"
-	machine.update
-
-when "uninstall"
-	machine.uninstall
-
-when "grids"
-	machine.grids ARGV
-
-when "apps"
-	machine.apps ARGV
-
-when "ps"
-	machine.ps ARGV
-
-when "logs"
-	machine.logs ARGV
-
-when "sync"
-	sync = SmartMachine::Sync.new
-	sync.run
+when "--init-local"
+	machine.init_local ARGV
+	return
 
 when "--version"
 	puts "SmartMachine #{SmartMachine.version}"
+	return
 
-when "buildpacker"
-	action = ARGV.shift
-	buildpacker = SmartMachine::Buildpacker.new
-	buildpacker.public_send(action, *ARGV)
+when "--help"
+	puts "Help: Specify a valid smartmachine command to execute. Are you in the correct directory to run this command?"
+	return
 
-when "prereceiver"
-	action = ARGV.shift
-	prereceiver = SmartMachine::Grids::Prereceiver.new
-	prereceiver.public_send(action, *ARGV)
+when "runner"
+	exec "smartrunner #{ARGV.join(' ')}"
+	return
 
+end
+
+if machine.in_local_machine_dir?
+	case command
+	when "credentials:edit"
+		credentials = SmartMachine::Credentials.new
+		credentials.edit
+
+	when "environment:edit"
+		system("#{ENV['EDITOR']} config/environment.rb")
+
+	when "users:edit"
+		system("#{ENV['EDITOR']} config/users.yml")
+
+	when "ssh"
+		machine.ssh
+
+	when "install"
+		machine.installer ARGV.unshift("install")
+
+	when "update"
+		machine.installer ARGV.unshift("update")
+
+	when "uninstall"
+		machine.installer ARGV.unshift("uninstall")
+
+	when "apps"
+		machine.apps ARGV
+
+	when "grids"
+		machine.grids ARGV
+		return
+
+	when "ps"
+		machine.ps ARGV
+		return
+
+	when "logs"
+		machine.logs ARGV
+		return
+
+	when "sync"
+		sync = SmartMachine::Sync.new
+		sync.run
+
+	else
+		exec "smartmachine --help"
+
+	end
 else
-	puts "Specify a valid smartmachine command to execute. Are you in the correct directory to run this command?"
-
+	exec "smartmachine --help"
 end
