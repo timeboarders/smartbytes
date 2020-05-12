@@ -49,7 +49,7 @@ module SmartMachine
 			ssh = SmartMachine::SSH.new
 
 			ssh.run "sudo rm /usr/local/bin/smartmachine"
-			ssh.run "docker images | grep chainz | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} docker rmi smartmachine:{}"
+			ssh.run "docker rmi $(docker images -q smartmachine)"
 
 			puts "-----> SmartMachine Engine Uninstallation Complete"
 		end
