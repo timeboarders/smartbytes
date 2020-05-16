@@ -80,6 +80,8 @@ module SmartMachine
 					run_backup(type: "snapshot")
 				elsif type == "--start-schedule"
 					start_schedule
+				elsif type == "--stop-schedule"
+					stop_schedule
 				elsif type == "--transfer"
 					transfer_backups_to_external_storage
 				end
@@ -94,6 +96,15 @@ module SmartMachine
 			def start_schedule
 				print "-----> Starting automatic backup schedule for mysql ... "
 				if system("whenever --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --update-crontab")
+					puts "done"
+				else
+					puts "error"
+				end
+			end
+
+			def stop_schedule
+				print "-----> Stopping automatic backup schedule for mysql ... "
+				if system("whenever --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --clear-crontab")
 					puts "done"
 				else
 					puts "error"
