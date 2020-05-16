@@ -64,6 +64,8 @@ module SmartMachine
 				'apps/repositories/.keep',
 
 				'config',
+				'config/mysql',
+				'config/mysql/schedule.rb',
 				'config/credentials.yml.enc',
 				'config/environment.rb',
 

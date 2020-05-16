@@ -62,13 +62,6 @@ module SmartMachine
 				end
 			end
 
-			# TODO: Setup automatic actions for
-			# flushlogs at 12am and 12 pm every day
-			# daily backup at 2 am
-			# weekly backup at 2 am after daily backup is completed
-			# Check flush logs working
-			# Check if weekly is showing error when daily is not present
-
 			# Flushing logs
 			def flushlogs(*args)
 				system("docker exec #{container_name} sh -c 'exec mysqladmin flush-logs'")
@@ -81,10 +74,12 @@ module SmartMachine
 
 				if type == "--daily"
 					run_backup(type: "daily")
-				elsif type == "--weekly"
+				elsif type == "--promote-to-weekly"
 					run_backup(type: "weekly")
 				elsif type == "--snapshot"
 					run_backup(type: "snapshot")
+				elsif type == "--start-schedule"
+					start_schedule
 				elsif type == "--transfer"
 					transfer_backups_to_external_storage
 				end
@@ -94,6 +89,15 @@ module SmartMachine
 
 			# Transfer all current backups to external storage
 			def transfer_backups_to_external_storage
+			end
+
+			def start_schedule
+				print "-----> Starting automatic backup schedule for mysql ... "
+				if system("whenever --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --update-crontab")
+					puts "done"
+				else
+					puts "error"
+				end
 			end
 
 			def run_backup(type:)
