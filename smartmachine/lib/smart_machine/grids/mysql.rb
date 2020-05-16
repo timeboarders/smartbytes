@@ -66,6 +66,8 @@ module SmartMachine
 			# flushlogs at 12am and 12 pm every day
 			# daily backup at 2 am
 			# weekly backup at 2 am after daily backup is completed
+			# Check flush logs working
+			# Check if weekly is showing error when daily is not present
 
 			# Flushing logs
 			def flushlogs(*args)
@@ -164,7 +166,7 @@ module SmartMachine
 
 						clean_up(type: "weekly")
 					else
-						print "-----> Could not find daily backup to copy to weekly ... error"
+						puts "-----> Could not find daily backup to copy to weekly ... error"
 					end
 				end
 			end
