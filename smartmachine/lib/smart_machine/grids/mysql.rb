@@ -139,10 +139,10 @@ module SmartMachine
 
 				print "-----> Restoring the backup of all databases with version #{version} (without binlogs) in #{container_name} ... "
 				if system("docker exec -i #{container_name} sh -c \
-					'exec mysql \
+					'exec xz < #{backups_path}/#{type}/#{version}.sql.xz \
+					| mysql \
 					--user=root \
-					--password=#{SmartMachine.credentials.mysql[:root_password]} \
-					< #{backups_path}/#{type}/#{version}.sql")
+					--password=#{SmartMachine.credentials.mysql[:root_password]}")
 
 					puts "done"
 				else
@@ -169,7 +169,7 @@ module SmartMachine
 					--routines \
 					--triggers \
 					2>/dev/null | grep -v \'mysqldump: [Warning] Using a password\'' \
-					> #{backups_path}/#{type}/#{version}.sql")
+					| xz -9 > #{backups_path}/#{type}/#{version}.sql")
 
 					puts "done"
 
