@@ -43,6 +43,7 @@ module SmartMachine
 				'grids/minio/data/***',
 
 				'grids/mysql',
+				'grids/mysql/backups/***',
 				'grids/mysql/data/***',
 
 				'grids/nginx',
@@ -79,6 +80,8 @@ module SmartMachine
 				'grids/minio/data/.keep',
 
 				'grids/mysql',
+				'grids/mysql/backups',
+				'grids/mysql/backups/.keep',
 				'grids/mysql/data',
 				'grids/mysql/data/.keep',
 

@@ -21,7 +21,7 @@ module SmartMachine
 					# Creating & Starting containers
 					print "-----> Creating container mysql ... "
 					if system("docker create \
-						--name='mysql' \
+						--name='#{container_name}' \
 						--env MYSQL_ROOT_PASSWORD=#{SmartMachine.credentials.mysql[:root_password]} \
 						--env MYSQL_USER=#{SmartMachine.credentials.mysql[:username]} \
 						--env MYSQL_PASSWORD=#{SmartMachine.credentials.mysql[:password]} \
@@ -60,7 +60,139 @@ module SmartMachine
 						puts "done"
 					end
 				end
-			end			
+			end
+
+			# TODO: Setup automatic actions for
+			# flushlogs at 12am and 12 pm every day
+			# daily backup at 2 am
+			# weekly backup at 2 am after daily backup is completed
+
+			# Flushing logs
+			def flushlogs(*args)
+				system("docker exec #{container_name} sh -c 'exec mysqladmin flush-logs'")
+			end
+
+			# Create snapshot using the grids snapshot command
+			def snapshot(*args)
+				args.flatten!
+				type = args.empty? ? '--manual' : args.shift
+
+				if type == "--daily"
+					backup(type: "daily")
+				elsif type == "--weekly"
+					backup(type: "weekly")
+				elsif type == "--manual"
+					backup(type: "manual")
+				elsif type == "--transfer"
+					transfer_snapshots_to_external_storage
+				end
+			end
+
+			# Transfer all current snapshots to external storage
+			def transfer_snapshots_to_external_storage
+			end
+
+			private
+
+			def backup(type:)
+				FileUtils.mkdir_p("#{backups_path}/#{type}")
+
+				unless type == "weekly"
+					standard_backup(type: type)
+				else
+					weekly_backup_from_latest_daily
+				end
+			end
+
+			def restore(type:, version:)
+				printf "Are you sure you want to do this? It will destroy all the old databases? Type 'YES' and press enter to continue: ".red
+				prompt = STDIN.gets.chomp
+				return unless prompt == 'YES'
+
+				print "-----> Restoring the backup of all databases with version #{version} (without binlogs) in #{container_name} ... "
+				if system("docker exec -i #{container_name} sh -c \
+					'exec mysql \
+					--user=root \
+					--password=#{SmartMachine.credentials.mysql[:root_password]} \
+					< #{backups_path}/#{type}/#{version}.sql")
+
+					puts "done"
+				else
+					puts "error... check data & try again"
+				end
+			end
+
+			# Create a standard backup
+			def standard_backup(type:)
+				# Note: There should be no space between + and " in version.
+				# Note: date will be UTC date until timezone has been changed.
+				version = `date +"%Y%m%d%H%M%S"`.chomp!
+
+				print "-----> Creating #{type} backup of all databases with version #{version} in #{container_name} ... "
+				if system("docker exec #{container_name} sh -c \
+					'exec mysqldump \
+					--user=root \
+					--password=#{SmartMachine.credentials.mysql[:root_password]} \
+					--all-databases \
+					--single-transaction \
+					--flush-logs \
+					--master-data=2 \
+					--events \
+					--routines \
+					--triggers \
+					2>/dev/null | grep -v \'mysqldump: [Warning] Using a password\'' \
+					> #{backups_path}/#{type}/#{version}.sql")
+
+					puts "done"
+
+					clean_up(type: type)
+				else
+					puts "error... check data & try again"
+				end
+			end
+
+			# Copy weekly backup from the daily backup
+			def weekly_backup_from_latest_daily
+				Dir.chdir("#{backups_path}/daily") do
+					backup_versions = Dir.glob('*').sort
+					backup_version = backup_versions.last
+
+					if backup_version
+						print "-----> Creating weekly backup from daily backup with version #{backup_version} ... "
+						system("cp ./#{backup_version} ../weekly/#{backup_version}")
+						puts "done"
+
+						clean_up(type: "weekly")
+					else
+						print "-----> Could not find daily backup to copy to weekly ... error"
+					end
+				end
+			end
+
+			# Clean up very old versions
+			def clean_up(type:)
+				keep_releases = { manual: 2, daily: 7, weekly: 3 }
+
+				Dir.chdir("#{backups_path}/#{type}") do
+					backup_versions = Dir.glob('*').sort
+					destroy_count = backup_versions.count - keep_releases[type.to_sym]
+					if destroy_count > 0
+						print "Deleting older #{type} backups ... "
+						destroy_count.times do
+							FileUtils.rm_r(File.join(Dir.pwd, backup_versions.shift))
+						end
+						puts "done"
+					end
+				end
+			end
+
+			def backups_path
+				"#{SmartMachine.config.user_home_path}/.smartmachine/grids/mysql/backups"
+			end
+
+			def container_name
+				"mysql"
+			end
 		end
 	end
 end
