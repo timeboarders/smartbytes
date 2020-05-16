@@ -74,29 +74,29 @@ module SmartMachine
 				system("docker exec #{container_name} sh -c 'exec mysqladmin flush-logs'")
 			end
 
-			# Create snapshot using the grids snapshot command
-			def snapshot(*args)
+			# Create backup using the grids backup command
+			def backup(*args)
 				args.flatten!
-				type = args.empty? ? '--manual' : args.shift
+				type = args.empty? ? '--snapshot' : args.shift
 
 				if type == "--daily"
-					backup(type: "daily")
+					run_backup(type: "daily")
 				elsif type == "--weekly"
-					backup(type: "weekly")
-				elsif type == "--manual"
-					backup(type: "manual")
+					run_backup(type: "weekly")
+				elsif type == "--snapshot"
+					run_backup(type: "snapshot")
 				elsif type == "--transfer"
-					transfer_snapshots_to_external_storage
+					transfer_backups_to_external_storage
 				end
-			end
-
-			# Transfer all current snapshots to external storage
-			def transfer_snapshots_to_external_storage
 			end
 
 			private
 
-			def backup(type:)
+			# Transfer all current backups to external storage
+			def transfer_backups_to_external_storage
+			end
+
+			def run_backup(type:)
 				FileUtils.mkdir_p("#{backups_path}/#{type}")
 
 				unless type == "weekly"
@@ -173,7 +173,7 @@ module SmartMachine
 
 			# Clean up very old versions
 			def clean_up(type:)
-				keep_releases = { manual: 2, daily: 7, weekly: 3 }
+				keep_releases = { snapshot: 2, daily: 7, weekly: 3 }
 
 				Dir.chdir("#{backups_path}/#{type}") do
 					backup_versions = Dir.glob('*').sort
