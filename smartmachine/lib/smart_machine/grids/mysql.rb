@@ -95,7 +95,7 @@ module SmartMachine
 
 			def start_schedule
 				print "-----> Starting automatic backup schedule for mysql ... "
-				if system("whenever --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --update-crontab")
+				if system("whenever --set 'MAILTO=#{SmartMachine.config.sysadmin_email}' --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --update-crontab")
 					puts "done"
 				else
 					puts "error"
@@ -104,7 +104,7 @@ module SmartMachine
 
 			def stop_schedule
 				print "-----> Stopping automatic backup schedule for mysql ... "
-				if system("whenever --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --clear-crontab")
+				if system("whenever --set 'MAILTO=#{SmartMachine.config.sysadmin_email}' --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --clear-crontab")
 					puts "done"
 				else
 					puts "error"
