@@ -64,7 +64,18 @@ module SmartMachine
 
 			# Flushing logs
 			def flushlogs(*args)
-				system("docker exec #{container_name} sh -c 'exec mysqladmin flush-logs'")
+				print "-----> Flushing logs for #{container_name} ... "
+				if system("docker exec #{container_name} sh -c \
+					'exec mysqladmin \
+					--user=root \
+					--password=#{SmartMachine.credentials.mysql[:root_password]} \
+					flush-logs \
+					2>/dev/null | grep -v \'mysqldump: [Warning] Using a password\''")
+
+					puts "done"
+				else
+					puts "error"
+				end
 			end
 
 			# Create backup using the grids backup command
