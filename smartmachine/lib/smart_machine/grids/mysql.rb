@@ -133,7 +133,7 @@ module SmartMachine
 			end
 
 			def restore(type:, version:)
-				printf "Are you sure you want to do this? It will destroy all the old databases? Type 'YES' and press enter to continue: ".red
+				printf "Are you sure you want to do this? It will destroy/overwrite all the current databases? Type 'YES' and press enter to continue: ".red
 				prompt = STDIN.gets.chomp
 				return unless prompt == 'YES'
 
