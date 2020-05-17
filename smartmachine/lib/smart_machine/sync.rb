@@ -49,6 +49,9 @@ module SmartMachine
 				'grids/nginx',
 				'grids/nginx/certificates/***',
 
+				'grids/scheduler',
+				'grids/scheduler/crontabs/***',
+
 				'grids/solr',
 				'grids/solr/solr/***',
 			]
@@ -100,6 +103,10 @@ module SmartMachine
 				'grids/redis',
 				'grids/redis/data',
 				'grids/redis/data/.keep',
+
+				'grids/scheduler',
+				'grids/scheduler/crontabs',
+				'grids/scheduler/crontabs/.keep',
 
 				'grids/solr',
 				'grids/solr/solr',

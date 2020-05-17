@@ -24,6 +24,7 @@ require 'smart_machine/grids/minio'
 require 'smart_machine/grids/mysql'
 require 'smart_machine/grids/nginx'
 require 'smart_machine/grids/prereceiver'
+require 'smart_machine/grids/scheduler'
 require 'smart_machine/grids/solr'
 
 require 'smart_machine/apps'

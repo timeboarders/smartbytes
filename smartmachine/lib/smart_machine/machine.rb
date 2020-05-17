@@ -64,6 +64,11 @@ module SmartMachine
 				prereceiver.public_send(action)
 			end
 
+			if args.empty? || args.include?("scheduler")
+				scheduler = SmartMachine::Grids::Scheduler.new
+				scheduler.public_send(action)
+			end
+
 			if args.empty? || args.include?("elasticsearch")
 				elasticsearch = SmartMachine::Grids::Elasticsearch.new
 				elasticsearch.public_send(action)

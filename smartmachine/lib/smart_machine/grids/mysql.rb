@@ -104,20 +104,18 @@ module SmartMachine
 			end
 
 			def start_schedule
-				print "-----> Starting automatic backup schedule for mysql ... "
-				if system("whenever --set 'MAILTO=#{SmartMachine.config.sysadmin_email}' --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --update-crontab")
-					puts "done"
+				if system("docker inspect -f '{{.State.Running}}' 'scheduler'", [:out, :err] => File::NULL)
+					system("docker exec scheduler sh -c 'exec scheduler start mysql-backups'")
 				else
-					puts "error"
+					puts "Scheduler is not running. Please start scheduler before scheduling"
 				end
 			end
 
 			def stop_schedule
-				print "-----> Stopping automatic backup schedule for mysql ... "
-				if system("whenever --set 'MAILTO=#{SmartMachine.config.sysadmin_email}' --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --clear-crontab")
-					puts "done"
+				if system("docker inspect -f '{{.State.Running}}' 'scheduler'", [:out, :err] => File::NULL)
+					system("docker exec scheduler sh -c 'exec scheduler stop mysql-backups'")
 				else
-					puts "error"
+					puts "Scheduler is not running. Please start scheduler before scheduling"
 				end
 			end
 
