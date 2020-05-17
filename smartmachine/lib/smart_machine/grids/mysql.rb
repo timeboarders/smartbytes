@@ -169,7 +169,7 @@ module SmartMachine
 					--routines \
 					--triggers \
 					2>/dev/null | grep -v \'mysqldump: [Warning] Using a password\'' \
-					| xz -9 > #{backups_path}/#{type}/#{version}.sql")
+					| xz -9 > #{backups_path}/#{type}/#{version}.sql.xz")
 
 					puts "done"
 
