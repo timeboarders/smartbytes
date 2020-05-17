@@ -69,8 +69,7 @@ module SmartMachine
 					'exec mysqladmin \
 					--user=root \
 					--password=#{SmartMachine.credentials.mysql[:root_password]} \
-					flush-logs \
-					2>/dev/null | grep -v \'mysqldump: [Warning] Using a password\''")
+					flush-logs'")
 
 					puts "done"
 				else
@@ -155,8 +154,9 @@ module SmartMachine
 				# Note: There should be no space between + and " in version.
 				# Note: date will be UTC date until timezone has been changed.
 				version = `date +"%Y%m%d%H%M%S"`.chomp!
+				backup_version_file = "#{version}.sql.xz"
 
-				print "-----> Creating #{type} backup of all databases with version #{version} in #{container_name} ... "
+				print "-----> Creating #{type} backup of all databases with backup version file #{backup_version_file} in #{container_name} ... "
 				if system("docker exec #{container_name} sh -c \
 					'exec mysqldump \
 					--user=root \
@@ -167,9 +167,8 @@ module SmartMachine
 					--master-data=2 \
 					--events \
 					--routines \
-					--triggers \
-					2>/dev/null | grep -v \'mysqldump: [Warning] Using a password\'' \
-					| xz -9 > #{backups_path}/#{type}/#{version}.sql.xz")
+					--triggers' \
+					| xz -9 > #{backups_path}/#{type}/#{backup_version_file}")
 
 					puts "done"
 
@@ -186,7 +185,7 @@ module SmartMachine
 					backup_version = backup_versions.last
 
 					if backup_version
-						print "-----> Creating weekly backup from daily backup with version #{backup_version} ... "
+						print "-----> Creating weekly backup from daily backup version file #{backup_version} ... "
 						system("cp ./#{backup_version} ../weekly/#{backup_version}")
 						puts "done"
 
