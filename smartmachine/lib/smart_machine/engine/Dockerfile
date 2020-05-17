@@ -12,6 +12,7 @@ RUN sed -i "s/999/99/" /etc/group && \
 
 # Essentials
 RUN apk add --update build-base && \
+	apk add --update xz && \
 	apk add --update docker && \
 	apk add --update git && \
     rm -rf /var/cache/apk/*
