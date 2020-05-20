@@ -88,10 +88,6 @@ module SmartMachine
 					run_backup(type: "weekly")
 				elsif type == "--snapshot"
 					run_backup(type: "snapshot")
-				elsif type == "--start-schedule"
-					start_schedule
-				elsif type == "--stop-schedule"
-					stop_schedule
 				elsif type == "--transfer"
 					transfer_backups_to_external_storage
 				end
@@ -101,22 +97,6 @@ module SmartMachine
 
 			# Transfer all current backups to external storage
 			def transfer_backups_to_external_storage
-			end
-
-			def start_schedule
-				if system("docker inspect -f '{{.State.Running}}' 'scheduler'", [:out, :err] => File::NULL)
-					system("docker exec scheduler sh -c 'exec scheduler start mysql-backups'")
-				else
-					puts "Scheduler is not running. Please start scheduler before scheduling"
-				end
-			end
-
-			def stop_schedule
-				if system("docker inspect -f '{{.State.Running}}' 'scheduler'", [:out, :err] => File::NULL)
-					system("docker exec scheduler sh -c 'exec scheduler stop mysql-backups'")
-				else
-					puts "Scheduler is not running. Please start scheduler before scheduling"
-				end
 			end
 
 			def run_backup(type:)
