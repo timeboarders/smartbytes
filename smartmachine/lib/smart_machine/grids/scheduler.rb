@@ -131,20 +131,23 @@ module SmartMachine
 				args.flatten!
 				action = args.empty? ? '' : args.shift
 
+				return unless ['start', 'stop'].include? action
+
+				command = "whenever --set 'job_template=:job' --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb"
+
 				if action == 'start'
-					print "-----> Starting automatic backup schedule for mysql ... "
-					if system("whenever --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --update-crontab", out: File::NULL)
-						puts "done"
-					else
-						puts "error"
-					end
+					command += " --update-crontab"
+					action_text = "Starting"
 				elsif action == 'stop'
-					print "-----> Stopping automatic backup schedule for mysql ... "
-					if system("whenever --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb --clear-crontab", out: File::NULL)
-						puts "done"
-					else
-						puts "error"
-					end
+					command += " --clear-crontab"
+					action_text = "Stopping"
+				end
+
+				print "-----> #{action_text} automatic backup schedule for mysql ... "
+				if system(command, out: File::NULL)
+					puts "done"
+				else
+					puts "error"
 				end
 			ensure
 				backup_crontabs
