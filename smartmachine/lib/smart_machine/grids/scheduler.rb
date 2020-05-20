@@ -66,7 +66,7 @@ module SmartMachine
 							--workdir /home/`id -un`/.smartmachine \
 							--volume='#{SmartMachine.config.user_home_path}/.smartmachine/config:#{SmartMachine.config.user_home_path}/.smartmachine/config' \
 							--volume='#{SmartMachine.config.user_home_path}/.smartmachine/grids/scheduler/crontabs:/crontabs' \
-							--volume='#{SmartMachine.config.user_home_path}/.smartmachine/bin/smartmachine.sh:/usr/local/bundle/bin/smartmachine' \
+							--volume='#{SmartMachine.config.user_home_path}/.smartmachine/bin/smartmachine.sh:/usr/local/bin/smartmachine' \
 							--volume='/var/run/docker.sock:/var/run/docker.sock:ro' \
 							--restart='always' \
 							#{scheduler_image_name}", out: File::NULL)
