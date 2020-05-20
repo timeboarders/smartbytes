@@ -9,10 +9,10 @@ scheduler = SmartMachine::Grids::Scheduler.new
 case command
 when "start"
 	action = ARGV.shift
-	scheduler.start_mysql_backups if action == 'mysql-backups'
+	scheduler.mysql("start") if action == "--mysql"
 
 when "stop"
 	action = ARGV.shift
-	scheduler.stop_mysql_backups if action == 'mysql-backups'
+	scheduler.mysql("stop") if action == "--mysql"
 
 end
