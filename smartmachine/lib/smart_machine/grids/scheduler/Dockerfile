@@ -5,6 +5,7 @@ LABEL maintainer="Timeboard <hello@timeboard.me>"
 
 # Scheduler Essentials
 RUN apk add --update busybox-suid && \
+	apk add --update bash && \
     rm -rf /var/cache/apk/*
 
 # Gems

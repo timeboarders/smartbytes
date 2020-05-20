@@ -133,7 +133,7 @@ module SmartMachine
 
 				return unless ['start', 'stop'].include? action
 
-				command = "whenever --set 'job_template=:job' --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb"
+				command = "whenever --set 'output=#{SmartMachine.config.user_home_path}/.smartmachine/grids/scheduler/crontabs/crontabs.log' --load-file #{SmartMachine.config.user_home_path}/.smartmachine/config/mysql/schedule.rb"
 
 				if action == 'start'
 					command += " --update-crontab"
@@ -158,10 +158,10 @@ module SmartMachine
 			end
 
 			def restore_crontabs
-				if system("docker exec scheduler sh -c 'exec test -f /crontabs/`id -un`'")
+				if system("docker exec scheduler sh -c 'exec test -f #{SmartMachine.config.user_home_path}/.smartmachine/grids/scheduler/crontabs/`id -un`'")
 					print "-----> Restoring latest crontabs ... "
 
-					if system("docker exec scheduler sh -c 'exec crontab - < /crontabs/`id -un`'")
+					if system("docker exec scheduler sh -c 'exec crontab - < #{SmartMachine.config.user_home_path}/.smartmachine/grids/scheduler/crontabs/`id -un`'")
 						puts "done"
 					else
 						puts "error"
@@ -171,7 +171,7 @@ module SmartMachine
 
 			def backup_crontabs
 				print "-----> Backing up latest crontabs ... "
-				if system("crontab -l > /crontabs/`id -un`", out: File::NULL)
+				if system("crontab -l > #{SmartMachine.config.user_home_path}/.smartmachine/grids/scheduler/crontabs/`id -un`", out: File::NULL)
 					puts "done"
 				else
 					puts "error"
