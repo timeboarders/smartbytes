@@ -11,4 +11,4 @@ RUN apk add --update busybox-suid && \
 # Gems
 RUN gem install whenever -v 1.0.0
 
-CMD ["crond", "-f"]
+CMD ["crond", "-f", "-l", "0", "-L", "/dev/stdout"]
