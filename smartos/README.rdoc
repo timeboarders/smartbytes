@@ -1,0 +1,9 @@
+= Welcome to SmartOS
+
+== What's SmartOS?
+
+Wait for it :)
+
+== License
+
+SmartOS is released under the [MIT License](https://opensource.org/licenses/MIT).
