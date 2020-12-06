@@ -1,5 +1,6 @@
 require "ostruct"
 require "yaml"
+require "os"
 
 # The main SmartMachine driver
 module SmartMachine

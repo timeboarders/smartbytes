@@ -44,39 +44,33 @@ module SmartMachine
 			end
 		end
 
-		def installer(*args)
-			args.flatten!
-
-			action = args.shift
-
-			if args.empty? || args.include?("docker")
-				docker = SmartMachine::Docker.new
-				docker.public_send(action)
+		def install(package_name:)
+			package_name = package_name&.to_sym
+			if packages[package_name].present?
+				package = packages[package_name].new
+				package.install
+			else
+				puts "Help: Package name not provided. Please provide package name to install."
 			end
+		end
 
-			if args.empty? || args.include?("engine")
-				engine = SmartMachine::Engine.new
-				engine.public_send(action)
+		def uninstall(package_name:)
+			package_name = package_name&.to_sym
+			if packages[package_name].present?
+				package = packages[package_name].new
+				package.uninstall
+			else
+				puts "Help: Package name not provided. Please provide package name to uninstall."
 			end
+		end
 
-			if args.empty? || args.include?("buildpacker")
-				buildpacker = SmartMachine::Buildpacker.new
-				buildpacker.public_send(action)
-			end
-
-			if args.empty? || args.include?("prereceiver")
-				prereceiver = SmartMachine::Grids::Prereceiver.new
-				prereceiver.public_send(action)
-			end
-
-			if args.empty? || args.include?("scheduler")
-				scheduler = SmartMachine::Grids::Scheduler.new
-				scheduler.public_send(action)
-			end
-
-			if args.empty? || args.include?("elasticsearch")
-				elasticsearch = SmartMachine::Grids::Elasticsearch.new
-				elasticsearch.public_send(action)
+		def update(package_name:)
+			package_name = package_name&.to_sym
+			if packages[package_name].present?
+				package = packages[package_name].new
+				package.update
+			else
+				puts "Help: Package name not provided. Please provide package name to update."
 			end
 		end
 
@@ -182,6 +176,19 @@ module SmartMachine
 
 		def in_machine_dir?
 			File.file?("./config/master.key")
+		end
+
+		private
+
+		def packages
+			{
+				docker: SmartMachine::Docker,
+				engine: SmartMachine::Engine,
+				buildpacker: SmartMachine::Buildpacker,
+				prereceiver: SmartMachine::Grids::Prereceiver,
+				scheduler: SmartMachine::Grids::Scheduler,
+				elasticsearch: SmartMachine::Grids::Elasticsearch
+			}
 		end
 	end
 end

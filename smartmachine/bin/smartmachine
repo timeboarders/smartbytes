@@ -32,11 +32,11 @@ if machine.in_machine_dir?
 	when "ssh"
 		machine.ssh
 	when "install"
-		machine.installer ARGV.unshift("install")
-	when "update"
-		machine.installer ARGV.unshift("update")
+		machine.install package_name: ARGV[0]
 	when "uninstall"
-		machine.installer ARGV.unshift("uninstall")
+		machine.uninstall package_name: ARGV[0]
+	when "update"
+		machine.update package_name: ARGV[0]
 	when "apps"
 		machine.apps ARGV
 	when "grids"
