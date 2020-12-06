@@ -26,11 +26,6 @@ module SmartMachine
 				puts "-----> Prereceiver Uninstallation Complete"
 			end
 
-			def update
-				uninstall
-				install
-			end
-
 			def create
 				unless system("docker image inspect #{prereceiver_image_name}", [:out, :err] => File::NULL)
 					print "-----> Creating image #{prereceiver_image_name} ... "

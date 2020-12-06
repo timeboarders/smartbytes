@@ -25,11 +25,6 @@ module SmartMachine
 			puts "-----> Buildpacker Uninstallation Complete"
 		end
 
-		def update
-			self.uninstall
-			self.install
-		end
-
 		def create
 			self.destroy
 

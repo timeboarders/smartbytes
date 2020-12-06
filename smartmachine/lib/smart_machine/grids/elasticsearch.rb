@@ -28,11 +28,6 @@ module SmartMachine
 				puts "-----> Elasticsearch Uninstallation Complete"
 			end
 
-			def update
-				self.uninstall
-				self.install
-			end
-
 			def up(*args)
 				args.flatten!
 				exposed = args.empty? ? '' : args.shift

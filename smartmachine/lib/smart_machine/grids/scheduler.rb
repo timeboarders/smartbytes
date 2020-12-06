@@ -26,11 +26,6 @@ module SmartMachine
 				puts "-----> Scheduler Uninstallation Complete"
 			end
 
-			def update
-				uninstall
-				install
-			end
-
 			def create
 				unless system("docker image inspect #{scheduler_image_name}", [:out, :err] => File::NULL)
 					print "-----> Creating image #{scheduler_image_name} ... "

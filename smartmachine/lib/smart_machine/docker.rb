@@ -42,10 +42,6 @@ module SmartMachine
 			puts "-----> Docker Uninstallation Complete"
 		end
 
-		def update
-			# Nothing to do
-		end
-
 		def self.running?
 			if system("docker info", [:out, :err] => File::NULL)
 				true

@@ -56,11 +56,6 @@ module SmartMachine
 			puts "-----> SmartMachine Engine Uninstallation Complete"
 		end
 
-		def update
-			self.uninstall
-			self.install
-		end
-
 		def smartmachine_binary_template
 			<<~BASH
 				#!/bin/bash

@@ -64,16 +64,6 @@ module SmartMachine
 			end
 		end
 
-		def update(package_name:)
-			package_name = package_name&.to_sym
-			if packages[package_name].present?
-				package = packages[package_name].new
-				package.update
-			else
-				puts "Help: Package name not provided. Please provide package name to update."
-			end
-		end
-
 		def grids(*args)
 			args.flatten!
 
