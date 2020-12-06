@@ -66,35 +66,35 @@ Feel free to choose only the grids you need. You can start or stop a grid at any
 === 1. Nginx Grid
 Lets you run a nginx web server fully equipped with https encryption using letsencrypt.
     
-    $ smartmachine grids nginx up # Start Grid
-    $ smartmachine grids nginx down # Stop Grid
+    $ smartmachine grids nginx up # To start the grid
+    $ smartmachine grids nginx down # To stop the grid
 
 === 2. Prereceiver Grid
 Lets you push rails apps to your server without any additional configuration or downtime using <b>git push production master</b>.
 
-    $ smartmachine grids prereceiver install # Install Grid
-    $ smartmachine grids prereceiver up # Start Grid
-    $ smartmachine grids prereceiver down # Stop Grid
+    $ smartmachine grids prereceiver install # To install the grid
+    $ smartmachine grids prereceiver up # To start the grid
+    $ smartmachine grids prereceiver down # To stop the grid
 
 === 3. Mysql Grid
 Lets you run a mysql server instance with as many databases as you need.
 
-    $ smartmachine grids mysql up # Start Grid
-    $ smartmachine grids mysql down # Stop Grid
+    $ smartmachine grids mysql up # To start the grid
+    $ smartmachine grids mysql down # To stop the grid
 
 === 4. Elasticsearch Grid
 Lets you run elasticsearch server instance with data persistance.
 
-    $ smartmachine grids elasticsearch install # Install Grid
-    $ smartmachine grids elasticsearch up # Start Grid
-    $ smartmachine grids elasticsearch down # Stop Grid
+    $ smartmachine grids elasticsearch install # To install the grid
+    $ smartmachine grids elasticsearch up # To start the grid
+    $ smartmachine grids elasticsearch down # To stop the grid
 
 === 5. Scheduler Grid
 Lets you setup scheduling services like database backups, etc.
 
-    $ smartmachine grids scheduler install # Install Grid
-    $ smartmachine grids scheduler up # Start Grid
-    $ smartmachine grids scheduler down # Stop Grid
+    $ smartmachine grids scheduler install # To install the grid
+    $ smartmachine grids scheduler up # To start the grid
+    $ smartmachine grids scheduler down # To stop the grid
 
 == Creating Apps on Server
 
