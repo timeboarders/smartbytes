@@ -61,33 +61,35 @@ If using SmartMachine on a server, perform the below steps before proceeding.
 
 == Choosing Grids of your Choice
 
+Feel free to choose only the grids you need. You can start or stop a grid at anytime independent of the others.
+
 === 1. Nginx Grid
 Lets you run a nginx web server fully equipped with https encryption using letsencrypt.
     
     $ smartmachine grids nginx up # To start the grid
     $ smartmachine grids nginx down # To stop the grid
 
-=== 1. Prereceiver Grid
+=== 2. Prereceiver Grid
 Lets you push rails apps to your server without any additional configuration or downtime using <b>git push production master</b>.
 
     $ smartmachine grids prereceiver install # To install the grid
     $ smartmachine grids prereceiver up # To start the grid
     $ smartmachine grids prereceiver down # To stop the grid
 
-=== 1. Mysql Grid
+=== 3. Mysql Grid
 Lets you run a mysql server instance with as many databases as you need.
 
     $ smartmachine grids mysql up # To start the grid
     $ smartmachine grids mysql down # To stop the grid
 
-=== 1. Elasticsearch Grid
+=== 4. Elasticsearch Grid
 Lets you run elasticsearch server instance with data persistance.
 
     $ smartmachine grids elasticsearch install # To install the grid
     $ smartmachine grids elasticsearch up # To start the grid
     $ smartmachine grids elasticsearch down # To stop the grid
 
-=== 1. Scheduler Grid
+=== 5. Scheduler Grid
 Lets you setup scheduling services like database backups, etc.
 
     $ smartmachine grids scheduler install # To install the grid
