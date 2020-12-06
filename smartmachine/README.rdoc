@@ -4,8 +4,9 @@ Git push should deploy.
 
 SmartMachine is a full-stack deployment framework for rails optimized for admin programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration.
 
-Deploy your Rails apps to your own server with - git push production master
+Before you begin, you should install ruby on your system.
 
+Deploy your Rails apps to your own server with - git push production master
 
 == How it Works
 
@@ -15,72 +16,80 @@ After you run the below commands, you get.
 3. Setup and installation of docker based Mysql, Solr, Nginx, App Prereceiver.
 4. Deployment of your Rails apps to your own server with - git push production master
 
+== Prerequisites
 
-== Setup a New Machine - Ubuntu 18.04 LTS
+If using SmartMachine on a server, perform the below steps before proceeding.
 
-1. Getting Started with Linode:
+1. Ensure that you have debian LTS installed on the server.
+
+    $ cat /etc/issue
+
+   here it should say some latest version of debian LTS.
+
+2. Getting Started with Linode:
 
     https://www.linode.com/docs/getting-started/
 
-2. How to Secure Your Server:
+3. How to Secure Your Server:
 
     https://www.linode.com/docs/security/securing-your-server/
 
+== Getting Started
 
-== Install SmartMachine
+1. Install SmartMachine at the command prompt:
 
-1. Install Ruby:
+    $ gem install smartmachine
 
-    $ sudo apt-get install ruby-full
+2. At the command prompt create a new SmartMachine move into it:
 
-2. Add gem executables to PATH (remember to check ruby version in the path):
+    $ smartmachine new yourmachinename
+    $ cd yourmachinename
 
-    $ echo 'export PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"' >> ~/.bashrc && source ~/.bashrc
+   here "yourmachinename" is the machine name you can choose
 
-3. Install smartmachine for current user:
+3. Install docker from the command prompt and add UFW rules for Docker, if specified at the end of installation:
 
-    $ gem install smartmachine --user-install
+    $ smartmachine install docker
 
-4. Initialize smartmachine:
+4. Install engine from the command prompt:
 
-    $ smartmachine init
+    $ smartmachine install engine
 
+5. Install buildpacker from the command prompt:
 
-== TODO - Setup Machine
-1. Getting Started and Securing your Server:
+    $ smartmachine install buildpacker
 
-    $ smartmachine machine install
+== Choosing Grids of your Choice
 
-
-== Install Docker
-
-1. Run docker install command:
-
-    $ smartmachine docker install
-
-2. Add UFW rules for Docker as specified at the end of installation.
-
-
-== Starting Grids as per Choice
-
-1. Start mysql grid:
+1. Mysql Grid:
 
     $ smartmachine grids mysql up
+    $ smartmachine grids mysql down
 
-2. Start solr grid:
+2. Elasticsearch Grid:
 
-    $ smartmachine grids solr up
+    $ smartmachine grids elasticsearch install
+    $ smartmachine grids elasticsearch up
+    $ smartmachine grids elasticsearch down
 
-3. Start nginx grid:
+4. Nginx Grid:
 
     $ smartmachine grids nginx up
+    $ smartmachine grids nginx down
 
-4. Start prereceiver grid:
+5. Prereceiver Grid:
 
+    $ smartmachine grids prereceiver install
     $ smartmachine grids prereceiver up
+    $ smartmachine grids prereceiver down
 
+6. Scheduler Grid:
 
-== TODO - Creating New App
+    $ smartmachine grids scheduler install
+    $ smartmachine grids scheduler up
+    $ smartmachine grids scheduler down
+
+== Creating Apps on Server
 
 1. Creating a new bare app on the server:
 
