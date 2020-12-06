@@ -47,7 +47,7 @@ If using SmartMachine on a server, perform the below steps before proceeding.
 
    here "yourmachinename" is the machine name you can choose
 
-3. Install docker from the command prompt and add UFW rules for Docker, if specified at the end of installation:
+3. Install docker from the command prompt, and add UFW rules for Docker if specified at the end of installation:
 
     $ smartmachine install docker
 
