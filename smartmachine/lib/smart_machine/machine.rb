@@ -89,22 +89,22 @@ module SmartMachine
 		def ps(*args)
 			args.flatten!
 
-			if args.delete("--local")
-				exec "docker ps #{args.join(' ')}"
-			else
+			if SmartMachine.config.machine_mode == :server
 				ssh = SmartMachine::SSH.new
 				ssh.run "docker ps #{args.join(' ')}"
+			else
+				exec "docker ps #{args.join(' ')}"
 			end
 		end
 
 		def logs(*args)
 			args.flatten!
 
-			if args.delete("--local")
-				exec "docker logs #{args.join(' ')}"
-			else
+			if SmartMachine.config.machine_mode == :server
 				ssh = SmartMachine::SSH.new
 				ssh.run "docker logs #{args.join(' ')}"
+			else
+				exec "docker logs #{args.join(' ')}"
 			end
 		end
 

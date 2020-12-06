@@ -35,10 +35,10 @@ if machine.in_machine_dir?
 		machine.install package_name: ARGV[0]
 	when "uninstall"
 		machine.uninstall package_name: ARGV[0]
-	when "apps"
-		machine.apps ARGV
 	when "grids"
 		machine.grids ARGV
+	when "apps"
+		machine.apps ARGV
 	when "ps"
 		machine.ps ARGV
 	when "logs"
