@@ -62,11 +62,10 @@ If using SmartMachine on a server, perform the below steps before proceeding.
 == Choosing Grids of your Choice
 
 === 1. Nginx Grid
-
     Lets you run a nginx web server equipped with https encryption using letsencrypt.
 
-     $ smartmachine grids nginx up
-     $ smartmachine grids nginx down
+    $ smartmachine grids nginx up
+    $ smartmachine grids nginx down
 
 2. Prereceiver Grid
 
