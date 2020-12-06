@@ -83,7 +83,13 @@ Lets you run a mysql server instance with as many databases as you need.
     $ smartmachine grids mysql up
     $ smartmachine grids mysql down
 
-=== 4. Elasticsearch Grid
+=== 4. Minio Grid
+Lets you run minio server instance with file storage persistance.
+
+    $ smartmachine grids minio up
+    $ smartmachine grids minio down
+
+=== 5. Elasticsearch Grid
 Lets you run elasticsearch server instance with data persistance.
 
     $ smartmachine grids elasticsearch install
@@ -91,7 +97,7 @@ Lets you run elasticsearch server instance with data persistance.
     $ smartmachine grids elasticsearch down
     $ smartmachine grids elasticsearch uninstall
 
-=== 5. Scheduler Grid
+=== 6. Scheduler Grid
 Lets you setup scheduling services like database backups, etc.
 
     $ smartmachine grids scheduler install
