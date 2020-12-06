@@ -62,12 +62,14 @@ If using SmartMachine on a server, perform the below steps before proceeding.
 == Choosing Grids of your Choice
 
 1. Nginx Grid
+
    Lets you run a nginx web server equipped with https encryption using letsencrypt.
 
     $ smartmachine grids nginx up
     $ smartmachine grids nginx down
 
 2. Prereceiver Grid
+
    Lets you push rails apps to your server without any downtime using <b>git push production master</b>.
 
     $ smartmachine grids prereceiver install
@@ -75,12 +77,14 @@ If using SmartMachine on a server, perform the below steps before proceeding.
     $ smartmachine grids prereceiver down
 
 3. Mysql Grid
+
    Lets you run a mysql server instance with as many databases as you need.
 
     $ smartmachine grids mysql up
     $ smartmachine grids mysql down
 
 4. Elasticsearch Grid
+
    Lets you run elasticsearch server instance with data persistance.
 
     $ smartmachine grids elasticsearch install
@@ -88,6 +92,7 @@ If using SmartMachine on a server, perform the below steps before proceeding.
     $ smartmachine grids elasticsearch down
 
 5. Scheduler Grid
+
    Lets you schedule various services like database backups, etc.
 
     $ smartmachine grids scheduler install
