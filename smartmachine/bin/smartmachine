@@ -30,12 +30,6 @@ if machine.in_machine_dir?
 		credentials = SmartMachine::Credentials.new
 		credentials.edit
 
-	when "environment:edit"
-		system("#{ENV['EDITOR']} config/environment.rb")
-
-	when "users:edit"
-		system("#{ENV['EDITOR']} config/users.yml")
-
 	when "ssh"
 		machine.ssh
 
