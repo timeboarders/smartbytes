@@ -75,8 +75,7 @@ If using SmartMachine on a server, perform the below steps before proceeding.
     $ smartmachine grids prereceiver down # To stop the grid
 
 === Mysql Grid
-
-   Lets you run a mysql server instance with as many databases as you need.
+Lets you run a mysql server instance with as many databases as you need.
 
     $ smartmachine grids mysql up # To start the grid
     $ smartmachine grids mysql down # To stop the grid
