@@ -97,6 +97,12 @@ Lets you run elasticsearch server instance with data persistance.
     $ smartmachine grids elasticsearch down
     $ smartmachine grids elasticsearch uninstall
 
+=== 4. Redis Grid - Coming Soon
+Lets you run redis server instance for cache storage and job queueing.
+
+    $ smartmachine grids redis up
+    $ smartmachine grids redis down
+
 === 6. Scheduler Grid
 Lets you setup scheduling services like database backups, etc.
 
