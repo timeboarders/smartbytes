@@ -15,9 +15,10 @@ end
 require 'smart_machine/version'
 
 SmartMachine.config.root_path = File.expand_path('../..', __FILE__)
-SmartMachine.config.user_home_path = File.expand_path('~')
-if File.exist?("#{SmartMachine.config.user_home_path}/.smartmachine/config/environment.rb")
-	require "#{SmartMachine.config.user_home_path}/.smartmachine/config/environment"
+# SmartMachine.config.user_home_path = File.expand_path('~')
+SmartMachine.config.machine_dir_path = Dir.pwd
+if File.exist?("#{SmartMachine.config.machine_dir_path}/config/environment.rb")
+	require "#{SmartMachine.config.machine_dir_path}/config/environment"
 end
 
 require 'smart_machine/base'

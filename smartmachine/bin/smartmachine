@@ -29,41 +29,27 @@ if machine.in_machine_dir?
 	when "credentials:edit"
 		credentials = SmartMachine::Credentials.new
 		credentials.edit
-
 	when "ssh"
 		machine.ssh
-
 	when "install"
 		machine.installer ARGV.unshift("install")
-
 	when "update"
 		machine.installer ARGV.unshift("update")
-
 	when "uninstall"
 		machine.installer ARGV.unshift("uninstall")
-
 	when "apps"
 		machine.apps ARGV
-
 	when "grids"
 		machine.grids ARGV
-		return
-
 	when "ps"
 		machine.ps ARGV
-		return
-
 	when "logs"
 		machine.logs ARGV
-		return
-
 	when "sync"
 		sync = SmartMachine::Sync.new
 		sync.run
-
 	else
 		puts "Help: Specify a valid smartmachine command to execute inside the machine directory."
-
 	end
 else
 	puts "Help: Specify a valid smartmachine command to execute. Are you in the correct directory to run this command?"

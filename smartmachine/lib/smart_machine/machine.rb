@@ -35,6 +35,15 @@ module SmartMachine
 			puts "New machine #{name} has been created."
 		end
 
+		def ssh
+			if SmartMachine.config.machine_mode == :server
+				ssh = SmartMachine::SSH.new
+				ssh.login
+			else
+				puts "Help: Cannot ssh into local machine. You can only use the ssh command when using smartmachine for a server."
+			end
+		end
+
 		def installer(*args)
 			args.flatten!
 
@@ -113,11 +122,6 @@ module SmartMachine
 				ssh = SmartMachine::SSH.new
 				ssh.run "docker logs #{args.join(' ')}"
 			end
-		end
-
-		def ssh
-			ssh = SmartMachine::SSH.new
-			ssh.login
 		end
 
 		def getting_started
