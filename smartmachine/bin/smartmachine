@@ -8,19 +8,14 @@ machine = SmartMachine::Machine.new
 
 case command
 when "new"
-	machine.create ARGV
-	return
+	raise "Can't create a machine inside a machine. Please come out of the machine directory to create another machine." if machine.in_machine_dir?
 
-when "--init-local"
-	machine.init_local ARGV
+	name = ARGV.shift
+	machine.create(name)
 	return
 
 when "--version"
 	puts "SmartMachine #{SmartMachine.version}"
-	return
-
-when "--help"
-	puts "Help: Specify a valid smartmachine command to execute. Are you in the correct directory to run this command?"
 	return
 
 when "runner"
@@ -29,7 +24,7 @@ when "runner"
 
 end
 
-if machine.in_local_machine_dir?
+if machine.in_machine_dir?
 	case command
 	when "credentials:edit"
 		credentials = SmartMachine::Credentials.new
@@ -73,9 +68,9 @@ if machine.in_local_machine_dir?
 		sync.run
 
 	else
-		exec "smartmachine --help"
+		puts "Help: Specify a valid smartmachine command to execute inside the machine directory."
 
 	end
 else
-	exec "smartmachine --help"
+	puts "Help: Specify a valid smartmachine command to execute. Are you in the correct directory to run this command?"
 end

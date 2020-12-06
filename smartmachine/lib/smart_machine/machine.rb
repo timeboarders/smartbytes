@@ -6,37 +6,33 @@ module SmartMachine
 		def initialize
 		end
 
-		def create(*args)
-			args.flatten!
+		# Create a new smartmachine
+		#
+		# Example:
+		#   >> Machine.create("QW21334Q")
+		#   => "New machine QW21334Q has been created."
+		#
+		# Arguments:
+		#   name: (String)
+		def create(name)
+			raise "Please specify a machine name" if name.blank?
 
-			raise "Please specify a machine name" if args.empty?
-
-			name = args.shift
 			pathname = File.expand_path "./#{name}"
 
-			self.setup_dotsmartmachine(pathname)
-
-			puts "New machine #{name} has been created."
-		end
-
-		def init_local(*args)
-			args.flatten!
-
-			pathname = File.expand_path "~/.smartmachine"
-
-			if args.delete("--force")
-				puts "Removing all the data to reinitialize."
-				FileUtils.rmtree(pathname)
-			end
-
 			if Dir.exist?(pathname)
-				puts "SmartMachine Local already initialized. If you want to delete all the data and reinitialize, please use the --force option."
+				puts "A machine with this name already exists. Please use a different name."
 				return
 			end
 
-			self.setup_dotsmartmachine(pathname)
+			FileUtils.mkdir pathname
+			FileUtils.cp_r "#{SmartMachine.config.root_path}/lib/smart_machine/templates/dotsmartmachine/.", pathname
+			FileUtils.chdir pathname do
+				credentials = SmartMachine::Credentials.new
+				credentials.create
+				system("git init && git add . && git commit -m 'initial commit'")
+			end
 
-			puts "SmartMachine Local Initialised."
+			puts "New machine #{name} has been created."
 		end
 
 		def installer(*args)
@@ -180,18 +176,8 @@ module SmartMachine
 			# sudo fail2ban-client status
 		end
 
-		def in_local_machine_dir?
+		def in_machine_dir?
 			File.file?("./config/master.key")
-		end
-
-		def setup_dotsmartmachine(pathname)
-			FileUtils.mkdir pathname
-			FileUtils.cp_r "#{SmartMachine.config.root_path}/lib/smart_machine/templates/dotsmartmachine/.", pathname
-			FileUtils.chdir pathname do
-				credentials = SmartMachine::Credentials.new
-				credentials.create
-				system("git init && git add . && git commit -m 'initial commit'")
-			end	
 		end
 	end
 end
