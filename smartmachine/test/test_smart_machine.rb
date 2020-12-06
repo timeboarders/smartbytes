@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require 'smartmachine'
+require 'smart_machine'
 
 class SmartMachineTest < Minitest::Test
 	# def test_docker_install
