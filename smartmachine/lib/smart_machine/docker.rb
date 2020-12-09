@@ -13,9 +13,9 @@ module SmartMachine
 		#   none
 		def install
 			puts "-----> Installing Docker"
-			if OS.linux?
+			if machine.has_linuxos?
 				install_on_linux(distro_name: "debian")
-			elsif OS.mac?
+			elsif machine.has_macos?
 				install_on_mac
 			else
 				puts "Installation of docker is currently supported on Debian or MacOS. Please install docker by other means on this platform to continue."
@@ -32,9 +32,9 @@ module SmartMachine
 		#   none
 		def uninstall
 			puts "-----> Uninstalling Docker"
-			if OS.linux?
+			if machine.has_linuxos?
 				uninstall_on_linux(distro_name: "debian")
-			elsif OS.mac?
+			elsif machine.has_macos?
 				uninstall_on_mac
 			else
 				puts "Uninstallation of docker is currently supported on Debian or MacOS. Please uninstall docker by other means on this platform to continue."
@@ -66,7 +66,7 @@ module SmartMachine
 				"docker run --rm hello-world",
 				"docker rmi hello-world"
 			]
-			run_based_on_machine_mode(commands: commands)
+			machine.run(commands: commands)
 
 			puts '-----> Add the following rules to the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
 			puts '# BEGIN UFW AND DOCKER
@@ -106,7 +106,7 @@ module SmartMachine
 				"sudo rm -rf /var/lib/docker",
 				"sudo rm -rf /var/lib/containerd"
 			]
-			run_based_on_machine_mode(commands: commands)
+			machine.run(commands: commands)
 
 			puts '-----> Remove the following rules at the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
 			puts '# BEGIN UFW AND DOCKER
@@ -127,8 +127,8 @@ module SmartMachine
 
 		def install_on_mac
 			commands = [
-				"/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)\"",
-				"brew install --cask docker",
+				"/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
+				"brew install homebrew/cask/docker",
 				"brew install bash-completion",
 				"brew install docker-completion",
 				"open /Applications/Docker.app",
@@ -136,25 +136,20 @@ module SmartMachine
 				# "docker run --rm hello-world",
 				# "docker rmi hello-world"
 			]
-			run_based_on_machine_mode(commands: commands)
+			machine.run(commands: commands)
 		end
 
 		def uninstall_on_mac
 			commands = [
 				"brew uninstall docker-completion",
 				"brew uninstall bash-completion",
-				"brew uninstall --cask --zap docker"
+				"brew uninstall --zap homebrew/cask/docker"
 			]
-			run_based_on_machine_mode(commands: commands)
+			machine.run(commands: commands)
 		end
 
-		def run_based_on_machine_mode(commands:)
-			if SmartMachine.config.machine_mode == :server
-				ssh = SmartMachine::SSH.new
-				ssh.run commands
-			else
-				system(commands.join(";"))
-			end
+		def machine
+			@machine = SmartMachine::Machine.new
 		end
 	end
 end
