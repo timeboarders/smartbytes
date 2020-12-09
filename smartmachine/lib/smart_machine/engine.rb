@@ -5,73 +5,92 @@ module SmartMachine
 		end
 
 		def install
-			puts "-----> Installing SmartMachine Engine"
+			if SmartMachine::Docker.running?
+				puts "-----> Installing SmartMachine Engine"
 
-			SmartMachine::User.create_htpasswd_files
+				# SmartMachine::User.create_htpasswd_files
 
-			ssh = SmartMachine::SSH.new
-			machine = SmartMachine::Machine.new
-			sync = SmartMachine::Sync.new
+				sync = SmartMachine::Sync.new
 
-			system("mkdir -p ./tmp/engine")
-			system("cp #{SmartMachine.config.root_path}/lib/smart_machine/engine/Dockerfile ./tmp/engine/Dockerfile")
+				system("mkdir -p ./tmp/engine")
+				system("cp #{SmartMachine.config.gem_dir}/lib/smart_machine/engine/Dockerfile ./tmp/engine/Dockerfile")
 
-			gem_file_path = File.expand_path("../../cache/smartmachine-#{SmartMachine.version}.gem", SmartMachine.config.root_path)
-			system("cp #{gem_file_path} ./tmp/engine/smartmachine-#{SmartMachine.version}.gem")
+				gem_file_path = "#{SmartMachine.config.cache_dir}/smartmachine-#{SmartMachine.version}.gem"
+				system("cp #{gem_file_path} ./tmp/engine/smartmachine-#{SmartMachine.version}.gem")
 
-			sync.run only: :push
+				# sync.run only: :push
 
-			print "-----> Creating image for SmartMachine ... "
-			ssh.run "docker image build --quiet --tag #{engine_image_name} \
-					--build-arg SMARTMACHINE_MASTER_KEY=#{SmartMachine::Credentials.new.read_key} \
-					--build-arg SMARTMACHINE_VERSION=#{SmartMachine.version} \
-					--build-arg USER_NAME=`id -un` \
-					--build-arg USER_UID=`id -u` \
-					--build-arg DOCKER_GID=`getent group docker | cut -d: -f3` \
-					~/.smartmachine/tmp/engine"
-			puts "done"
+				print "-----> Creating image for Engine ... "
+				docker_gid = (machine.has_linuxos? ? `getent group docker | cut -d: -f3` : (machine.has_macos? ? `id -g` : '')).to_i
+				machine.run commands: "docker image build --quiet --tag #{engine_image_name_with_version} \
+						--build-arg SMARTMACHINE_MASTER_KEY=#{SmartMachine::Credentials.new.read_key} \
+						--build-arg SMARTMACHINE_VERSION=#{SmartMachine.version} \
+						--build-arg USER_NAME=`id -un` \
+						--build-arg USER_UID=`id -u` \
+						--build-arg DOCKER_GID=#{docker_gid} \
+						#{SmartMachine.config.machine_dir}/tmp/engine"
+				puts "done"
 
-			print "-----> Adding SmartMachine to PATH ... "
-			ssh.run "mkdir -p ~/.smartmachine/bin && touch ~/.smartmachine/bin/smartmachine.sh"
-			ssh.run "echo '#{smartmachine_binary_template}' > ~/.smartmachine/bin/smartmachine.sh"
-			ssh.run "chmod +x ~/.smartmachine/bin/smartmachine.sh && sudo ln -sf ~/.smartmachine/bin/smartmachine.sh /usr/local/bin/smartmachine"
-			puts "done"
+				print "-----> Adding Engine to PATH ... "
+				commands = [
+					"mkdir -p #{SmartMachine.config.machine_dir}/bin && touch #{SmartMachine.config.machine_dir}/bin/smartengine",
+					"echo '#{smartengine_binary_template}' > #{SmartMachine.config.machine_dir}/bin/smartengine",
+					"chmod +x #{SmartMachine.config.machine_dir}/bin/smartengine",
+					"sudo ln -sf #{SmartMachine.config.machine_dir}/bin/smartengine /usr/local/bin/smartengine"
+				]
+				machine.run(commands: commands)
+				puts "done"
 
-			system("rm ./tmp/engine/Dockerfile")
-			system("rm ./tmp/engine/smartmachine-#{SmartMachine.version}.gem")
+				system("rm ./tmp/engine/Dockerfile")
+				system("rm ./tmp/engine/smartmachine-#{SmartMachine.version}.gem")
 
-			sync.run
+				# sync.run
 
-			puts "-----> SmartMachine Engine Installation Complete"
+				puts "-----> SmartMachine Engine Installation Complete"
+			end
 		end
 
 		def uninstall
-			puts "-----> Uninstalling SmartMachine Engine"
+			if SmartMachine::Docker.running?
+				puts "-----> Uninstalling SmartMachine Engine"
 
-			ssh = SmartMachine::SSH.new
+				commands = [
+					"sudo rm /usr/local/bin/smartengine",
+					"sudo rm #{SmartMachine.config.machine_dir}/bin/smartengine",
+					"docker rmi $(docker images -q #{engine_image_name})"
+				]
+				machine.run(commands: commands)
 
-			ssh.run "sudo rm /usr/local/bin/smartmachine"
-			ssh.run "docker rmi $(docker images -q smartmachine)"
-
-			puts "-----> SmartMachine Engine Uninstallation Complete"
+				puts "-----> SmartMachine Engine Uninstallation Complete"
+			end
 		end
 
-		def smartmachine_binary_template
+		private
+
+		def machine
+			@machine = SmartMachine::Machine.new
+		end
+
+		def smartengine_binary_template
 			<<~BASH
 				#!/bin/bash
 
 				docker run -it --rm \
-					-v "/home/$(whoami)/.smartmachine:/home/$(whoami)/.smartmachine" \
+					-v "#{SmartMachine.config.machine_dir}:/home/`id -u`/machine" \
 					-v "/var/run/docker.sock:/var/run/docker.sock" \
-					-w "/home/$(whoami)/.smartmachine" \
+					-w "/home/`id -u`/machine" \
 					-u `id -u` \
 					--entrypoint "smartmachine" \
-					#{engine_image_name} "$@"
+					#{engine_image_name_with_version} "$@"
 			BASH
 		end
 
+		def engine_image_name_with_version
+			"#{engine_image_name}:#{SmartMachine.version}"
+		end
+
 		def engine_image_name
-			"smartmachine:#{SmartMachine.version}"
+			"smartmachine/smartengine"
 		end
 	end
 end
