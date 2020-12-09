@@ -29,7 +29,7 @@ module SmartMachine
 			FileUtils.chdir pathname do
 				credentials = SmartMachine::Credentials.new
 				credentials.create
-				system("git init && git add . && git commit -m 'initial commit'")
+				system("bundle install && git init && git add . && git commit -m 'initial commit'")
 			end
 
 			puts "New machine #{name} has been created."
