@@ -25,7 +25,7 @@ module SmartMachine
 			end
 
 			FileUtils.mkdir pathname
-			FileUtils.cp_r "#{SmartMachine.config.root_path}/lib/smart_machine/templates/dotsmartmachine/.", pathname
+			FileUtils.cp_r "#{SmartMachine.config.gem_dir}/lib/smart_machine/templates/dotsmartmachine/.", pathname
 			FileUtils.chdir pathname do
 				credentials = SmartMachine::Credentials.new
 				credentials.create
@@ -168,6 +168,25 @@ module SmartMachine
 			# Change action = %(action_mwl)s
 			# sudo fail2ban-client reload
 			# sudo fail2ban-client status
+		end
+
+		def run(commands:)
+			commands = Array(commands).flatten
+
+			if SmartMachine.config.machine_mode == :server
+				ssh = SmartMachine::SSH.new
+				ssh.run commands
+			else
+				system(commands.join(";"))
+			end
+		end
+
+		def has_linuxos?
+			OS.linux?
+		end
+
+		def has_macos?
+			OS.mac?
 		end
 
 		def in_machine_dir?
