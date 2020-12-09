@@ -29,7 +29,10 @@ module SmartMachine
 			FileUtils.chdir pathname do
 				credentials = SmartMachine::Credentials.new
 				credentials.create
+
+				File.write("Gemfile", File.open("Gemfile",&:read).gsub("replace_smartmachine_version", "#{SmartMachine.version}"))
 				system("mv gitignore-template .gitignore && mv ruby-version-template .ruby-version")
+
 				system("bundle install && git init && git add . && git commit -m 'initial commit'")
 			end
 
