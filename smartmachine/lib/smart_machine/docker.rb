@@ -68,21 +68,6 @@ module SmartMachine
 			]
 			run_based_on_machine_mode(commands: commands)
 
-			self.add_ufw_rules_linux(distro_name, arch)
-		end
-
-		def uninstall_on_linux(distro_name: "debian", arch: "amd64")
-			commands = [
-				"sudo apt-get purge docker-ce docker-ce-cli containerd.io",
-				"sudo rm -rf /var/lib/docker",
-				"sudo rm -rf /var/lib/containerd"
-			]
-			run_based_on_machine_mode(commands: commands)
-
-			self.remove_ufw_rules_linux(distro_name, arch)
-		end
-
-		def add_ufw_rules_linux(distro_name:, arch:)
 			puts '-----> Add the following rules to the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
 			puts '# BEGIN UFW AND DOCKER
 			*filter
@@ -115,7 +100,14 @@ module SmartMachine
 			# system("sudo ufw reload")
 		end
 
-		def remove_ufw_rules_linux(distro_name:, arch:)
+		def uninstall_on_linux(distro_name: "debian", arch: "amd64")
+			commands = [
+				"sudo apt-get purge docker-ce docker-ce-cli containerd.io",
+				"sudo rm -rf /var/lib/docker",
+				"sudo rm -rf /var/lib/containerd"
+			]
+			run_based_on_machine_mode(commands: commands)
+
 			puts '-----> Remove the following rules at the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
 			puts '# BEGIN UFW AND DOCKER
 			*filter
