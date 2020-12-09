@@ -133,8 +133,8 @@ module SmartMachine
 				"brew install docker-completion",
 				"open /Applications/Docker.app",
 				# The docker app asks for permission after opening gui. if that can be automated then the next two statements can be uncommented and automated. Until then can't execute automatically.
-				"docker run --rm hello-world",
-				"docker rmi hello-world"
+				# "docker run --rm hello-world",
+				# "docker rmi hello-world"
 			]
 			run_based_on_machine_mode(commands: commands)
 		end
