@@ -30,8 +30,10 @@ module SmartMachine
 				credentials = SmartMachine::Credentials.new
 				credentials.create
 
+				File.write("Gemfile", File.open("Gemfile",&:read).gsub("replace_ruby_version", "#{SmartMachine.ruby_version}"))
+				File.write(".ruby-version", SmartMachine.ruby_version)
 				File.write("Gemfile", File.open("Gemfile",&:read).gsub("replace_smartmachine_version", "#{SmartMachine.version}"))
-				system("mv gitignore-template .gitignore && mv ruby-version-template .ruby-version")
+				system("mv gitignore-template .gitignore")
 
 				system("bundle install && git init && git add . && git commit -m 'initial commit'")
 			end

@@ -7,4 +7,8 @@ module SmartMachine
 	def self.version
 		gem_version
 	end
+
+	def self.ruby_version
+		"2.7.0"
+	end
 end

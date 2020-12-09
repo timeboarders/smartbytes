@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 	s.summary     	= "Full-stack deployment framework for Rails."
 	s.description 	= "SmartMachine is a full-stack deployment framework for rails optimized for admin programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration."
 
-	s.required_ruby_version     = ">= 2.5.0"
+	s.required_ruby_version     = ">= 2.7.0"
 
 	s.license     	= "MIT"
 
