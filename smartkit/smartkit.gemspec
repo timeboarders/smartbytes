@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-require_relative "lib/smart_os/version"
+require_relative "lib/smart_kit/version"
 
 Gem::Specification.new do |spec|
   spec.platform      = Gem::Platform::RUBY
-  spec.name          = "smartos"
-  spec.version       = SmartOS::VERSION
+  spec.name          = "smartkit"
+  spec.version       = SmartKit::VERSION
   spec.authors       = ["Timeboard"]
   spec.email         = ["support@timeboard.me"]
 
-  spec.summary       = "SmartOS Summary."
-  spec.description   = "SmartOS Description."
-  spec.homepage      = "https://github.com/timeboardcode/smartbytes/tree/v#{SmartOS::VERSION}/smartos"
+  spec.summary       = "SmartKit Summary."
+  spec.description   = "SmartKit Description."
+  spec.homepage      = "https://github.com/timeboardcode/smartbytes/tree/v#{SmartKit::VERSION}/smartkit"
   spec.license       = "GPL-3.0-or-later"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
   spec.metadata = {
     "homepage_uri"      => spec.homepage,
     "bug_tracker_uri"   => "https://github.com/timeboardcode/smartbytes/issues",
-    "changelog_uri"     => "https://github.com/timeboardcode/smartbytes/releases/tag/v#{SmartOS::VERSION}",
-    "source_code_uri"   => "https://github.com/timeboardcode/smartbytes/tree/v#{SmartOS::VERSION}/smartos"
+    "changelog_uri"     => "https://github.com/timeboardcode/smartbytes/releases/tag/v#{SmartKit::VERSION}",
+    "source_code_uri"   => "https://github.com/timeboardcode/smartbytes/tree/v#{SmartKit::VERSION}/smartkit"
     # "documentation_uri" => "https://www.timeboard.me/about/free-software/smartbytes/api/v#{version}/",
     # "mailing_list_uri"  => "https://www.timeboard.me/about/free-software/smartbytes/smartos/discuss",
   }

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "smart_os/version"
+require_relative "smart_kit/version"
 
-module SmartOS
+module SmartKit
   class Error < StandardError; end
   # Your code goes here...
 end

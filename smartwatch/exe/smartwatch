@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'smart_watch/commands'
+SmartWatch::Commands::CLI.start(ARGV)

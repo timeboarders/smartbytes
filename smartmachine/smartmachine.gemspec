@@ -8,14 +8,14 @@ Gem::Specification.new do |s|
 	s.version     	= version
 	s.summary     	= "Full-stack deployment framework for Rails."
 	s.description 	= "SmartMachine is a full-stack deployment framework for rails optimized for admin programmer happiness and peaceful administration. It encourages natural simplicity by favoring convention over configuration."
-
 	s.required_ruby_version     = ">= 2.7.0"
+	s.required_rubygems_version = ">= 1.8.11"
 
 	s.license     	= "MIT"
 
 	s.author     	= "Timeboard"
-	s.email       	= "hello@timeboard.me"
-	s.homepage    	= "https://github.com/timeboarders/smartbytes"
+	s.email       	= "support@timeboard.me"
+	s.homepage    	= "https://github.com/timeboardcode/smartbytes"
 
 	s.executables 	= %w(buildpacker prereceiver scheduler smartmachine smartrunner)
 
@@ -25,11 +25,11 @@ Gem::Specification.new do |s|
 	s.rdoc_options.concat ["--main",  "README.rdoc"]
 
 	s.metadata		= {
-		"bug_tracker_uri"   => "https://github.com/timeboarders/smartbytes/issues",
-	    "changelog_uri"     => "https://github.com/timeboarders/smartbytes/blob/v#{version}/smartmachine/CHANGELOG.rdoc",
-	    # "documentation_uri" => "https://www.timeboard.me/smartbytes/api/v#{version}/",
-	    # "mailing_list_uri"  => "https://www.timeboard.me/smartbytes/discuss",
-	    "source_code_uri"   => "https://github.com/timeboarders/smartbytes/tree/v#{version}/smartmachine"
+		"bug_tracker_uri"   => "https://github.com/timeboardcode/smartbytes/issues",
+	    "changelog_uri"     => "https://github.com/timeboardcode/smartbytes/releases/tag/v#{version}",
+	    # "documentation_uri" => "https://www.timeboard.me/about/software/smartbytes/api/v#{version}/",
+	    # "mailing_list_uri"  => "https://www.timeboard.me/about/software/smartbytes/discuss",
+	    "source_code_uri"   => "https://github.com/timeboardcode/smartbytes/tree/v#{version}/smartmachine"
 	}
 
 	s.add_dependency "net-ssh", 		'~> 5.2'

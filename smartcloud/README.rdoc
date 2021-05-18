@@ -1,9 +1,0 @@
-= Welcome to SmartCloud
-
-== What's SmartCloud?
-
-Wait for it :)
-
-== License
-
-SmartCloud is released under the [MIT License](https://opensource.org/licenses/MIT).

@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 	s.required_ruby_version     = ">= 2.5.0"
 	s.required_rubygems_version = ">= 1.8.11"
 
-	s.license     	= "MIT"
+	s.license     	= "GPL-3.0-or-later"
 
 	s.author     	= "Timeboard"
 	s.email       	= "hello@timeboard.me"
