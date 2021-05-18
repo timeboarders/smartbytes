@@ -4,7 +4,7 @@ require 'bcrypt'
 
 # The main SmartMachine User driver
 module SmartMachine
-	class User < SmartMachine::Base
+	class Users < SmartMachine::Base
 		def initialize
 		end
 

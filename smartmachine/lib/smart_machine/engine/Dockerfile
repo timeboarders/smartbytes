@@ -6,9 +6,10 @@ LABEL maintainer="Timeboard <hello@timeboard.me>"
 ARG USER_NAME
 ARG USER_UID
 ARG DOCKER_GID
+ARG DOCKER_GNAME
 RUN sed -i "s/$DOCKER_GID/998/" /etc/group && \
 	adduser --disabled-password --gecos "" --uid "$USER_UID" "$USER_NAME" && \
-	addgroup --gid "$DOCKER_GID" "docker" && adduser "$USER_NAME" "docker"
+	addgroup --gid "$DOCKER_GID" "$DOCKER_GNAME" && adduser "$USER_NAME" "$DOCKER_GNAME"
 
 # Essentials
 RUN apk add --update build-base && \

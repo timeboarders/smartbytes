@@ -13,13 +13,13 @@ module SmartMachine
 		#   none
 		def install
 			puts "-----> Installing Docker"
-			if machine.has_linuxos?
-				install_on_linux(distro_name: "debian")
-			elsif machine.has_macos?
-				install_on_mac
-			else
-				puts "Installation of docker is currently supported on Debian or MacOS. Please install docker by other means on this platform to continue."
-			end
+      if machine_has_linuxos?
+        install_on_linux
+      elsif machine_has_macos?
+        install_on_mac
+      else
+        raise "Installation of docker is currently supported on Debian or MacOS. Please install docker by other means on this platform to continue."
+      end
 			puts "-----> Docker Installation Complete"
 		end
 
@@ -32,13 +32,13 @@ module SmartMachine
 		#   none
 		def uninstall
 			puts "-----> Uninstalling Docker"
-			if machine.has_linuxos?
-				uninstall_on_linux(distro_name: "debian")
-			elsif machine.has_macos?
-				uninstall_on_mac
-			else
-				puts "Uninstallation of docker is currently supported on Debian or MacOS. Please uninstall docker by other means on this platform to continue."
-			end
+      if machine_has_linuxos?
+        uninstall_on_linux
+      elsif machine_has_macos?
+        uninstall_on_mac
+      else
+        raise "Uninstallation of docker is currently supported on Debian or MacOS. Please uninstall docker by other means on this platform to continue."
+      end
 			puts "-----> Docker Uninstallation Complete"
 		end
 
@@ -54,6 +54,7 @@ module SmartMachine
 		private
 
 		def install_on_linux(distro_name: "debian", arch: "amd64")
+
 			commands = [
 				"sudo apt-get -y update",
 				"sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common",
@@ -66,7 +67,7 @@ module SmartMachine
 				"docker run --rm hello-world",
 				"docker rmi hello-world"
 			]
-			machine.run(commands: commands)
+			run_commands_by_machine_mode(commands: commands)
 
 			puts '-----> Add the following rules to the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
 			puts '# BEGIN UFW AND DOCKER
@@ -101,12 +102,13 @@ module SmartMachine
 		end
 
 		def uninstall_on_linux(distro_name: "debian", arch: "amd64")
+
 			commands = [
 				"sudo apt-get purge docker-ce docker-ce-cli containerd.io",
 				"sudo rm -rf /var/lib/docker",
 				"sudo rm -rf /var/lib/containerd"
 			]
-			machine.run(commands: commands)
+			run_commands_by_machine_mode(commands: commands)
 
 			puts '-----> Remove the following rules at the end of the file /etc/ufw/after.rules and reload ufw using - sudo ufw reload'
 			puts '# BEGIN UFW AND DOCKER
@@ -136,7 +138,7 @@ module SmartMachine
 				# "docker run --rm hello-world",
 				# "docker rmi hello-world"
 			]
-			machine.run(commands: commands)
+			run_commands_by_machine_mode(commands: commands)
 		end
 
 		def uninstall_on_mac
@@ -145,11 +147,7 @@ module SmartMachine
 				"brew uninstall bash-completion",
 				"brew uninstall --zap homebrew/cask/docker"
 			]
-			machine.run(commands: commands)
-		end
-
-		def machine
-			@machine = SmartMachine::Machine.new
+			run_commands_by_machine_mode(commands: commands)
 		end
 	end
 end

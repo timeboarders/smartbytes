@@ -8,9 +8,9 @@ module SmartMachine
 			if SmartMachine::Docker.running?
 				puts "-----> Installing SmartMachine Engine"
 
-				# SmartMachine::User.create_htpasswd_files
+				# SmartMachine::Users.create_htpasswd_files
 
-				sync = SmartMachine::Sync.new
+				syncer = SmartMachine::Syncer.new
 
 				system("mkdir -p ./tmp/engine")
 				system("cp #{SmartMachine.config.gem_dir}/lib/smart_machine/engine/Dockerfile ./tmp/engine/Dockerfile")
@@ -18,16 +18,18 @@ module SmartMachine
 				gem_file_path = "#{SmartMachine.config.cache_dir}/smartmachine-#{SmartMachine.version}.gem"
 				system("cp #{gem_file_path} ./tmp/engine/smartmachine-#{SmartMachine.version}.gem")
 
-				# sync.run only: :push
+        syncer.sync only: :push
 
 				print "-----> Creating image for Engine ... "
-				docker_gid = (machine.has_linuxos? ? `getent group docker | cut -d: -f3` : (machine.has_macos? ? `id -g` : '')).to_i
-				machine.run commands: "docker image build --quiet --tag #{engine_image_name_with_version} \
+				docker_gid = machine_has_linuxos? ? "getent group docker | cut -d: -f3" : (machine_has_macos? ? "id -g" : "")
+				docker_gname = machine_has_linuxos? ? "docker" : (machine_has_macos? ? "staff" : raise("OS not supported to create docker_gname"))
+				run_commands_by_machine_mode commands: "docker image build --quiet --tag #{engine_image_name_with_version} \
 						--build-arg SMARTMACHINE_MASTER_KEY=#{SmartMachine::Credentials.new.read_key} \
 						--build-arg SMARTMACHINE_VERSION=#{SmartMachine.version} \
 						--build-arg USER_NAME=`id -un` \
 						--build-arg USER_UID=`id -u` \
-						--build-arg DOCKER_GID=#{docker_gid} \
+						--build-arg DOCKER_GID=`#{docker_gid}` \
+						--build-arg DOCKER_GNAME=#{docker_gname} \
 						#{SmartMachine.config.machine_dir}/tmp/engine"
 				puts "done"
 
@@ -38,13 +40,13 @@ module SmartMachine
 					"chmod +x #{SmartMachine.config.machine_dir}/bin/smartengine",
 					"sudo ln -sf #{SmartMachine.config.machine_dir}/bin/smartengine /usr/local/bin/smartengine"
 				]
-				machine.run(commands: commands)
+				run_commands_by_machine_mode(commands: commands)
 				puts "done"
 
 				system("rm ./tmp/engine/Dockerfile")
 				system("rm ./tmp/engine/smartmachine-#{SmartMachine.version}.gem")
 
-				# sync.run
+        syncer.sync
 
 				puts "-----> SmartMachine Engine Installation Complete"
 			end
@@ -59,26 +61,31 @@ module SmartMachine
 					"sudo rm #{SmartMachine.config.machine_dir}/bin/smartengine",
 					"docker rmi $(docker images -q #{engine_image_name})"
 				]
-				machine.run(commands: commands)
+				run_commands_by_machine_mode(commands: commands)
 
 				puts "-----> SmartMachine Engine Uninstallation Complete"
 			end
 		end
 
+    def reinstall
+      uninstall
+      install
+    end
+
 		private
 
-		def machine
-			@machine = SmartMachine::Machine.new
-		end
-
 		def smartengine_binary_template
+      docker_socket_path = "/var/run/docker.sock"
+      docker_socket_path = "/Users/`whoami`/Library/Containers/com.docker.docker/Data/docker.sock" if machine_has_macos?
+
 			<<~BASH
 				#!/bin/bash
 
 				docker run -it --rm \
-					-v "#{SmartMachine.config.machine_dir}:/home/`id -u`/machine" \
-					-v "/var/run/docker.sock:/var/run/docker.sock" \
-					-w "/home/`id -u`/machine" \
+          -e INSIDE_ENGINE="yes" \
+					-v "#{SmartMachine.config.machine_dir}:/home/`whoami`/machine" \
+					-v "#{docker_socket_path}:/var/run/docker.sock" \
+					-w "/home/`whoami`/machine" \
 					-u `id -u` \
 					--entrypoint "smartmachine" \
 					#{engine_image_name_with_version} "$@"

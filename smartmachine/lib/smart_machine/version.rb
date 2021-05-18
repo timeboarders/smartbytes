@@ -6,13 +6,26 @@ module SmartMachine
     Gem::Version.new VERSION::STRING
   end
 
+  def self.version
+    self.gem_version.to_s
+  end
+
   def self.ruby_version
-    "2.7.0"
+    RUBY_VERSION::STRING
   end
 
   module VERSION
     MAJOR = 0
     MINOR = 9
+    TINY  = 0
+    PRE   = nil
+
+    STRING = [MAJOR, MINOR, TINY, PRE].compact.join(".")
+  end
+
+  module RUBY_VERSION
+    MAJOR = 2
+    MINOR = 7
     TINY  = 0
     PRE   = nil
 

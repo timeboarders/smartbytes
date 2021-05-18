@@ -64,7 +64,7 @@ module SmartMachine
 					--restart='always' \
 					--init \
 					--network='nginx-network' \
-					smartmachine/buildpacks/rails:#{SmartMachine.version}", out: File::NULL)
+					smartmachine/buildpackers/rails:#{SmartMachine.version}", out: File::NULL)
 
 					system("docker network connect elasticsearch-network #{new_container}")
 					system("docker network connect minio-network #{new_container}")

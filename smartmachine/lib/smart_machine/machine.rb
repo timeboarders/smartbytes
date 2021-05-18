@@ -14,7 +14,8 @@ module SmartMachine
 		#
 		# Arguments:
 		#   name: (String)
-		def create(name)
+		#   dev: (Boolean)
+		def create(name:, dev:)
 			raise "Please specify a machine name" if name.blank?
 
 			pathname = File.expand_path "./#{name}"
@@ -32,87 +33,29 @@ module SmartMachine
 
 				File.write("Gemfile", File.open("Gemfile",&:read).gsub("replace_ruby_version", "#{SmartMachine.ruby_version}"))
 				File.write(".ruby-version", SmartMachine.ruby_version)
-				File.write("Gemfile", File.open("Gemfile",&:read).gsub("replace_smartmachine_version", "#{SmartMachine.version}"))
+				if dev
+          File.write("Gemfile", File.open("Gemfile",&:read).gsub("\"~> replace_smartmachine_version\"", "path: \"../\""))
+        else
+          File.write("Gemfile", File.open("Gemfile",&:read).gsub("replace_smartmachine_version", "#{SmartMachine.version}"))
+        end
 				system("mv gitignore-template .gitignore")
 
-				system("bundle install && git init && git add . && git commit -m 'initial commit'")
+        # Here BUNDLE_GEMFILE is needed as it may be already set due to usage of bundle exec (which may not be correct in this case)
+        bundle_gemfile = "#{pathname}/Gemfile"
+        system("BUNDLE_GEMFILE='#{bundle_gemfile}' bundle install && BUNDLE_GEMFILE='#{bundle_gemfile}' bundle binstubs smartmachine")
+
+        system("git init && git add . && git commit -m 'initial commit'")
 			end
 
 			puts "New machine #{name} has been created."
 		end
 
-		def ssh
-			if SmartMachine.config.machine_mode == :server
-				ssh = SmartMachine::SSH.new
-				ssh.login
-			else
-				puts "Help: Cannot ssh into local machine. You can only use the ssh command when using smartmachine for a server."
-			end
-		end
+    def initial_setup
+      getting_started
+      securing_your_server
+    end
 
-		def install(package_name:)
-			package_name = package_name&.to_sym
-			if packages[package_name].present?
-				package = packages[package_name].new
-				package.install
-			else
-				puts "Help: Package name not provided. Please provide package name to install."
-			end
-		end
-
-		def uninstall(package_name:)
-			package_name = package_name&.to_sym
-			if packages[package_name].present?
-				package = packages[package_name].new
-				package.uninstall
-			else
-				puts "Help: Package name not provided. Please provide package name to uninstall."
-			end
-		end
-
-		def grids(*args)
-			args.flatten!
-
-			if args.delete("--local")
-				exec "smartmachine runner grids #{args.join(" ")}"
-			else
-				ssh = SmartMachine::SSH.new
-				ssh.run "smartmachine runner grids #{args.join(" ")}"
-			end
-		end
-
-		def apps(*args)
-			args.flatten!
-
-			if args.delete("--local")
-				exec "smartmachine runner apps #{args.join(" ")}"
-			else
-				ssh = SmartMachine::SSH.new
-				ssh.run "smartmachine runner apps #{args.join(" ")}"
-			end
-		end
-
-		def ps(*args)
-			args.flatten!
-
-			if SmartMachine.config.machine_mode == :server
-				ssh = SmartMachine::SSH.new
-				ssh.run "docker ps #{args.join(' ')}"
-			else
-				exec "docker ps #{args.join(' ')}"
-			end
-		end
-
-		def logs(*args)
-			args.flatten!
-
-			if SmartMachine.config.machine_mode == :server
-				ssh = SmartMachine::SSH.new
-				ssh.run "docker logs #{args.join(' ')}"
-			else
-				exec "docker logs #{args.join(' ')}"
-			end
-		end
+		private
 
 		def getting_started
 			# puts 'You may be prompted to make a menu selection when the Grub package is updated on Ubuntu. If prompted, select keep the local version currently installed.'
@@ -168,42 +111,6 @@ module SmartMachine
 			# Change action = %(action_mwl)s
 			# sudo fail2ban-client reload
 			# sudo fail2ban-client status
-		end
-
-		def run(commands:)
-			commands = Array(commands).flatten
-
-			if SmartMachine.config.machine_mode == :server
-				ssh = SmartMachine::SSH.new
-				ssh.run commands
-			else
-				system(commands.join(";"))
-			end
-		end
-
-		def has_linuxos?
-			OS.linux?
-		end
-
-		def has_macos?
-			OS.mac?
-		end
-
-		def in_machine_dir?
-			File.file?("./config/master.key")
-		end
-
-		private
-
-		def packages
-			{
-				docker: SmartMachine::Docker,
-				engine: SmartMachine::Engine,
-				buildpacker: SmartMachine::Buildpacker,
-				prereceiver: SmartMachine::Grids::Prereceiver,
-				scheduler: SmartMachine::Grids::Scheduler,
-				elasticsearch: SmartMachine::Grids::Elasticsearch
-			}
 		end
 	end
 end

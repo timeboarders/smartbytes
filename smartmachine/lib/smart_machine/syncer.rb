@@ -1,29 +1,32 @@
 module SmartMachine
-	class Sync < SmartMachine::Base
+	class Syncer < SmartMachine::Base
 
-		def run(**params)
-			puts "-----> Syncing SmartMachine"
+    def sync(**params)
+      if SmartMachine.config.machine_mode == :server
+        puts "-----> Syncing SmartMachine"
 
-			only = params[:only] ? Array(params[:only]).flatten : [:push, :pull]
+        only = params[:only] ? Array(params[:only]).flatten : [:push, :pull]
 
-			pull if only.include? :pull
-			yield if block_given?
-			push if only.include? :push
+        pull if only.include? :pull
+        push if only.include? :push
 
-			puts "-----> Syncing SmartMachine Complete"
-		end
+        puts "-----> Syncing SmartMachine Complete"
+      else
+        puts "There is no need to sync when using smartmachine for a local machine."
+      end
+    end
 
 		private
 
 		def pull
-			print "-----> Sync pulling ... "
-			system("rsync -azumv --delete --include={#{pull_files_list}} --exclude=* -e ssh #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:address]}:~/.smartmachine/ .")
+			print "-----> Syncer pulling ... "
+			system("rsync -azumv -e 'ssh -p #{SmartMachine.credentials.machine[:port]}' --delete --include={#{pull_files_list}} --exclude=* #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:address]}:~/smartmachine/ .")
 			puts "done"
 		end
 
 		def push
-			print "-----> Sync pushing ... "
-			system("rsync -azumv --delete --include={#{push_files_list}} --exclude=* -e ssh ./ #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:address]}:~/.smartmachine")
+			print "-----> Syncer pushing ... "
+			system("rsync -azumv -e 'ssh -p #{SmartMachine.credentials.machine[:port]}' --delete --include={#{push_files_list}} --exclude=* ./ #{SmartMachine.credentials.machine[:username]}@#{SmartMachine.credentials.machine[:address]}:~/smartmachine")
 			puts "done"
 		end
 

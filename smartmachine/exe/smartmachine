@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'smart_machine/commands'
+SmartMachine::Commands::CLI.start(ARGV)

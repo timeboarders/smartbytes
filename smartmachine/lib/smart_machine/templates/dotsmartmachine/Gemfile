@@ -5,3 +5,5 @@ ruby 'replace_ruby_version'
 
 # SmartMachine
 gem 'smartmachine', "~> replace_smartmachine_version"
+# Use Whenever for scheduling in scheduler
+gem 'whenever', "~> 1.0"
