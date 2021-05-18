@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "SmartOS Summary."
   spec.description   = "SmartOS Description."
-  spec.homepage      = "https://github.com/timeboardcode/smartbytes/tree/master/smartos"
+  spec.homepage      = "https://github.com/timeboardcode/smartbytes/tree/v#{SmartOS::VERSION}/smartos"
   spec.license       = "GPL-3.0-or-later"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
