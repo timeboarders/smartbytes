@@ -16,10 +16,10 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
   spec.metadata = {
-    "homepage_uri"      => spec.homepage
+    "homepage_uri"      => spec.homepage,
     "bug_tracker_uri"   => "https://github.com/timeboardcode/smartbytes/issues",
-    "changelog_uri"     => "https://github.com/timeboardcode/smartbytes/releases/tag/v#{version}",
-    "source_code_uri"   => "https://github.com/timeboardcode/smartbytes/tree/v#{version}/smartos"
+    "changelog_uri"     => "https://github.com/timeboardcode/smartbytes/releases/tag/v#{SmartOS::VERSION}",
+    "source_code_uri"   => "https://github.com/timeboardcode/smartbytes/tree/v#{SmartOS::VERSION}/smartos"
     # "documentation_uri" => "https://www.timeboard.me/about/free-software/smartbytes/api/v#{version}/",
     # "mailing_list_uri"  => "https://www.timeboard.me/about/free-software/smartbytes/smartos/discuss",
   }
