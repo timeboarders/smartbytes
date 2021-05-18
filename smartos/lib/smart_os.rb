@@ -1,15 +1,8 @@
-require "ostruct"
-require "yaml"
+# frozen_string_literal: true
 
-# The main SmartOS driver
+require_relative "smart_os/version"
+
 module SmartOS
-	def self.config
-		@@config ||= OpenStruct.new
-	end
-
-	def self.credentials
-		@@credentials ||= OpenStruct.new(SmartOS::Credentials.new.config)
-	end
+  class Error < StandardError; end
+  # Your code goes here...
 end
-
-require 'smart_os/version'

@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "gem_version"
+version = File.read(File.expand_path("../../SMARTBYTES_VERSION", __dir__)).strip
 
 module SmartOS
-	# Returns the version of the currently loaded SmartOS as a <tt>Gem::Version</tt>
-	def self.version
-		gem_version
-	end
+  VERSION = version.to_s
 end

@@ -1,34 +1,36 @@
 # frozen_string_literal: true
 
-version = File.read(File.expand_path("../SMARTBYTES_VERSION", __dir__)).strip
+require_relative "lib/smart_os/version"
 
-Gem::Specification.new do |s|
-	s.platform    	= Gem::Platform::RUBY
-	s.name        	= "smartos"
-	s.version     	= version
-	s.summary     	= "SmartOS Summary."
-	s.description 	= "SmartOS description."
+Gem::Specification.new do |spec|
+  spec.platform      = Gem::Platform::RUBY
+  spec.name          = "smartos"
+  spec.version       = SmartOS::VERSION
+  spec.authors       = ["Timeboard"]
+  spec.email         = ["support@timeboard.me"]
 
-	s.required_ruby_version     = ">= 2.5.0"
+  spec.summary       = "SmartOS Summary."
+  spec.description   = "SmartOS Description."
+  spec.homepage      = "https://github.com/timeboardcode/smartbytes/tree/master/smartos"
+  spec.license       = "GPL-3.0-or-later"
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
-	s.license     	= "MIT"
+  spec.metadata = {
+    "homepage_uri"      => spec.homepage
+    "bug_tracker_uri"   => "https://github.com/timeboardcode/smartbytes/issues",
+    "changelog_uri"     => "https://github.com/timeboardcode/smartbytes/releases/tag/v#{version}",
+    "source_code_uri"   => "https://github.com/timeboardcode/smartbytes/tree/v#{version}/smartos"
+    # "documentation_uri" => "https://www.timeboard.me/about/free-software/smartbytes/api/v#{version}/",
+    # "mailing_list_uri"  => "https://www.timeboard.me/about/free-software/smartbytes/smartos/discuss",
+  }
 
-	s.author     	= "Timeboard"
-	s.email       	= "hello@timeboard.me"
-	s.homepage    	= "https://github.com/timeboarders/smartbytes"
+  # Specify which files should be added to the gem when it is released.
+  spec.files = Dir["CODE_OF_CONDUCT.md", "LICENSE.txt", "README.md", "bin/**/*", "bin/**/.keep", "lib/**/*", "lib/**/.keep"]
 
-	s.executables 	= %w(smartos)
+  spec.bindir        = "exe"
+  spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  spec.require_paths = ["lib"]
 
-	s.files        	= Dir["CHANGELOG.rdoc", "MIT-LICENSE", "README.rdoc", "bin/**/*", "bin/**/.keep", "lib/**/*", "lib/**/.keep"]
-
-	s.extra_rdoc_files = %w(README.rdoc)
-	s.rdoc_options.concat ["--main",  "README.rdoc"]
-
-	s.metadata		= {
-		"bug_tracker_uri"   => "https://github.com/timeboarders/smartbytes/issues",
-	    "changelog_uri"     => "https://github.com/timeboarders/smartbytes/blob/v#{version}/smartos/CHANGELOG.rdoc",
-	    # "documentation_uri" => "https://www.timeboard.me/smartbytes/api/v#{version}/",
-	    # "mailing_list_uri"  => "https://www.timeboard.me/smartbytes/discuss",
-	    "source_code_uri"   => "https://github.com/timeboarders/smartbytes/tree/v#{version}/smartos"
-	}
+  # Uncomment to register a new dependency of your gem
+  # spec.add_dependency "example-gem", "~> 1.0"
 end
